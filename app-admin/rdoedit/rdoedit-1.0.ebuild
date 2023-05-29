@@ -3,9 +3,9 @@
 
 EAPI=8
 
-DESCRIPTION="Su implementation without pam"
-HOMEPAGE="https://github.com/stefan11111/su"
-EGIT_REPO_URI="https://github.com/stefan11111/su.git"
+DESCRIPTION="minimal sudoedit alternative"
+HOMEPAGE="https://github.com/stefan11111/rdoedit"
+EGIT_REPO_URI="https://github.com/stefan11111/rdoedit.git"
 inherit git-r3
 
 LICENSE="GPL-3"
@@ -20,4 +20,4 @@ BDEPEND=""
 
 src_install() {
     emake install PREFIX=/usr DESTDIR=${D}
-} 
+}

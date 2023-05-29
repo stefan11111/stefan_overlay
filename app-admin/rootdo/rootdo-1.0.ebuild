@@ -3,9 +3,9 @@
 
 EAPI=8
 
-DESCRIPTION="Su implementation without pam"
-HOMEPAGE="https://github.com/stefan11111/su"
-EGIT_REPO_URI="https://github.com/stefan11111/su.git"
+DESCRIPTION="run command as another user"
+HOMEPAGE="https://github.com/stefan11111/rootdo"
+EGIT_REPO_URI="https://github.com/stefan11111/rootdo.git"
 inherit git-r3
 
 LICENSE="GPL-3"
@@ -14,10 +14,11 @@ KEYWORDS="~amd64 ~x86"
 IUSE=""
 
 DEPEND="|| (    sys-devel/gcc
-                sys-devel/clang ) virtual/libcrypt"
+                sys-devel/clang )
+                virtual/libcrypt"
 RDEPEND="${DEPEND}"
 BDEPEND=""
 
 src_install() {
     emake install PREFIX=/usr DESTDIR=${D}
-} 
+}
