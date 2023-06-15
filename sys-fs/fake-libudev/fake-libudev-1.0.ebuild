@@ -5,7 +5,8 @@ EAPI=8
 
 DESCRIPTION="Dummy implementation of libudev"
 HOMEPAGE="https://github.com/stefan11111/fake-libudev"
-SRC_URI="https://github.com/stefan11111/${PN}/archive/refs/tags/${PV}.tar.gz"
+EGIT_REPO_URI="https://github.com/stefan11111/fake-libudev.git"
+inherit git-r3
 
 LICENSE="GPL-3"
 SLOT="0"

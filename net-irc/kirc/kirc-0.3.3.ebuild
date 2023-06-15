@@ -5,7 +5,8 @@ EAPI=8
 
 DESCRIPTION="Terminal irc client"
 HOMEPAGE="https://github.com/stefan11111/kirc"
-SRC_URI="https://github.com/stefan11111/${PN}/archive/refs/tags/${PV}.tar.gz"
+EGIT_REPO_URI="https://github.com/stefan11111/kirc.git"
+inherit git-r3
 
 LICENSE="MIT"
 SLOT="0"
