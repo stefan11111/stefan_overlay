@@ -23,8 +23,8 @@ KEYWORDS="~alpha amd64 arm arm64 hppa ~ia64 ~loong ~mips ppc ppc64 ~riscv ~s390 
 
 COMMON_DEPEND="
 	atk-bridge? ( >=app-accessibility/at-spi2-core-2.46.0[introspection?,${MULTILIB_USEDEP}] )
-        !atk-bridge? ( >=dev-libs/atk-2.10.0[introspection(+)?,${MULTILIB_USEDEP}] )
-        !atk-bridge? ( <dev-libs/atk-2.46.0[introspection(+)?,${MULTILIB_USEDEP}] )
+	!atk-bridge? ( >=dev-libs/atk-2.10.0[introspection(+)?,${MULTILIB_USEDEP}] )
+	!atk-bridge? ( <dev-libs/atk-2.46.0[introspection(+)?,${MULTILIB_USEDEP}] )
 	>=dev-libs/fribidi-0.19.7[${MULTILIB_USEDEP}]
 	>=dev-libs/glib-2.57.2:2[${MULTILIB_USEDEP}]
 	media-libs/fontconfig[${MULTILIB_USEDEP}]
