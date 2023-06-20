@@ -2,9 +2,9 @@
 <!DOCTYPE pkgmetadata SYSTEM "https://www.gentoo.org/dtd/metadata.dtd">
 <pkgmetadata>
 	<maintainer type="person">
-		<email>martin@mvath.de</email>
-		<name>Martin Väth</name>
-		<description>maintainer of the updates in the mv overlay</description>
+		<email>stefanalexe48@gmail.com</email>
+		<name>Alexe Ștefan</name>
+		<description>maintainer of the updates in the stefan_overlay overlay</description>
 	</maintainer>
 	<maintainer type="project">
 		<email>gnome@gentoo.org</email>
