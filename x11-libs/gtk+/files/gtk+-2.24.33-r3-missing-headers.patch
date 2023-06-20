@@ -1,0 +1,36 @@
+diff --git a/modules/other/gail/tests/testcomponent.c b/modules/other/gail/tests/testcomponent.c
+index 7600c10..fc62254 100644
+--- a/modules/other/gail/tests/testcomponent.c
++++ b/modules/other/gail/tests/testcomponent.c
+@@ -1,4 +1,5 @@
+ #include <atk/atk.h>
++#include <glib.h>
+
+ static void _check_position (AtkObject *obj);
+
+diff --git a/modules/other/gail/tests/testobject.c b/modules/other/gail/tests/testobject.c
+index 38b104b..a4c817c 100644
+--- a/modules/other/gail/tests/testobject.c
++++ b/modules/other/gail/tests/testobject.c
+@@ -198,21 +198,6 @@ static void _print_accessible (AtkObject *obj)
+
+ static void _check_relation (AtkObject *obj)
+ {
+-  AtkRelationSet* relation_set = atk_object_ref_relation_set (obj);
+-  gint n_relations, i;
+-
+-  g_return_if_fail (relation_set);
+-
+-  n_relations = atk_relation_set_get_n_relations (relation_set);
+-  for (i = 0; i < n_relations; i++)
+-    {
+-      AtkRelation* relation = atk_relation_set_get_relation (relation_set, i);
+-
+-      g_print ("Index: %d Relation type: %d Number: %d\n", i,
+-                atk_relation_get_relation_type (relation),
+-                atk_relation_get_target (relation)->len);
+-    }
+-  g_object_unref (relation_set);
+ }
+
+ static void _check_children (AtkObject *obj)
