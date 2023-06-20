@@ -4,8 +4,8 @@
 EAPI=8
 
 DESCRIPTION="Minimal fetch written in c"
-HOMEPAGE="https://github.com/stefan11111/cfetch"
-EGIT_REPO_URI="https://github.com/stefan11111/cfetch.git"
+HOMEPAGE="https://github.com/africavoid/cfetch"
+EGIT_REPO_URI="https://github.com/africavoid/cfetch.git"
 inherit git-r3
 
 LICENSE="GPL-3"
