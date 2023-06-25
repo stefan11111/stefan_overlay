@@ -127,7 +127,6 @@ BDEPEND="${PYTHON_DEPS}
 		)
 	)"
 COMMON_DEPEND="${FF_ONLY_DEPEND}
-	>=app-accessibility/at-spi2-core-2.46.0:2
 	dev-libs/expat
 	dev-libs/glib:2
 	dev-libs/libffi:=
