@@ -121,7 +121,6 @@ src_configure() {
 		$(meson_use !minimal dri2)
 		$(meson_use !minimal dri3)
 		$(meson_use !minimal glamor)
-		$(meson_use glx)
 		$(meson_use udev)
 		$(meson_use udev udev_kms)
 		$(meson_use unwind libunwind)
@@ -131,6 +130,7 @@ src_configure() {
 		$(meson_use xnest)
 		$(meson_use xorg)
 		$(meson_use xvfb)
+		-Dglx=true
 		-Ddocs=false
 		-Ddrm=true
 		-Ddtrace=false
