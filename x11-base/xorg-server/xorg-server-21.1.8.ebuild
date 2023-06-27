@@ -121,7 +121,7 @@ src_configure() {
 		$(meson_use !minimal dri2)
 		$(meson_use !minimal dri3)
 		$(meson_use !minimal glamor)
-		$(meson_use !minimal glx)
+		$(meson_use glx)
 		$(meson_use udev)
 		$(meson_use udev udev_kms)
 		$(meson_use unwind libunwind)
