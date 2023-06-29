@@ -3,22 +3,22 @@ index 1f2441b..ae73432 100644
 --- a/components/netspeeds.c
 +++ b/components/netspeeds.c
 @@ -6,8 +6,8 @@
-
+ 
  #include <stdint.h>
-
--       #define NET_RX_BYTES "/sys/class/net/%s/statistics/rx_bytes"
--       #define NET_TX_BYTES "/sys/class/net/%s/statistics/tx_bytes"
-+       #define NET_RX_BYTES "/sys/class/net/eth0/statistics/rx_bytes"
-+       #define NET_TX_BYTES "/sys/class/net/eth0/statistics/tx_bytes"
-
-        const char *
-        netspeed_rx(const char *interface)
+ 
+-	#define NET_RX_BYTES "/sys/class/net/%s/statistics/rx_bytes"
+-	#define NET_TX_BYTES "/sys/class/net/%s/statistics/tx_bytes"
++	#define NET_RX_BYTES "/sys/class/net/eth0/statistics/rx_bytes"
++	#define NET_TX_BYTES "/sys/class/net/eth0/statistics/tx_bytes"
+ 
+ 	const char *
+ 	netspeed_rx(const char *interface)
 @@ -18,7 +18,7 @@
-
-                oldrxbytes = rxbytes;
-
--               if (esnprintf(path, sizeof(path), NET_RX_BYTES, interface) < 0)
-+               if (esnprintf(path, sizeof(path), NET_RX_BYTES) < 0)
-                        return NULL;
-                if (pscanf(path, "%ju", &rxbytes) != 1)
-                        return NULL;
+ 
+ 		oldrxbytes = rxbytes;
+ 
+-		if (esnprintf(path, sizeof(path), NET_RX_BYTES, interface) < 0)
++		if (esnprintf(path, sizeof(path), NET_RX_BYTES) < 0)
+ 			return NULL;
+ 		if (pscanf(path, "%ju", &rxbytes) != 1)
+ 			return NULL;

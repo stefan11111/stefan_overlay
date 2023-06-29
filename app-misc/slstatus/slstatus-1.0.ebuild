@@ -11,16 +11,16 @@ inherit git-r3
 LICENSE="ISC"
 SLOT="0"
 KEYWORDS="~amd64 ~x86"
-IUSE="static-dev"
+IUSE=""
 
 DEPEND="|| (    sys-devel/gcc
                 sys-devel/clang )"
 RDEPEND="${DEPEND}"
 BDEPEND=""
 
-src_prepare() {
-    static-dev? epatch "${FILESDIR}/static-dev.patch"
-} 
+PATCHES=(
+    "${FILESDIR}/static-dev.patch"
+)
 
 src_install() {
     emake install PREFIX=/usr DESTDIR=${D}
