@@ -27,7 +27,7 @@ COMMON_DEPEND="
 	>=dev-libs/atk-2.12[introspection?,${MULTILIB_USEDEP}]
 	>=dev-libs/glib-2.41.2:2[${MULTILIB_USEDEP}]
 	media-libs/fontconfig[${MULTILIB_USEDEP}]
-	>=x11-libs/cairo-1.12[aqua?,glib,svg,X?,${MULTILIB_USEDEP}]
+	>=x11-libs/cairo-1.12[aqua?,glib,X?,${MULTILIB_USEDEP}]
 	>=x11-libs/gdk-pixbuf-2.30:2[introspection?,X?,${MULTILIB_USEDEP}]
 	>=x11-libs/pango-1.36.7[introspection?,${MULTILIB_USEDEP}]
 	x11-misc/shared-mime-info
