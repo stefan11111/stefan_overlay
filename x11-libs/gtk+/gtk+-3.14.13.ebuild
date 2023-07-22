@@ -24,7 +24,7 @@ KEYWORDS="alpha amd64 arm hppa ia64 ~mips ppc ppc64 ~s390 ~sh sparc x86 ~amd64-f
 # FIXME: introspection data is built against system installation of gtk+:3
 # NOTE: cairo[svg] dep is due to bug 291283 (not patched to avoid eautoreconf)
 COMMON_DEPEND="
-	>=dev-libs/atk-2.12[introspection?,${MULTILIB_USEDEP}]
+	>=dev-libs/atk-2.12[introspection(+)?,${MULTILIB_USEDEP}]
 	>=dev-libs/glib-2.41.2:2[${MULTILIB_USEDEP}]
 	media-libs/fontconfig[${MULTILIB_USEDEP}]
 	>=x11-libs/cairo-1.12[aqua?,glib,X?,${MULTILIB_USEDEP}]
@@ -44,7 +44,6 @@ COMMON_DEPEND="
 		>=x11-libs/libxkbcommon-0.2[${MULTILIB_USEDEP}]
 	)
 	X? (
-		>=app-accessibility/at-spi2-atk-2.5.3[${MULTILIB_USEDEP}]
 		x11-libs/libXrender[${MULTILIB_USEDEP}]
 		x11-libs/libX11[${MULTILIB_USEDEP}]
 		>=x11-libs/libXi-1.3[${MULTILIB_USEDEP}]
@@ -66,13 +65,6 @@ DEPEND="${COMMON_DEPEND}
 	>=dev-util/gtk-doc-am-1.20
 	sys-devel/gettext
 	virtual/pkgconfig[${MULTILIB_USEDEP}]
-	X? (
-		x11-proto/xextproto[${MULTILIB_USEDEP}]
-		x11-proto/xproto[${MULTILIB_USEDEP}]
-		x11-proto/inputproto[${MULTILIB_USEDEP}]
-		x11-proto/damageproto[${MULTILIB_USEDEP}]
-		xinerama? ( x11-proto/xineramaproto[${MULTILIB_USEDEP}] )
-	)
 	test? (
 		media-fonts/font-misc-misc
 		media-fonts/font-cursor-misc )
@@ -112,9 +104,6 @@ strip_builddir() {
 }
 
 src_prepare() {
-	# https://bugzilla.gnome.org/show_bug.cgi?id=738835
-	epatch "${FILESDIR}"/${PN}-non-bash-support.patch
-
 	# -O3 and company cause random crashes in applications. Bug #133469
 	replace-flags -O3 -O2
 	strip-flags
@@ -130,8 +119,6 @@ src_prepare() {
 		strip_builddir SRC_SUBDIRS demos Makefile.{am,in}
 		strip_builddir SRC_SUBDIRS examples Makefile.{am,in}
 	fi
-
-	epatch_user
 
 	eautoreconf
 	gnome2_src_prepare
@@ -158,7 +145,6 @@ multilib_src_configure() {
 		$(use_enable xinerama) \
 		--disable-papi \
 		--enable-man \
-		--enable-gtk2-dependency \
 		--with-xml-catalog="${EPREFIX}"/etc/xml/catalog \
 		--libdir="${EPREFIX}"/usr/$(get_libdir) \
 		CUPS_CONFIG="${EPREFIX}/usr/bin/${CHOST}-cups-config"
