@@ -34,7 +34,9 @@ RDEPEND="
 		dev-lang/tcl:0=[threads]
 		dev-lang/tk:0=[threads]
 	)
-	dev-libs/libyaml
+	!minimal? (
+		dev-libs/libyaml
+	)
 	dev-libs/libffi:=
 	sys-libs/readline:0=
 	sys-libs/zlib
