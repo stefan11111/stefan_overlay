@@ -49,6 +49,10 @@ DEPEND="
 	valgrind? ( dev-util/valgrind )
 "
 
+BDEPEND="
+	dev-util/ragel
+"
+
 BUNDLED_GEMS="
 	>=dev-ruby/debug-1.7.1[ruby_targets_ruby32(-)]
 	>=dev-ruby/matrix-0.4.2[ruby_targets_ruby32(-)]
