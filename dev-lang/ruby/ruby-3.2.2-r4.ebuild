@@ -277,10 +277,10 @@ src_install() {
 		dodoc -r sample
 	fi
 
-	!minimal? (
+	if use !minimal; then
 		dodoc ChangeLog NEWS.md README*
 		dodoc -r doc
-	)
+	fi
 }
 
 pkg_postinst() {
