@@ -29,8 +29,6 @@ IUSE="
 	+devtools
 	+av1
 	+jpegxl
-	strip
-	eme
 	tests
 	gamepad
 	system-hunspell
@@ -106,20 +104,6 @@ src_configure() {
 	mozconfig_init
 
 	mozconfig_disable updater accessibility gconf webrtc
-
-	if use strip; then
-		mozconfig_enable strip
-		mozconfig_enable install-strip
-	else
-                mozconfig_disable strip
-                mozconfig_disable install-strip
-	fi
-
-	if use eme; then
-		mozconfig_enable eme
-	else
-		mozconfig_disable eme
-	fi
 
 	if use gamepad; then
 		mozconfig_enable gamepad
