@@ -14,7 +14,7 @@ KEYWORDS="~amd64 ~x86"
 IUSE=""
 
 DEPEND="|| (    sys-devel/gcc
-                sys-devel/clang )
+                sys-devel/clang )"
 RDEPEND="${DEPEND}"
 BDEPEND=""
 
