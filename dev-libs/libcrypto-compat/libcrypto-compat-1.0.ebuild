@@ -11,11 +11,12 @@ inherit git-r3
 LICENSE="MIT"
 SLOT="0"
 KEYWORDS="~amd64 ~x86"
-IUSE=""
+IUSE="patchelf"
 
 DEPEND="|| (    sys-devel/gcc
                 sys-devel/clang )"
-RDEPEND="${DEPEND}"
+RDEPEND="${DEPEND}
+	patchelf? ( dev-util/patchelf )"
 BDEPEND=""
 
 src_install() {
