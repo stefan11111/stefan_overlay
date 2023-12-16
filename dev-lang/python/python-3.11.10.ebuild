@@ -7,9 +7,12 @@ DESCRIPTION="Dummy python 3.11 package to satisfy broken deps"
 HOMEPAGE=""
 
 LICENSE="GPL-3"
-SLOT="0"
+SLOT="3.11"
 KEYWORDS="~amd64 ~x86"
-IUSE=""
+IUSE="
+        bluetooth build debug +ensurepip examples gdbm libedit lto
+        +ncurses pgo +readline +sqlite +ssl test tk valgrind
+"
 
 DEPEND=""
 RDEPEND=""
