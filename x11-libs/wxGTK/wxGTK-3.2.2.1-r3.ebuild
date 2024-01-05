@@ -135,10 +135,13 @@ src_prepare() {
 multilib_src_configure() {
 	# X independent options
 	local myeconfargs=(
-		--with-zlib=sys
-		--with-expat=sys
-		--enable-compat30
-		--enable-xrc
+#		--with-zlib=sys
+#		--with-expat=sys
+		--without-zlib
+		--without-expat
+
+#		--enable-compat30
+#		--enable-xrc
 		$(use_with sdl)
 		$(use_with lzma liblzma)
 		# Currently defaults to curl, could change.  Watch the VDB!
