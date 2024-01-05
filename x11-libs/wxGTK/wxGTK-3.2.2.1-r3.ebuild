@@ -49,7 +49,7 @@ RDEPEND="
 		)
 		x11-libs/cairo[${MULTILIB_USEDEP}]
                 gtk2? (
-                        x11-libs/gtk+:3[${MULTILIB_USEDEP}]
+                        x11-libs/gtk+:2[${MULTILIB_USEDEP}]
                 )
                 gtk3? (
                         x11-libs/gtk+:3[wayland?,${MULTILIB_USEDEP}]
