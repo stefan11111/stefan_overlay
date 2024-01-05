@@ -146,6 +146,8 @@ multilib_src_configure() {
 		--disable-compat28
 		--disable-compat30
 
+		--without-svg
+
 		$(use_with sdl)
 		$(use_with lzma liblzma)
 		# Currently defaults to curl, could change.  Watch the VDB!
