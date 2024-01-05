@@ -144,6 +144,9 @@ multilib_src_configure() {
 	# X independent options
 	local myeconfargs=(
 		--enable-compat30
+
+		--disable-unicode
+
 		$(use_with sdl)
 		$(use_with lzma liblzma)
 		# Currently defaults to curl, could change.  Watch the VDB!
