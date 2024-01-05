@@ -187,6 +187,7 @@ multilib_src_configure() {
                 use gtk2 && myeconfargs+=( --with-gtk=2 )
                 use gtk3 && myeconfargs+=( --with-gtk=3 )
 		use jpeg && myeconfargs+=( --with-libjpeg=sys )
+		use !jpeg && myeconfargs+=( --with-libjpeg=no )
 
 	# wxGTK options
 	#   --enable-graphics_ctx - needed for webkit, editra
