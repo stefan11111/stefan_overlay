@@ -21,7 +21,7 @@ S="${WORKDIR}/wxWidgets-${PV}"
 LICENSE="wxWinLL-3 GPL-2 doc? ( wxWinFDL-3 )"
 SLOT="${WXRELEASE}"
 KEYWORDS="~alpha amd64 arm arm64 ~hppa ~ia64 ~loong ~mips ~ppc ~ppc64 ~riscv ~sparc ~x86 ~amd64-linux ~x86-linux"
-IUSE="+X curl doc debug keyring gstreamer libnotify +lzma opengl pch sdl +spell test tiff wayland webkit gtk2 gtk3 graphics_ctx gtkprint gui pcre zlib expat png jpeg xrc"
+IUSE="+X curl doc debug keyring gstreamer libnotify +lzma opengl pch sdl +spell test tiff wayland webkit gtk2 gtk3 graphics_ctx gtkprint gui pcre zlib expat png jpeg xrc unicode"
 REQUIRED_USE="test? ( tiff ) tiff? ( X ) spell? ( X ) keyring? ( X )"
 RESTRICT="!test? ( test )"
 
@@ -143,9 +143,8 @@ src_prepare() {
 multilib_src_configure() {
 	# X independent options
 	local myeconfargs=(
-		--enable-compat30
-
-		--disable-unicode
+#		--enable-compat30
+		--disable-compat30
 
 		$(use_with sdl)
 		$(use_with lzma liblzma)
@@ -168,6 +167,8 @@ multilib_src_configure() {
 	use !expat && myeconfargs+=( --without-expat )
 
 	use xrc && myeconfargs+=( --enable-xrc )
+
+	use !unicode && myeconfargs+=( --disable-unicode )
 
 	# By default, we now build with the GLX GLCanvas because some software like
 	# PrusaSlicer does not yet support EGL:
