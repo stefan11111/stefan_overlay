@@ -21,14 +21,16 @@ S="${WORKDIR}/wxWidgets-${PV}"
 LICENSE="wxWinLL-3 GPL-2 doc? ( wxWinFDL-3 )"
 SLOT="${WXRELEASE}"
 KEYWORDS="~alpha amd64 arm arm64 ~hppa ~ia64 ~loong ~mips ~ppc ~ppc64 ~riscv ~sparc ~x86 ~amd64-linux ~x86-linux"
-IUSE="+X curl doc debug keyring gstreamer libnotify +lzma opengl pch sdl +spell test tiff wayland webkit gtk2 gtk3 graphics_ctx gtkprint gui"
+IUSE="+X curl doc debug keyring gstreamer libnotify +lzma opengl pch sdl +spell test tiff wayland webkit gtk2 gtk3 graphics_ctx gtkprint gui pcre"
 REQUIRED_USE="test? ( tiff ) tiff? ( X ) spell? ( X ) keyring? ( X )"
 RESTRICT="!test? ( test )"
 
 RDEPEND="
 	>=app-eselect/eselect-wxwidgets-20131230
 	dev-libs/expat[${MULTILIB_USEDEP}]
-	dev-libs/libpcre2[pcre16,pcre32,unicode]
+	pcre? (
+		dev-libs/libpcre2[pcre16,pcre32,unicode]
+	)
 	sdl? ( media-libs/libsdl2[${MULTILIB_USEDEP}] )
 	curl? ( net-misc/curl )
 	lzma? ( app-arch/xz-utils )
@@ -184,6 +186,8 @@ multilib_src_configure() {
                 use gui  && myeconfargs+=( --enable-gui )
                 use gtk2 && myeconfargs+=( --with-gtk=2 )
                 use gtk3 && myeconfargs+=( --with-gtk=3 )
+		use pcre && myeconfargs+=( --with-regex=sys )
+		use !pcre && myeconfargs+=( --without-regex )
 
 	# wxGTK options
 	#   --enable-graphics_ctx - needed for webkit, editra
@@ -194,8 +198,6 @@ multilib_src_configure() {
 
 		# Choosing to enable this unconditionally seems fair, pcre2 is
 		# almost certain to be installed.
-#		--with-regex=sys
-		--without-regex
 		--without-gnomevfs
 		$(use_enable gstreamer mediactrl)
 		$(multilib_native_use_enable webkit webview)
