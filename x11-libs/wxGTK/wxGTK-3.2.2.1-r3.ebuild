@@ -180,6 +180,7 @@ multilib_src_configure() {
 
                 use graphics_ctx && myeconfargs+=( --enable-graphics_ctx )
                 use gtkprint && myeconfargs+=( --with-gtkprint )
+		use !gtkprint && myeconfargs+=( --without-gtkprint )
                 use gui  && myeconfargs+=( --enable-gui )
                 use gtk2 && myeconfargs+=( --with-gtk=2 )
                 use gtk3 && myeconfargs+=( --with-gtk=3 )
