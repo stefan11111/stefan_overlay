@@ -145,6 +145,7 @@ multilib_src_configure() {
 	local myeconfargs=(
 #		--enable-compat30
 		--disable-compat30
+		--enable-compat30
 
 		$(use_with sdl)
 		$(use_with lzma liblzma)
