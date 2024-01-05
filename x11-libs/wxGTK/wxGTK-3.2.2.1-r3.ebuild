@@ -193,8 +193,10 @@ multilib_src_configure() {
 	#   --enable-graphics_ctx - needed for webkit, editra
 	#   --without-gnomevfs - bug #203389
 	use X && myeconfargs+=(
-		--with-libpng=sys
-		--with-libjpeg=sys
+#		--with-libpng=sys
+#		--with-libjpeg=sys
+		--without-libjpeg
+		--withouy-libpng
 
 		# Choosing to enable this unconditionally seems fair, pcre2 is
 		# almost certain to be installed.
