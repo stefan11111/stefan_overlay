@@ -140,7 +140,8 @@ multilib_src_configure() {
 		--without-zlib
 		--without-expat
 
-		--enable-compat30
+#		--enable-compat30
+		--enable-compat28
 #		--enable-xrc
 		$(use_with sdl)
 		$(use_with lzma liblzma)
