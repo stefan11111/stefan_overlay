@@ -146,7 +146,7 @@ multilib_src_configure() {
 		--disable-compat28
 		--disable-compat30
 
-		--without-svg
+		--disable-svg
 
 		$(use_with sdl)
 		$(use_with lzma liblzma)
