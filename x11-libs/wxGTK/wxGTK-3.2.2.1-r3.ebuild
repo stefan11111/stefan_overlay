@@ -199,7 +199,7 @@ multilib_src_configure() {
 #		--with-libpng=sys
 #		--with-libjpeg=sys
 		--without-libjpeg
-		--withouy-libpng
+		--without-libpng
 
 		# Choosing to enable this unconditionally seems fair, pcre2 is
 		# almost certain to be installed.
