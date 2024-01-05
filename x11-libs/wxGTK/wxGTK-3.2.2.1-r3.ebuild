@@ -21,13 +21,15 @@ S="${WORKDIR}/wxWidgets-${PV}"
 LICENSE="wxWinLL-3 GPL-2 doc? ( wxWinFDL-3 )"
 SLOT="${WXRELEASE}"
 KEYWORDS="~alpha amd64 arm arm64 ~hppa ~ia64 ~loong ~mips ~ppc ~ppc64 ~riscv ~sparc ~x86 ~amd64-linux ~x86-linux"
-IUSE="+X curl doc debug keyring gstreamer libnotify +lzma opengl pch sdl +spell test tiff wayland webkit gtk2 gtk3 graphics_ctx gtkprint gui pcre"
+IUSE="+X curl doc debug keyring gstreamer libnotify +lzma opengl pch sdl +spell test tiff wayland webkit gtk2 gtk3 graphics_ctx gtkprint gui pcre zlib expat png jpeg xrc"
 REQUIRED_USE="test? ( tiff ) tiff? ( X ) spell? ( X ) keyring? ( X )"
 RESTRICT="!test? ( test )"
 
 RDEPEND="
 	>=app-eselect/eselect-wxwidgets-20131230
-	dev-libs/expat[${MULTILIB_USEDEP}]
+	expat? (
+		dev-libs/expat[${MULTILIB_USEDEP}]
+	)
 	pcre? (
 		dev-libs/libpcre2[pcre16,pcre32,unicode]
 	)
@@ -36,9 +38,15 @@ RDEPEND="
 	lzma? ( app-arch/xz-utils )
 	X? (
 		>=dev-libs/glib-2.22:2[${MULTILIB_USEDEP}]
-		media-libs/libjpeg-turbo:=[${MULTILIB_USEDEP}]
-		media-libs/libpng:0=[${MULTILIB_USEDEP}]
-		sys-libs/zlib[${MULTILIB_USEDEP}]
+		jpeg? (
+			media-libs/libjpeg-turbo:=[${MULTILIB_USEDEP}]
+		)
+		png? (
+			media-libs/libpng:0=[${MULTILIB_USEDEP}]
+		)
+		zlib? (
+			sys-libs/zlib[${MULTILIB_USEDEP}]
+		)
 		x11-libs/cairo[${MULTILIB_USEDEP}]
                 gtk2? (
                         x11-libs/gtk+:3[${MULTILIB_USEDEP}]
@@ -135,14 +143,7 @@ src_prepare() {
 multilib_src_configure() {
 	# X independent options
 	local myeconfargs=(
-#		--with-zlib=sys
-#		--with-expat=sys
-		--without-zlib
-		--without-expat
-
-#		--enable-compat30
-		--enable-compat28
-#		--enable-xrc
+		--enable-compat30
 		$(use_with sdl)
 		$(use_with lzma liblzma)
 		# Currently defaults to curl, could change.  Watch the VDB!
@@ -156,6 +157,14 @@ multilib_src_configure() {
 		# Don't hard-code libdir's prefix for wx-config
 		--libdir='${prefix}'/$(get_libdir)
 	)
+
+	use zlib && myeconfargs+=( --with-zlib=sys )
+	use !zlib && myeconfargs+=( --without-zlib )
+
+	use expat && myeconfargs+=( --with-expat=sys )
+	use !expat && myeconfargs+=( --without-expat )
+
+	use xrc && myeconfargs+=( --enable-xrc )
 
 	# By default, we now build with the GLX GLCanvas because some software like
 	# PrusaSlicer does not yet support EGL:
@@ -192,18 +201,15 @@ multilib_src_configure() {
                 use gtk3 && myeconfargs+=( --with-gtk=3 )
 		use pcre && myeconfargs+=( --with-regex=sys )
 		use !pcre && myeconfargs+=( --without-regex )
+		use png && myeconfargs+=( --with-libpng=sys )
+		use !png && myeconfargs+=( --without-libpng )
+		use jpeg && myeconfargs+=( --with-libjpeg=sys )
+		use !jpeg && myeconfargs+=( --without-libjpeg )
 
 	# wxGTK options
 	#   --enable-graphics_ctx - needed for webkit, editra
 	#   --without-gnomevfs - bug #203389
 	use X && myeconfargs+=(
-#		--with-libpng=sys
-#		--with-libjpeg=sys
-		--without-libjpeg
-		--without-libpng
-
-		# Choosing to enable this unconditionally seems fair, pcre2 is
-		# almost certain to be installed.
 		--without-gnomevfs
 		$(use_enable gstreamer mediactrl)
 		$(multilib_native_use_enable webkit webview)
