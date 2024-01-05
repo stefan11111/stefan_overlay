@@ -21,7 +21,7 @@ S="${WORKDIR}/wxWidgets-${PV}"
 LICENSE="wxWinLL-3 GPL-2 doc? ( wxWinFDL-3 )"
 SLOT="${WXRELEASE}"
 KEYWORDS="~alpha amd64 arm arm64 ~hppa ~ia64 ~loong ~mips ~ppc ~ppc64 ~riscv ~sparc ~x86 ~amd64-linux ~x86-linux"
-IUSE="+X curl doc debug keyring gstreamer libnotify +lzma opengl pch sdl +spell test tiff wayland webkit gtk2 gtk3 graphics_ctx gtkprint gui jpeg"
+IUSE="+X curl doc debug keyring gstreamer libnotify +lzma opengl pch sdl +spell test tiff wayland webkit gtk2 gtk3 graphics_ctx gtkprint gui"
 REQUIRED_USE="test? ( tiff ) tiff? ( X ) spell? ( X ) keyring? ( X )"
 RESTRICT="!test? ( test )"
 
@@ -34,9 +34,7 @@ RDEPEND="
 	lzma? ( app-arch/xz-utils )
 	X? (
 		>=dev-libs/glib-2.22:2[${MULTILIB_USEDEP}]
-		jpeg? (
-			media-libs/libjpeg-turbo:=[${MULTILIB_USEDEP}]
-		)
+		media-libs/libjpeg-turbo:=[${MULTILIB_USEDEP}]
 		media-libs/libpng:0=[${MULTILIB_USEDEP}]
 		sys-libs/zlib[${MULTILIB_USEDEP}]
 		x11-libs/cairo[${MULTILIB_USEDEP}]
@@ -186,8 +184,6 @@ multilib_src_configure() {
                 use gui  && myeconfargs+=( --enable-gui )
                 use gtk2 && myeconfargs+=( --with-gtk=2 )
                 use gtk3 && myeconfargs+=( --with-gtk=3 )
-		use jpeg && myeconfargs+=( --with-libjpeg=sys )
-		use !jpeg && myeconfargs+=( --without-libjpeg )
 
 	# wxGTK options
 	#   --enable-graphics_ctx - needed for webkit, editra
@@ -198,7 +194,8 @@ multilib_src_configure() {
 
 		# Choosing to enable this unconditionally seems fair, pcre2 is
 		# almost certain to be installed.
-		--with-regex=sys
+#		--with-regex=sys
+		--without-regex
 		--without-gnomevfs
 		$(use_enable gstreamer mediactrl)
 		$(multilib_native_use_enable webkit webview)
