@@ -146,8 +146,6 @@ multilib_src_configure() {
 		--disable-compat28
 		--disable-compat30
 
-		--disable-svg
-
 		$(use_with sdl)
 		$(use_with lzma liblzma)
 		# Currently defaults to curl, could change.  Watch the VDB!
@@ -213,7 +211,7 @@ multilib_src_configure() {
 	use png && myeconfargs+=( --with-libpng=sys )
 	use !png && myeconfargs+=( --without-libpng )
 	use jpeg && myeconfargs+=( --with-libjpeg=sys )
-	use !jpeg && myeconfargs+=( --without-libjpeg )
+	use !jpeg && myeconfargs+=( --without-libjpeg --disable-svg )
 
 	# wxGTK options
 	#   --enable-graphics_ctx - needed for webkit, editra
