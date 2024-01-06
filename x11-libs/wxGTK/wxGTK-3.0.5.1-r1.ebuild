@@ -157,9 +157,9 @@ multilib_src_configure() {
 	use !pcre && myeconfargs+=( --without-regex )
 
 	use png && myeconfargs+=( --with-libpng=sys )
-	use !png && myeconfargs+=( --without-libpng )
+	use !png && myeconfargs+=( --without-libpng --disable-svg)
 	use jpeg && myeconfargs+=( --with-libjpeg=sys )
-	use !jpeg && myeconfargs+=( --without-libjpeg --disable-svg )
+	use !jpeg && myeconfargs+=( --without-libjpeg )
 
 	# wxGTK options
 	#   --enable-graphics_ctx - needed for webkit, editra
