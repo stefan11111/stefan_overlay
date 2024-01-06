@@ -12,7 +12,7 @@ SRC_URI="mirror://nongnu/${PN}/${P}.tar.gz"
 LICENSE="GPL-2"
 SLOT="0"
 KEYWORDS="amd64 ~arm ~ppc ~ppc64 ~riscv x86 ~amd64-linux ~x86-linux"
-IUSE="emacs file-chooser print"
+IUSE="emacs"
 
 BDEPEND="
 	dev-util/intltool
@@ -35,9 +35,7 @@ PATCHES=(
 
 src_configure() {
 	econf \
-		--enable-chooser \
-		--enable-print \
+		--disable-chooser \
+		--disable-print \
 		$(use_enable emacs)
-		$(use_disable print)
-		$(use_disable chooser)
 }
