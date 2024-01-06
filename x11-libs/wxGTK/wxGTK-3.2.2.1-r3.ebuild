@@ -251,7 +251,7 @@ multilib_src_install_all() {
 
 	# Unversioned links
 	rm "${ED}"/usr/bin/wx-config || die
-	rm "${ED}"/usr/bin/wxrc || die
+	rm -rf "${ED}"/usr/bin/wxrc || die
 
 	# version bakefile presets
 	pushd "${ED}"/usr/share/bakefile/presets >/dev/null || die
