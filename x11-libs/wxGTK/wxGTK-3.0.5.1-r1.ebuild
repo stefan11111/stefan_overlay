@@ -30,9 +30,6 @@ RDEPEND="
 	expat? (
 		dev-libs/expat[${MULTILIB_USEDEP}]
 	)
-	pcre? (
-		dev-libs/libpcre2[pcre16,pcre32,unicode]
-	)
 	sdl? ( media-libs/libsdl2[${MULTILIB_USEDEP}] )
 	X? (
 		>=dev-libs/glib-2.22:2[${MULTILIB_USEDEP}]
@@ -154,8 +151,11 @@ multilib_src_configure() {
 	use gui  && myeconfargs+=( --enable-gui )
 	use gtk2 && myeconfargs+=( --with-gtk=2 )
 	use gtk3 && myeconfargs+=( --with-gtk=3 )
-	use pcre && myeconfargs+=( --with-regex=sys )
+
+	#system libpcre2 doesn't work with all apps
+	use pcre && myeconfargs+=( --with-regex=builtin )
 	use !pcre && myeconfargs+=( --without-regex )
+
 	use png && myeconfargs+=( --with-libpng=sys )
 	use !png && myeconfargs+=( --without-libpng )
 	use jpeg && myeconfargs+=( --with-libjpeg=sys )
