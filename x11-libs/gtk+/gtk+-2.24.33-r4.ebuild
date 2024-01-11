@@ -111,10 +111,6 @@ set_gtk2_confdir() {
 
 src_prepare() {
 
-	# -O3 and company cause random crashes in applications, bug #133469
-	replace-flags -O3 -O2
-	strip-flags
-
 	if ! use test ; then
 		# don't waste time building tests
 		strip_builddir SRC_SUBDIRS tests Makefile.{am,in}
