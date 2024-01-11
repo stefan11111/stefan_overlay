@@ -13,7 +13,7 @@ EGIT_REPO_URI="https://github.com/stefan11111/gtk2.git"
 
 LICENSE="LGPL-2+"
 SLOT="2"
-IUSE="adwaita-icon-theme aqua cups doc examples +introspection test vim-syntax xinerama"
+IUSE="adwaita-icon-theme aqua cups +introspection test vim-syntax xinerama"
 REQUIRED_USE="
 	xinerama? ( !aqua )
 "
@@ -25,8 +25,6 @@ KEYWORDS="~alpha amd64 arm arm64 ~hppa ~ia64 ~loong ~mips ppc ppc64 ~riscv ~s390
 RESTRICT="test"
 
 COMMON_DEPEND="
-	>=dev-libs/atk-2.10.0[introspection(+)?,${MULTILIB_USEDEP}]
-	<dev-libs/atk-2.46.0[introspection(+)?,${MULTILIB_USEDEP}]
 	>=dev-libs/glib-2.34.3:2[${MULTILIB_USEDEP}]
 	>=media-libs/fontconfig-2.10.92[${MULTILIB_USEDEP}]
 	virtual/libintl[${MULTILIB_USEDEP}]
@@ -79,21 +77,12 @@ PDEPEND="
 	)
 	vim-syntax? ( app-vim/gtk-syntax )
 "
-# docbook-4.1.2 and xsl required for man pages
-# docbook-4.3 required for gtk-doc
 BDEPEND="
-	doc? (
-		app-text/docbook-xml-dtd:4.1.2
-		app-text/docbook-xml-dtd:4.3
-		app-text/docbook-xsl-stylesheets
-		dev-libs/libxslt
-	)
 	dev-libs/gobject-introspection-common
 	dev-util/glib-utils
 	>=dev-util/gtk-doc-am-1.20
 	>=sys-devel/gettext-0.18.3
 	virtual/pkgconfig
-	examples? ( x11-libs/gdk-pixbuf )
 "
 
 DISABLE_AUTOFORMATTING="yes"
@@ -121,10 +110,6 @@ set_gtk2_confdir() {
 }
 
 src_prepare() {
-
-	# Stop trying to build unmaintained docs, bug #349754, upstream bug #623150
-	strip_builddir SUBDIRS tutorial docs/Makefile.{am,in}
-	strip_builddir SUBDIRS faq docs/Makefile.{am,in}
 
 	# -O3 and company cause random crashes in applications, bug #133469
 	replace-flags -O3 -O2
@@ -163,21 +148,12 @@ src_prepare() {
 		fi
 	fi
 
-	if ! use examples; then
-		# don't waste time building demos
-		strip_builddir SRC_SUBDIRS demos Makefile.{am,in}
-	fi
-
 	gnome2_src_prepare
 }
 
 multilib_src_configure() {
 	[[ ${ABI} == ppc64 ]] && append-flags -mminimal-toc
 
-	if use doc
-	then	set -- --enable-man --with-xml-catalog="${EPREFIX}"/etc/xml/catalog
-	else	set --
-	fi
 	ECONF_SOURCE=${S} \
 	gnome2_src_configure \
 		$(usex aqua --with-gdktarget=quartz --with-gdktarget=x11) \
@@ -188,14 +164,6 @@ multilib_src_configure() {
 		--disable-papi \
 		"$@" \
 		CUPS_CONFIG="${EPREFIX}/usr/bin/${CHOST}-cups-config"
-
-	# work-around gtk-doc out-of-source brokedness
-	if multilib_is_native_abi; then
-		local d
-		for d in gdk gtk libgail-util; do
-			ln -s "${S}"/docs/reference/${d}/html docs/reference/${d}/html || die
-		done
-	fi
 }
 
 multilib_src_test() {
@@ -216,15 +184,6 @@ multilib_src_install_all() {
 	gtk-icon-theme-name = "$(usex Adwaita gnome)"
 	gtk-cursor-theme-name = "Adwaita"
 	EOF
-
-	einstalldocs
-	rm "${ED}"/usr/share/doc/${P}/ChangeLog # empty file
-
-	# dev-util/gtk-builder-convert split off into a separate package, #402905
-	rm "${ED}"/usr/bin/gtk-builder-convert || die
-	if use doc ; then
-		rm "${ED}"/usr/share/man/man1/gtk-builder-convert.* || die
-	fi
 
 	readme.gentoo_create_doc
 }
