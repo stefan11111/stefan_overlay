@@ -13,7 +13,7 @@ EGIT_REPO_URI="https://github.com/stefan11111/gtk2.git"
 
 LICENSE="LGPL-2+"
 SLOT="2"
-IUSE="adwaita-icon-theme aqua cups +introspection test vim-syntax xinerama"
+IUSE="adwaita-icon-theme aqua cups +introspection vim-syntax xinerama"
 REQUIRED_USE="
 	xinerama? ( !aqua )
 "
@@ -24,6 +24,7 @@ KEYWORDS="~alpha amd64 arm arm64 ~hppa ~ia64 ~loong ~mips ppc ppc64 ~riscv ~s390
 
 # Upstream wants us to do their job:
 # https://bugzilla.gnome.org/show_bug.cgi?id=768663#c1
+# Also no longer in the codebase
 RESTRICT="test"
 
 COMMON_DEPEND="
@@ -53,11 +54,6 @@ COMMON_DEPEND="
 "
 DEPEND="${COMMON_DEPEND}
 	!aqua? ( x11-base/xorg-proto )
-	test? (
-		media-fonts/font-cursor-misc
-		media-fonts/font-misc-misc
-		x11-themes/hicolor-icon-theme
-	)
 "
 
 # gtk+-2.24.8 breaks Alt key handling in <=x11-libs/vte-0.28.2:0
@@ -97,55 +93,12 @@ MULTILIB_CHOST_TOOLS=(
 	/usr/bin/gtk-query-immodules-2.0$(get_exeext)
 )
 
-strip_builddir() {
-	local rule=$1
-	shift
-	local directory=$1
-	shift
-	sed -e "s/^\(${rule} =.*\)${directory}\(.*\)$/\1\2/" -i $@ \
-		|| die "Could not strip director ${directory} from build."
-}
-
 set_gtk2_confdir() {
 	# An arch specific config directory is used on multilib systems
 	GTK2_CONFDIR="/etc/gtk-2.0/${CHOST}"
 }
 
 src_prepare() {
-
-	if ! use test ; then
-		# don't waste time building tests
-		strip_builddir SRC_SUBDIRS tests Makefile.{am,in}
-		strip_builddir SUBDIRS tests gdk/Makefile.{am,in} gtk/Makefile.{am,in}
-	else
-		# Non-working test in gentoo's env
-		sed 's:\(g_test_add_func ("/ui-tests/keys-events.*\):/*\1*/:g' \
-			-i gtk/tests/testing.c || die "sed 1 failed"
-
-		# Cannot work because glib is too clever to find real user's home
-		# gentoo bug #285687, upstream bug #639832
-		# XXX: /!\ Pay extra attention to second sed when bumping /!\
-		sed '/TEST_PROGS.*recentmanager/d' -i gtk/tests/Makefile.am \
-			|| die "failed to disable recentmanager test (1)"
-		sed '/^TEST_PROGS =/,+3 s/recentmanager//' -i gtk/tests/Makefile.in \
-			|| die "failed to disable recentmanager test (2)"
-		sed 's:\({ "GtkFileChooserButton".*},\):/*\1*/:g' -i gtk/tests/object.c \
-			|| die "failed to disable recentmanager test (3)"
-
-		# https://bugzilla.gnome.org/show_bug.cgi?id=617473
-		sed -i -e 's:pltcheck.sh:$(NULL):g' \
-			gtk/Makefile.am || die
-
-		# UI tests require immodules already installed; bug #413185
-		if ! has_version 'x11-libs/gtk+:2'; then
-			ewarn "Disabling UI tests because this is the first install of"
-			ewarn "gtk+:2 on this machine. Please re-run the tests after ${P}"
-			ewarn "has been installed."
-			sed '/g_test_add_func.*ui-tests/ d' \
-				-i gtk/tests/testing.c || die "sed 2 failed"
-		fi
-	fi
-
 	gnome2_src_prepare
 }
 
