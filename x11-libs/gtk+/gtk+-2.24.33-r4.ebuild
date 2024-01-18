@@ -78,7 +78,7 @@ PDEPEND="
 BDEPEND="
 	dev-libs/gobject-introspection-common
 	dev-util/glib-utils
-	>=dev-util/gtk-doc-am-1.20
+	>=dev-build/gtk-doc-am-1.20
 	>=sys-devel/gettext-0.18.3
 	virtual/pkgconfig
 "

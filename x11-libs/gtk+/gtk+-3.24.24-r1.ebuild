@@ -96,7 +96,7 @@ BDEPEND="
 	dev-libs/libxslt
 	>=dev-util/gdbus-codegen-2.48
 	dev-util/glib-utils
-	>=dev-util/gtk-doc-am-1.20
+	>=dev-build/gtk-doc-am-1.20
 	virtual/pkgconfig
 	gtk-doc? (
 		app-text/docbook-xml-dtd:4.3
