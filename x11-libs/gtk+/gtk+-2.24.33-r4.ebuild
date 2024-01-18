@@ -13,11 +13,11 @@ EGIT_REPO_URI="https://github.com/stefan11111/gtk2.git"
 
 LICENSE="LGPL-2+"
 SLOT="2"
-IUSE="adwaita-icon-theme aqua cups +introspection vim-syntax xinerama"
-REQUIRED_USE="
-	xinerama? ( !aqua )
-"
 
+# USE="cups" left for compatibility
+IUSE="adwaita-icon-theme cups +introspection vim-syntax xinerama"
+
+# Disable deprecation warnings
 CFLAGS="-Wno-deprecated-declarations ${CFLAGS}"
 
 KEYWORDS="~alpha amd64 arm arm64 ~hppa ~ia64 ~loong ~mips ppc ppc64 ~riscv ~s390 sparc x86 ~amd64-linux ~x86-linux ~ppc-macos ~x64-macos ~sparc-solaris ~sparc64-solaris ~x64-solaris ~x86-solaris"
@@ -31,29 +31,28 @@ COMMON_DEPEND="
 	>=dev-libs/glib-2.34.3:2[${MULTILIB_USEDEP}]
 	>=media-libs/fontconfig-2.10.92[${MULTILIB_USEDEP}]
 	virtual/libintl[${MULTILIB_USEDEP}]
-	>=x11-libs/cairo-1.12.14-r4:=[aqua?,svg(+),${MULTILIB_USEDEP}]
+	>=x11-libs/cairo-1.12.14-r4:=[svg(+),${MULTILIB_USEDEP}]
 	>=x11-libs/gdk-pixbuf-2.30.7:2[introspection?,${MULTILIB_USEDEP}]
 	>=x11-libs/pango-1.36.3[introspection?,${MULTILIB_USEDEP}]
 	x11-misc/shared-mime-info
 
-	cups? ( >=net-print/cups-1.7.1-r2:=[${MULTILIB_USEDEP}] )
 	introspection? ( >=dev-libs/gobject-introspection-0.9.3:= )
-	!aqua? (
-		>=x11-libs/cairo-1.12.14-r4:=[aqua?,svg(+),X,${MULTILIB_USEDEP}]
-		>=x11-libs/libX11-1.6.2[${MULTILIB_USEDEP}]
-		>=x11-libs/libXcomposite-0.4.4-r1[${MULTILIB_USEDEP}]
-		>=x11-libs/libXcursor-1.1.14[${MULTILIB_USEDEP}]
-		>=x11-libs/libXdamage-1.1.4-r1[${MULTILIB_USEDEP}]
-		>=x11-libs/libXext-1.3.2[${MULTILIB_USEDEP}]
-		>=x11-libs/libXfixes-5.0.1[${MULTILIB_USEDEP}]
-		>=x11-libs/libXi-1.7.2[${MULTILIB_USEDEP}]
-		>=x11-libs/libXrandr-1.5[${MULTILIB_USEDEP}]
-		>=x11-libs/libXrender-0.9.8[${MULTILIB_USEDEP}]
-		xinerama? ( >=x11-libs/libXinerama-1.1.3[${MULTILIB_USEDEP}] )
-	)
+
+	>=x11-libs/cairo-1.12.14-r4:=[svg(+),X,${MULTILIB_USEDEP}]
+	>=x11-libs/libX11-1.6.2[${MULTILIB_USEDEP}]
+	>=x11-libs/libXcomposite-0.4.4-r1[${MULTILIB_USEDEP}]
+	>=x11-libs/libXcursor-1.1.14[${MULTILIB_USEDEP}]
+	>=x11-libs/libXdamage-1.1.4-r1[${MULTILIB_USEDEP}]
+	>=x11-libs/libXext-1.3.2[${MULTILIB_USEDEP}]
+	>=x11-libs/libXfixes-5.0.1[${MULTILIB_USEDEP}]
+	>=x11-libs/libXi-1.7.2[${MULTILIB_USEDEP}]
+	>=x11-libs/libXrandr-1.5[${MULTILIB_USEDEP}]
+	>=x11-libs/libXrender-0.9.8[${MULTILIB_USEDEP}]
+
+	xinerama? ( >=x11-libs/libXinerama-1.1.3[${MULTILIB_USEDEP}] )
 "
 DEPEND="${COMMON_DEPEND}
-	!aqua? ( x11-base/xorg-proto )
+	x11-base/xorg-proto
 "
 
 # gtk+-2.24.8 breaks Alt key handling in <=x11-libs/vte-0.28.2:0
@@ -103,14 +102,10 @@ multilib_src_configure() {
 
 	ECONF_SOURCE=${S} \
 	gnome2_src_configure \
-		$(usex aqua --with-gdktarget=quartz --with-gdktarget=x11) \
-		$(usex aqua "" --with-xinput) \
-		$(use_enable cups cups auto) \
+		--with-gdktarget=x11 \
 		$(multilib_native_use_enable introspection) \
 		$(use_enable xinerama) \
-		--disable-papi \
 		"$@" \
-		CUPS_CONFIG="${EPREFIX}/usr/bin/${CHOST}-cups-config"
 }
 
 multilib_src_test() {
