@@ -105,7 +105,7 @@ multilib_src_configure() {
 		--with-gdktarget=x11 \
 		$(multilib_native_use_enable introspection) \
 		$(use_enable xinerama) \
-		"$@" \
+		"$@"
 }
 
 multilib_src_test() {
