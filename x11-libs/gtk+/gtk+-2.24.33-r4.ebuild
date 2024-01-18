@@ -89,10 +89,6 @@ edit ~/.config/gtk-2.0/gtkfilechooser.ini to contain the following:
 [Filechooser Settings]
 StartupMode=cwd"
 
-MULTILIB_CHOST_TOOLS=(
-	/usr/bin/gtk-query-immodules-2.0$(get_exeext)
-)
-
 set_gtk2_confdir() {
 	# An arch specific config directory is used on multilib systems
 	GTK2_CONFDIR="/etc/gtk-2.0/${CHOST}"
@@ -139,30 +135,8 @@ multilib_src_install_all() {
 	readme.gentoo_create_doc
 }
 
-pkg_preinst() {
-	gnome2_pkg_preinst
-
-	multilib_pkg_preinst() {
-		# Make immodules.cache belongs to gtk+ alone
-		local cache="/usr/$(get_libdir)/gtk-2.0/2.10.0/immodules.cache"
-
-		if [[ -e "${EROOT}${cache}" ]]; then
-			cp "${EROOT}${cache}" "${ED}${cache}" || die
-		else
-			touch "${ED}${cache}" || die
-		fi
-	}
-	multilib_parallel_foreach_abi multilib_pkg_preinst
-}
-
 pkg_postinst() {
 	gnome2_pkg_postinst
-
-	multilib_pkg_postinst() {
-		gnome2_query_immodules_gtk2 \
-			|| die "Update immodules cache failed (for ${ABI})"
-	}
-	multilib_parallel_foreach_abi multilib_pkg_postinst
 
 	set_gtk2_confdir
 
