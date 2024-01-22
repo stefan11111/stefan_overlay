@@ -15,7 +15,7 @@ LICENSE="LGPL-2+"
 SLOT="2"
 
 # USE="cups" left for compatibility
-IUSE="adwaita-icon-theme directfb cups +introspection vim-syntax xinerama"
+IUSE="adwaita-icon-theme X directfb cups +introspection vim-syntax xinerama"
 
 # Disable deprecation warnings
 CFLAGS="-Wno-deprecated-declarations ${CFLAGS}"
@@ -38,20 +38,22 @@ COMMON_DEPEND="
 
 	introspection? ( >=dev-libs/gobject-introspection-0.9.3:= )
 
-	>=x11-libs/cairo-1.12.14-r4:=[svg(+),X,${MULTILIB_USEDEP}]
-	>=x11-libs/libX11-1.6.2[${MULTILIB_USEDEP}]
-	>=x11-libs/libXcomposite-0.4.4-r1[${MULTILIB_USEDEP}]
-	>=x11-libs/libXcursor-1.1.14[${MULTILIB_USEDEP}]
-	>=x11-libs/libXdamage-1.1.4-r1[${MULTILIB_USEDEP}]
-	>=x11-libs/libXext-1.3.2[${MULTILIB_USEDEP}]
-	>=x11-libs/libXfixes-5.0.1[${MULTILIB_USEDEP}]
-	>=x11-libs/libXi-1.7.2[${MULTILIB_USEDEP}]
-	>=x11-libs/libXrandr-1.5[${MULTILIB_USEDEP}]
-	>=x11-libs/libXrender-0.9.8[${MULTILIB_USEDEP}]
+	X? (
+		>=x11-libs/cairo-1.12.14-r4:=[svg(+),X,${MULTILIB_USEDEP}]
+		>=x11-libs/libX11-1.6.2[${MULTILIB_USEDEP}]
+		>=x11-libs/libXcomposite-0.4.4-r1[${MULTILIB_USEDEP}]
+		>=x11-libs/libXcursor-1.1.14[${MULTILIB_USEDEP}]
+		>=x11-libs/libXdamage-1.1.4-r1[${MULTILIB_USEDEP}]
+		>=x11-libs/libXext-1.3.2[${MULTILIB_USEDEP}]
+		>=x11-libs/libXfixes-5.0.1[${MULTILIB_USEDEP}]
+		>=x11-libs/libXi-1.7.2[${MULTILIB_USEDEP}]
+		>=x11-libs/libXrandr-1.5[${MULTILIB_USEDEP}]
+		>=x11-libs/libXrender-0.9.8[${MULTILIB_USEDEP}]
+	)
 
 	xinerama? ( >=x11-libs/libXinerama-1.1.3[${MULTILIB_USEDEP}] )
 
-        directfb? ( >=x11-libs/cairo-1.12.14-r4:=[svg(+),X,directfb(-),${MULTILIB_USEDEP}] )
+        directfb? ( >=x11-libs/cairo-1.12.14-r4:=[svg(+),directfb(-),${MULTILIB_USEDEP}] )
 "
 DEPEND="${COMMON_DEPEND}
 	x11-base/xorg-proto
@@ -104,7 +106,7 @@ multilib_src_configure() {
 
 	ECONF_SOURCE=${S} \
 	gnome2_src_configure \
-		--with-gdktarget=x11 \
+		use X &&--with-gdktarget=x11 \
 		use directfb && --with-gdktarget=directfb \
 		$(multilib_native_use_enable introspection) \
 		$(use_enable xinerama) \
