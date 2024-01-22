@@ -50,6 +50,8 @@ COMMON_DEPEND="
 	>=x11-libs/libXrender-0.9.8[${MULTILIB_USEDEP}]
 
 	xinerama? ( >=x11-libs/libXinerama-1.1.3[${MULTILIB_USEDEP}] )
+
+        directfb? ( >=x11-libs/cairo-1.12.14-r4:=[svg(+),X,${MULTILIB_USEDEP}, directfb(-)]
 "
 DEPEND="${COMMON_DEPEND}
 	x11-base/xorg-proto
