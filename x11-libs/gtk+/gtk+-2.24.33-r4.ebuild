@@ -15,7 +15,7 @@ LICENSE="LGPL-2+"
 SLOT="2"
 
 # USE="cups" left for compatibility
-IUSE="adwaita-icon-theme cups +introspection vim-syntax xinerama"
+IUSE="adwaita-icon-theme directfb cups +introspection vim-syntax xinerama"
 
 # Disable deprecation warnings
 CFLAGS="-Wno-deprecated-declarations ${CFLAGS}"
@@ -51,7 +51,7 @@ COMMON_DEPEND="
 
 	xinerama? ( >=x11-libs/libXinerama-1.1.3[${MULTILIB_USEDEP}] )
 
-        directfb? ( >=x11-libs/cairo-1.12.14-r4:=[svg(+),X,directfb(-),${MULTILIB_USEDEP}]
+        directfb? ( >=x11-libs/cairo-1.12.14-r4:=[svg(+),X,directfb(-),${MULTILIB_USEDEP}] )
 "
 DEPEND="${COMMON_DEPEND}
 	x11-base/xorg-proto
@@ -105,6 +105,7 @@ multilib_src_configure() {
 	ECONF_SOURCE=${S} \
 	gnome2_src_configure \
 		--with-gdktarget=x11 \
+		use directfb && --with-gdktarget=directfb \
 		$(multilib_native_use_enable introspection) \
 		$(use_enable xinerama) \
 		"$@"
