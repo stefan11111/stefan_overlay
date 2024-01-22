@@ -104,13 +104,17 @@ src_prepare() {
 multilib_src_configure() {
 	[[ ${ABI} == ppc64 ]] && append-flags -mminimal-toc
 
-	ECONF_SOURCE=${S} \
-	gnome2_src_configure \
-		use X &&--with-gdktarget=x11 \
-		use directfb && --with-gdktarget=directfb \
-		$(multilib_native_use_enable introspection) \
-		$(use_enable xinerama) \
-		"$@"
+    local myeconfargs=(
+    )
+
+    use X && myeconfargs+=(--with-gdktarget=x11)
+    use directfb && myeconfargs+=(--with-gdktarget=directfb)
+
+	use xinerama && myeconfargs+=(--enable-xinerama)
+
+	use introspection && myeconfargs+=(--enable-introspection)
+
+	ECONF_SOURCE="${S}" econf "${myeconfargs[@]}"
 }
 
 multilib_src_test() {
