@@ -45,9 +45,8 @@ RDEPEND="
 		>=x11-libs/libxcb-1.9.1[${MULTILIB_USEDEP}]
 	)"
 DEPEND="${RDEPEND}
-	X? ( x11-base/xorg-proto )"
-
-        directfb? ( dev-libs/DirectFB )
+	X? ( x11-base/xorg-proto )
+        directfb? ( dev-libs/DirectFB )"
 
 #[[ ${PV} == *9999* ]] && DEPEND="${DEPEND}
 #	doc? (
