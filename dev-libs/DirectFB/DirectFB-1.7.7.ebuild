@@ -65,8 +65,11 @@ RDEPEND="
 	X? ( x11-libs/libXext x11-libs/libX11 )
 	xine? ( media-libs/xine-lib[vdpau?] )
 	zlib? ( sys-libs/zlib )	"
-	dev-libs/flux
-DEPEND="${RDEPEND}"
+
+BDEPEND="
+	dev-libs/flux "
+
+DEPEND="${RDEPEND} ${BDEPEND}"
 
 post_src_unpack() {
     cp -r /var/tmp/portage/dev-libs/DirectFB-1.7.7/work/* /var/tmp/portage/dev-libs/DirectFB-1.7.7/work/DirectFB-1.7.7
