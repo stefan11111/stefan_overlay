@@ -2,7 +2,7 @@
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=8
-inherit autotools toolchain-funcs git-r3
+inherit autotools toolchain-funcs
 
 DESCRIPTION="Text mode window environment"
 HOMEPAGE="https://github.com/cosmos72/twin"
