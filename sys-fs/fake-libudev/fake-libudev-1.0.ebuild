@@ -8,6 +8,8 @@ HOMEPAGE="https://github.com/stefan11111/fake-libudev"
 EGIT_REPO_URI="https://github.com/stefan11111/fake-libudev.git"
 inherit git-r3
 
+CFLAGS="${CFLAGS}"
+
 LICENSE="GPL-3"
 SLOT="0"
 KEYWORDS="~amd64 ~x86"
@@ -19,5 +21,7 @@ RDEPEND="${DEPEND}"
 BDEPEND=""
 
 src_install() {
-    emake install PREFIX=/usr DESTDIR=${D}
-} 
+	emake install PREFIX=/usr DESTDIR=${D} LIBDIR=/lib64
+	emake clean
+	emake install PREFIX=/usr DESTDIR=${D} LIBDIR=/lib CFLAGS="${CFLAGS} -m32"
+}
