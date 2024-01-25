@@ -109,8 +109,8 @@ multilib_src_configure() {
     local myeconfargs=(
     )
 
-    use X && myeconfargs+=(--with-gdktarget=x11)
-    use directfb && myeconfargs+=(--with-gdktarget=directfb)
+	use X && myeconfargs+=(--with-gdktarget=x11)
+	use directfb && myeconfargs+=(--with-gdktarget=directfb)
 
 	use xinerama && myeconfargs+=(--enable-xinerama)
 
@@ -187,6 +187,11 @@ pkg_postinst() {
 		elog "Please install app-text/evince for print preview functionality."
 		elog "Alternatively, check \"gtk-print-preview-command\" documentation and"
 		elog "add it to your gtkrc."
+	fi
+
+	if use cups; then
+		elog "Might want to add x11-misc/xdg-utils-1.2.0 to"
+		elog "/etc/portage/profile/package.provided to not install bloated dependencies"
 	fi
 
 	readme.gentoo_print_elog
