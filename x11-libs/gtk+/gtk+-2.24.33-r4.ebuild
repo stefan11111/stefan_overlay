@@ -10,11 +10,11 @@ DESCRIPTION="Gimp ToolKit +"
 HOMEPAGE="https://www.gtk.org/"
 #SRC_URI=${SRC_URI}
 EGIT_REPO_URI="https://github.com/stefan11111/gtk2.git"
+#EGIT_BRANCH="devel"
 
 LICENSE="LGPL-2+"
 SLOT="2"
 
-# USE="cups" left for compatibility
 IUSE="adwaita-icon-theme X directfb cups +introspection vim-syntax xinerama"
 
 # Disable deprecation warnings
@@ -35,6 +35,8 @@ COMMON_DEPEND="
 	>=x11-libs/gdk-pixbuf-2.30.7:2[introspection?,${MULTILIB_USEDEP}]
 	>=x11-libs/pango-1.36.3[introspection?,${MULTILIB_USEDEP}]
 	x11-misc/shared-mime-info
+
+	cups? ( >=net-print/cups-1.7.1-r2:=[${MULTILIB_USEDEP}] )
 
 	introspection? ( >=dev-libs/gobject-introspection-0.9.3:= )
 
@@ -113,6 +115,10 @@ multilib_src_configure() {
 	use xinerama && myeconfargs+=(--enable-xinerama)
 
 	use introspection && myeconfargs+=(--enable-introspection)
+
+	use cups && myeconfargs+=(--enable-cups)
+
+	use cups && myeconfargs+=(CUPS_CONFIG="${EPREFIX}/usr/bin/${CHOST}-cups-config")
 
 	ECONF_SOURCE="${S}" econf "${myeconfargs[@]}"
 }
