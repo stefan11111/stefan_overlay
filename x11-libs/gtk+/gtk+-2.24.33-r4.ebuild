@@ -190,7 +190,7 @@ pkg_postinst() {
 	fi
 
 	if use cups; then
-		elog "Might want to add x11-misc/xdg-utils-1.2.0 to"
+		elog "Might want to add x11-misc/xdg-utils and net-print/cups-filters to"
 		elog "/etc/portage/profile/package.provided to not install bloated dependencies"
 	fi
 
