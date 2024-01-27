@@ -11,7 +11,7 @@ inherit git-r3
 LICENSE="MIT"
 SLOT="0"
 KEYWORDS="~amd64 ~x86"
-IUSE=""
+IUSE="abi_x86_32 abi_x86_64"
 
 DEPEND="|| (    sys-devel/gcc
                 sys-devel/clang )
@@ -20,5 +20,11 @@ RDEPEND="${DEPEND}"
 BDEPEND=""
 
 src_install() {
-    emake install PREFIX=/usr DESTDIR=${D}
-} 
+    if use abi_x86_64; then
+        emake install PREFIX=/usr DESTDIR=${D}
+    fi
+    if use abi_x86_32; then
+        emake clean
+        emake install PREFIX=/usr DESTDIR=${D} LIBDIR=/lib CFLAGS="${CFLAGS} -m32"
+    fi
+}
