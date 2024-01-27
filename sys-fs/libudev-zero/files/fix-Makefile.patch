@@ -1,0 +1,36 @@
+diff --git a/Makefile b/Makefile
+index 1fc5a1f..ac48654 100644
+--- a/Makefile
++++ b/Makefile
+@@ -1,10 +1,10 @@
+ # SPDX-License-Identifier: ISC
+ .POSIX:
+ 
+-PREFIX = /usr/local
++PREFIX = /usr
+ LIBDIR = ${PREFIX}/lib
+ INCLUDEDIR = ${PREFIX}/include
+-PKGCONFIGDIR = ${LIBDIR}/pkgconfig
++PKGCONFIGDIR = ${PREFIX}${LIBDIR}/pkgconfig
+ XCFLAGS = ${CPPFLAGS} ${CFLAGS} -std=c99 -fPIC -D_XOPEN_SOURCE=700 \
+ 		  -Wall -Wextra -Wpedantic -Wmissing-prototypes -Wstrict-prototypes \
+ 		  -Wno-unused-parameter
+@@ -59,11 +59,7 @@ install-shared: libudev.so.1 install-headers install-pkgconfig
+ 	cp -f libudev.so.1 ${DESTDIR}${LIBDIR}/libudev.so.1
+ 	ln -fs libudev.so.1 ${DESTDIR}${LIBDIR}/libudev.so
+ 
+-install-static: libudev.a install-headers install-pkgconfig
+-	mkdir -p ${DESTDIR}${LIBDIR}
+-	cp -f libudev.a ${DESTDIR}${LIBDIR}/libudev.a
+-
+-install: install-shared install-static
++install: install-shared
+ 
+ uninstall:
+ 	rm -f ${DESTDIR}${LIBDIR}/libudev.a \
+@@ -76,4 +72,4 @@ clean:
+ 	rm -f libudev.so.1 libudev.a libudev.pc ${OBJ}
+ 
+ .PHONY: all clean install-headers install-pkgconfig install-shared \
+-	install-static install uninstall
++	install uninstall

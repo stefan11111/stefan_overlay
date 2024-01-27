@@ -4,8 +4,8 @@
 EAPI=8
 
 DESCRIPTION="Daemonless replacement for libudev "
-HOMEPAGE="https://github.com/stefan11111/libudev-zero"
-EGIT_REPO_URI="https://github.com/stefan11111/libudev-zero.git"
+HOMEPAGE="https://github.com/illiliti/libudev-zero"
+EGIT_REPO_URI="https://github.com/illiliti/libudev-zero.git"
 inherit git-r3
 
 CFLAGS="${CFLAGS}"
@@ -19,6 +19,10 @@ DEPEND="|| (    sys-devel/gcc
                 sys-devel/clang )"
 RDEPEND="${DEPEND}"
 BDEPEND=""
+
+PATCHES=(
+	"${FILESDIR}"/fix-Makefile.patch
+)
 
 src_install() {
 	if use abi_x86_64; then
