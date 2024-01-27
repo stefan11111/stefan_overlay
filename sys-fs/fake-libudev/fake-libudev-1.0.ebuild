@@ -21,7 +21,7 @@ RDEPEND="${DEPEND}"
 BDEPEND=""
 
 src_install() {
-	if abi_x86_64; then
+	if use abi_x86_64; then
 		emake install PREFIX=/usr DESTDIR=${D} LIBDIR=/lib64
 	fi
 	if use abi_x86_32; then
