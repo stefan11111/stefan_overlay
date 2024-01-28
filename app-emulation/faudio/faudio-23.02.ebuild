@@ -39,5 +39,7 @@ src_test() {
 }
 
 pkg_postinst() {
-        cp /usr/lib64/libFAudio.so* /usr/lib
+	cp /usr/lib64/libFAudio.so.0.* /usr/lib
+	ln -rsf /usr/lib/libFAudio.so.0.* /usr/lib/libFAudio.so.0
+	ln -rsf /usr/lib/libFAudio.so.0 /usr/lib/libFAudio.so
 }
