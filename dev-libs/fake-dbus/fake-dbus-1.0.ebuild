@@ -20,10 +20,10 @@ BDEPEND=""
 
 src_install() {
     if use abi_x86_64; then
-        emake libdbus-1.so.3 PREFIX=/usr DESTDIR=${D}
+        emake install PREFIX=/usr DESTDIR=${D}
     fi
     if use abi_x86_32; then
         emake clean
-        emake libdbus-1.so.3 PREFIX=/usr DESTDIR=${D} LIBDIR=/lib CFLAGS="${CFLAGS} -m32"
+        emake install PREFIX=/usr DESTDIR=${D} LIBDIR=/lib CFLAGS="${CFLAGS} -m32"
     fi
 }
