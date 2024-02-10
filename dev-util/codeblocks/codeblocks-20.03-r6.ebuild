@@ -32,7 +32,7 @@ RDEPEND="app-arch/zip
 	dev-libs/glib:2
 	>=dev-libs/tinyxml-2.6.2-r3
 	>=dev-util/astyle-3.1-r2:0/3.1
-	x11-libs/wxGTK:${WX_GTK_VER}-gtk3[X]
+	x11-libs/wxGTK:${WX_GTK_VER}-gtk3[X,expat(+),unicode(+),xrc(+),pcre(+),zlib(+),png(+)]
 	contrib? (
 		app-admin/gamin
 		app-arch/bzip2
