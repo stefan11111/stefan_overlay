@@ -5,7 +5,7 @@ EAPI=8
 
 WX_GTK_VER="3.0"
 
-inherit autotools flag-o-matic wxwidgets xdg
+inherit autotools flag-o-matic xdg
 
 DESCRIPTION="The open source, cross platform, free C, C++ and Fortran IDE"
 HOMEPAGE="https://codeblocks.org/"
@@ -61,8 +61,6 @@ src_prepare() {
 src_configure() {
 	# Bug 858338
 	append-flags -fno-strict-aliasing
-
-	setup-wxwidgets
 
 	# USE="contrib -fortran" setup:
 	use fortran || CONF_WITH_LST=$(use_with contrib contrib-plugins all,-FortranProject)
