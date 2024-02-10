@@ -3,7 +3,7 @@
 
 EAPI=8
 
-WX_GTK_VER="3.2"
+WX_GTK_VER="3.2-gtk3"
 
 inherit autotools flag-o-matic subversion wxwidgets xdg
 
