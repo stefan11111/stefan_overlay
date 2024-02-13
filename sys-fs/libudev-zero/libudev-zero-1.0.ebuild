@@ -3,7 +3,7 @@
 
 EAPI=8
 
-DESCRIPTION="Daemonless replacement for libudev "
+DESCRIPTION="Daemonless replacement for libudev"
 HOMEPAGE="https://github.com/illiliti/libudev-zero"
 EGIT_REPO_URI="https://github.com/illiliti/libudev-zero.git"
 inherit git-r3
@@ -20,16 +20,12 @@ DEPEND="|| (    sys-devel/gcc
 RDEPEND="${DEPEND}"
 BDEPEND=""
 
-PATCHES=(
-	"${FILESDIR}"/fix-Makefile.patch
-)
-
 src_install() {
 	if use abi_x86_64; then
-		emake install PREFIX=/usr DESTDIR=${D} LIBDIR=/lib64
+		emake install-shared PREFIX=/usr DESTDIR=${D} LIBDIR=/lib64 PKGCONFIGDIR=/usr/lib64/pkgconfig
 	fi
 	if use abi_x86_32; then
 		emake clean
-		emake install PREFIX=/usr DESTDIR=${D} LIBDIR=/lib CFLAGS="${CFLAGS} -m32"
+		emake install-shared PREFIX=/usr DESTDIR=${D} LIBDIR=/lib PKGCONFIGDIR=/usr/lib64/pkgconfig CFLAGS="${CFLAGS} -m32"
 	fi
 }
