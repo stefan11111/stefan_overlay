@@ -3,7 +3,9 @@
 
 EAPI=8
 DESCRIPTION="dummy vala implementation"
-HOMEPAGE=""
+HOMEPAGE="https://github.com/stefan11111/fake-vala"
+EGIT_REPO_URI="https://github.com/stefan11111/fake-vala.git"
+inherit git-r3
 
 LICENSE="MIT"
 SLOT="0"
@@ -15,7 +17,5 @@ RDEPEND=""
 BDEPEND=""
 
 src_install() {
-    mkdir -p ${D}/usr/bin
-    touch ${D}/usr/bin/valac
-    chmod 755 ${D}/usr/bin/valac
+    emake install PREFIX=/usr DESTDIR=${D}
 }
