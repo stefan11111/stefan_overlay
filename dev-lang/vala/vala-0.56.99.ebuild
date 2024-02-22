@@ -8,7 +8,7 @@ EGIT_REPO_URI="https://github.com/stefan11111/fake-vala.git"
 inherit git-r3
 
 LICENSE="MIT"
-SLOT="0"
+SLOT="0.56"
 KEYWORDS="~amd64 ~x86"
 IUSE=""
 
