@@ -38,7 +38,8 @@ COMMON_DEPEND="
 
 	cups? ( >=net-print/cups-1.7.1-r2:=[${MULTILIB_USEDEP}] )
 
-	introspection? ( >=dev-libs/gobject-introspection-0.9.3:= )
+	introspection? ( >=dev-libs/gobject-introspection-0.9.3:=
+			 dev-libs/gobject-introspection-common )
 
 	X? (
 		>=x11-libs/cairo-1.12.14-r4:=[svg(+),X,${MULTILIB_USEDEP}]
