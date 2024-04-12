@@ -30,7 +30,6 @@ COMMON_DEPEND="
 	media-libs/libjpeg-turbo:=
 	>=media-libs/libepoxy-1.4[egl,X(+)?]
 	>=media-libs/graphene-1.10.0[introspection?]
-	app-text/iso-codes
 	x11-misc/shared-mime-info
 
 	cloudproviders? ( net-libs/libcloudproviders )
