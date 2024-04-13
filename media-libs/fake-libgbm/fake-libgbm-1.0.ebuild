@@ -15,6 +15,7 @@ IUSE="abi_x86_32 abi_x86_64"
 
 DEPEND="|| (    sys-devel/gcc
                 sys-devel/clang )
+        "
 RDEPEND="${DEPEND}"
 BDEPEND=""
 
