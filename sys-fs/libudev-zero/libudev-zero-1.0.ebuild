@@ -26,6 +26,6 @@ src_install() {
 	fi
 	if use abi_x86_32; then
 		emake clean
-		emake install-shared PREFIX=/usr DESTDIR=${D} LIBDIR=/lib PKGCONFIGDIR=/usr/lib64/pkgconfig CFLAGS="${CFLAGS} -m32"
+		emake install-shared PREFIX=/usr DESTDIR=${D} LIBDIR=/lib PKGCONFIGDIR=/usr/lib/pkgconfig CFLAGS="${CFLAGS} -m32"
 	fi
 }
