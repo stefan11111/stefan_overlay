@@ -22,6 +22,7 @@ IUSE="
 	+jemalloc
 	valgrind
 	dbus
+	npapi
 	necko-wifi
 	gtk2
 	gtk3
@@ -104,6 +105,12 @@ src_configure() {
 	mozconfig_init
 
 	mozconfig_disable updater accessibility gconf webrtc
+
+	if use npapi; then
+		mozconfig_enable npapi
+	else
+		mozconfig_disable npapi
+	fi
 
 	if use gamepad; then
 		mozconfig_enable gamepad
