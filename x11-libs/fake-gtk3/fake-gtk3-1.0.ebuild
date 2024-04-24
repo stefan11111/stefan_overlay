@@ -5,7 +5,7 @@ EAPI=8
 
 DESCRIPTION="placeholder gtk3 shared libraries"
 HOMEPAGE="https://github.com/stefan11111/fake-gtk3"
-EGIT_REPO_URI="https://github.com/stefan11111/fake-gtk2.git"
+EGIT_REPO_URI="https://github.com/stefan11111/fake-gtk3.git"
 inherit git-r3
 
 LICENSE="GPL-3"
