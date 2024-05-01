@@ -27,11 +27,11 @@ DEPEND="
 RDEPEND="${DEPEND}"
 
 PATCHES=(
-	"${FILESDIR}"/${P}-fdo.patch
-	"${FILESDIR}"/${P}-format-security.patch
+	"${FILESDIR}"/leafpad-0.8.18.1-fdo.patch
+	"${FILESDIR}"/leafpad-0.8.18.1-format-security.patch
 
 	# https://bugs.gentoo.org/657462
-	"${FILESDIR}"/${P}-truncate.patch
+	"${FILESDIR}"/leafpad-0.8.18.1-truncate.patch
 )
 
 src_configure() {
