@@ -3,7 +3,7 @@
 
 EAPI=8
 
-inherit xdg git-r3
+inherit xdg git-r3 autotools
 
 DESCRIPTION="Simple GTK2 text editor"
 HOMEPAGE="http://tarot.freeshell.org/leafpad/"
@@ -29,6 +29,7 @@ DEPEND="
 RDEPEND="${DEPEND}"
 
 src_configure() {
+	eautoconf
 	econf \
 		--disable-chooser \
 		--disable-print \
