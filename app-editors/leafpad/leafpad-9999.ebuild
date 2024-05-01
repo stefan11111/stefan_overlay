@@ -26,14 +26,6 @@ DEPEND="
 "
 RDEPEND="${DEPEND}"
 
-PATCHES=(
-	"${FILESDIR}"/leafpad-0.8.18.1-fdo.patch
-	"${FILESDIR}"/leafpad-0.8.18.1-format-security.patch
-
-	# https://bugs.gentoo.org/657462
-	"${FILESDIR}"/leafpad-0.8.18.1-truncate.patch
-)
-
 src_configure() {
 	econf \
 		--disable-chooser \
