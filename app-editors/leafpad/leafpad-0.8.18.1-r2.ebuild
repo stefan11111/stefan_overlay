@@ -10,6 +10,8 @@ HOMEPAGE="http://tarot.freeshell.org/leafpad/"
 #SRC_URI="mirror://nongnu/${PN}/${P}.tar.gz"
 EGIT_REPO_URI="https://github.com/stefan11111/leafpad.git"
 
+CFLAGS="-Wall -Wextra -Werror ${CFLAGS}"
+
 LICENSE="GPL-2"
 SLOT="0"
 KEYWORDS="amd64 ~arm ~ppc ~ppc64 ~riscv x86 ~amd64-linux ~x86-linux"
