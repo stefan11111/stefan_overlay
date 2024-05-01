@@ -26,6 +26,10 @@ DEPEND="
 "
 RDEPEND="${DEPEND}"
 
+src_prepare() {
+	eautoreconf
+}
+
 src_configure() {
 	econf \
 		--disable-chooser \
