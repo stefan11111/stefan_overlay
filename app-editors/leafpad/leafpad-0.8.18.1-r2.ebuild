@@ -3,12 +3,11 @@
 
 EAPI=8
 
-inherit xdg git-r3 autotools
+inherit xdg git-r3
 
 DESCRIPTION="Simple GTK2 text editor"
-HOMEPAGE="http://tarot.freeshell.org/leafpad/"
-#SRC_URI="mirror://nongnu/${PN}/${P}.tar.gz"
-EGIT_REPO_URI="https://github.com/stefan11111/leafpad.git"
+HOMEPAGE="https://github.com/stefan11111/leafpad"
+SRC_URI="https://github.com/stefan11111/leafpad/archive/refs/tags/0.8.18.1-r2.tar.gz"
 
 CFLAGS="-Wall -Wextra -Werror ${CFLAGS}"
 
