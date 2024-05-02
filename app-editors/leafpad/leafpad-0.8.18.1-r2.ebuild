@@ -29,7 +29,6 @@ DEPEND="
 RDEPEND="${DEPEND}"
 
 src_configure() {
-	eautoconf
 	econf \
 		--disable-chooser \
 		--disable-print \
