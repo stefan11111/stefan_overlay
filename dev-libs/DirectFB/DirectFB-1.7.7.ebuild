@@ -49,7 +49,7 @@ RDEPEND="
 	mad? ( media-libs/libmad )
 	mng? ( media-libs/libmng )
 	mpeg3? ( media-libs/libmpeg3 )
-	opengl? ( media-libs/mesa[gbm,egl?,gles2?] x11-libs/libdrm )
+	opengl? ( media-libs/mesa[gbm,egl(+)?,gles2(+)?] x11-libs/libdrm )
 	png? ( media-libs/libpng:0= )
 	sdl? ( media-libs/libsdl )
 	tiff? ( media-libs/tiff:0 )
