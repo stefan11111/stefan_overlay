@@ -23,12 +23,12 @@ DEPEND="|| (    sys-devel/gcc
 RDEPEND="${DEPEND}"
 BDEPEND=""
 
-src_install() {
+src_compile() {
 	use print && CFLAGS="-DENABLE_PRINT ${CFLAGS}"
-	if use X; then
-		emake install PREFIX=/usr DESTDIR=${D} GDKTARGET=x11
-	fi
-	if use directfb; then
-		emake install PREFIX=/usr DESTDIR=${D} GDKTARGET=directfb
-	fi
+	use X && emake GDKTARGET=x11
+	use directfb && emake GDKTARGET=directfb
+}
+
+src_install() {
+	emake install PREFIX=/usr DESTDIR=${D}
 }
