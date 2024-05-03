@@ -27,7 +27,8 @@ KEYWORDS="~alpha amd64 arm arm64 ~hppa ~ia64 ~loong ~mips ppc ppc64 ~riscv ~s390
 # Also no longer in the codebase
 RESTRICT="test"
 
-REQUIRED_USE="cups? ( print ) at-most-one-of ( X directfb )"
+REQUIRED_USE="cups? ( print )
+		?? ( X directfb )"
 
 COMMON_DEPEND="
 	>=dev-libs/glib-2.34.3:2[${MULTILIB_USEDEP}]
