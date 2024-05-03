@@ -35,6 +35,7 @@ IUSE="alsa wawe playlist bmp cddb debug divine drmkms +dynload doc egl fbcon fus
 REQUIRED_USE="gles2? ( opengl )"
 
 CFLAGS="-fno-strict-aliasing ${CFLAGS}"
+CXXFLAGS=-fno-strict-aliasing ${CXXFLAGS}"
 
 # ffmpeg useflag broken
 # ffmpeg? ( virtual/ffmpeg )
