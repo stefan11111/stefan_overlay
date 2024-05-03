@@ -6,7 +6,7 @@ EAPI=8
 DESCRIPTION="DirectFB examples"
 HOMEPAGE="https://github.com/directfb2/DirectFB-examples"
 EGIT_REPO_URI="https://github.com/directfb2/DirectFB-examples.git"
-inherit git-r3
+inherit git-r3 meson
 
 LICENSE="MIT"
 SLOT="0"
@@ -21,13 +21,9 @@ RDEPEND="${DEPEND}"
 BDEPEND=""
 
 src_configure() {
-    meson setup build/
-}
-
-src_compile() {
-    meson compile -C build/
+    meson_src_configure
 }
 
 src_install() {
-    meson install -C build/
+    meson_src_install
 }
