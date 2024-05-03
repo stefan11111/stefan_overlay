@@ -15,10 +15,10 @@ EGIT_REPO_URI="https://github.com/stefan11111/gtk2.git"
 LICENSE="LGPL-2+"
 SLOT="2"
 
-IUSE="adwaita-icon-theme X directfb cups +introspection vim-syntax xinerama"
+IUSE="adwaita-icon-theme X directfb print cups +introspection vim-syntax xinerama"
 
 # Disable deprecation warnings
-CFLAGS="-Wno-deprecated-declarations ${CFLAGS}"
+#CFLAGS="-Wno-deprecated-declarations ${CFLAGS}"
 
 KEYWORDS="~alpha amd64 arm arm64 ~hppa ~ia64 ~loong ~mips ppc ppc64 ~riscv ~s390 sparc x86 ~amd64-linux ~x86-linux ~ppc-macos ~x64-macos ~sparc-solaris ~sparc64-solaris ~x64-solaris ~x86-solaris"
 
@@ -26,6 +26,8 @@ KEYWORDS="~alpha amd64 arm arm64 ~hppa ~ia64 ~loong ~mips ppc ppc64 ~riscv ~s390
 # https://bugzilla.gnome.org/show_bug.cgi?id=768663#c1
 # Also no longer in the codebase
 RESTRICT="test"
+
+REQUIRED_USE="cups? ( print ) at-most-one-of ( X directfb )"
 
 COMMON_DEPEND="
 	>=dev-libs/glib-2.34.3:2[${MULTILIB_USEDEP}]
@@ -113,6 +115,8 @@ multilib_src_configure() {
 	use xinerama && myeconfargs+=(--enable-xinerama)
 
 	use introspection && myeconfargs+=(--enable-introspection)
+
+	use print && myeconfargs+=(--enable-print)
 
 	use cups && myeconfargs+=(--enable-cups)
 
