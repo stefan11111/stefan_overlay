@@ -23,9 +23,8 @@ DEPEND="|| (    sys-devel/gcc
 RDEPEND="${DEPEND}"
 BDEPEND=""
 
-use print && CFLAGS="${CFLAGS} -DENABLE_PRINT"
-
 src_install() {
+	use print && CFLAGS="-DENABLE_PRINT ${CFLAGS}"
 	if use X; then
 		emake install PREFIX=/usr DESTDIR=${D} GDKTARGET=x11
 	fi
