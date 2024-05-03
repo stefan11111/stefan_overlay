@@ -40,7 +40,7 @@ REQUIRED_USE="gles2? ( opengl )"
 RDEPEND="
 	alsa? ( media-libs/alsa-lib )
 	cddb? ( media-libs/libcddb )
-	drmkms? ( x11-libs/libdrm[libkms] )
+	drmkms? ( x11-libs/libdrm[libkms(+)] )
 	gif? ( media-libs/giflib )
 	gstreamer? ( media-libs/gstreamer:1.0 media-libs/gst-plugins-base:1.0 )
 	imlib2? ( media-libs/imlib2 )
