@@ -16,7 +16,10 @@ IUSE="ffmpeg freetype png"
 DEPEND="|| (    sys-devel/gcc
                 sys-devel/clang )
 	dev-build/meson
-	virtual/directfb"
+	virtual/directfb
+	ffmpeg? (media-video/ffmpeg)
+	freetype? (media-libs/freetype)
+	png? (media-libs/libpng)"
 
 RDEPEND="${DEPEND}"
 BDEPEND=""
