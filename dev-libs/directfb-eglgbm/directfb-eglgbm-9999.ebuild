@@ -16,6 +16,7 @@ IUSE=""
 DEPEND="|| (    sys-devel/gcc
                 sys-devel/clang )
 	dev-build/meson
+	media-libs/mesa
 	virtual/directfb"
 RDEPEND="${DEPEND}"
 BDEPEND=""
