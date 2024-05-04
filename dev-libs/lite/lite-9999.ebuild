@@ -3,9 +3,9 @@
 
 EAPI=8
 
-DESCRIPTION="DirectFB Terminal Emulato"
-HOMEPAGE="https://github.com/directfb2/DFBTerm"
-EGIT_REPO_URI="https://github.com/directfb2/DFBTerm.git"
+DESCRIPTION="Lightweight Toolkit Enabler"
+HOMEPAGE="https://github.com/directfb2/LiTE"
+EGIT_REPO_URI="https://github.com/directfb2/LiTE.git"
 inherit git-r3 meson
 
 LICENSE="MIT"
@@ -16,9 +16,7 @@ IUSE=""
 DEPEND="|| (    sys-devel/gcc
                 sys-devel/clang )
 	dev-build/meson
-	virtual/directfb
-        dev-libs/lite"
-
+	virtual/directfb"
 RDEPEND="${DEPEND}"
 BDEPEND=""
 
