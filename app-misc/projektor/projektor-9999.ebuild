@@ -11,19 +11,20 @@ inherit git-r3 meson
 LICENSE="MIT"
 SLOT="0"
 KEYWORDS="~amd64 ~x86"
-IUSE="dejavu mupdf poppler"
+IUSE="mupdf poppler"
 
 DEPEND="|| (    sys-devel/gcc
                 sys-devel/clang )
 	dev-build/meson
-	virtual/directfb"
+	virtual/directfb
+	mupdf? ( app-text/mupdf )
+        poppler? ( app-text/poppler )"
 
 RDEPEND="${DEPEND}"
 BDEPEND=""
 
 src_configure() {
     local emesonargs=(
-        $(meson_use dejavu djvu)
         $(meson_use mupdf)
         $(meson_use poppler)
     )
