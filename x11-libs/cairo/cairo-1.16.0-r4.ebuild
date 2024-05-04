@@ -46,7 +46,7 @@ RDEPEND="
 	)"
 DEPEND="${RDEPEND}
 	X? ( x11-base/xorg-proto )
-        directfb? ( dev-libs/DirectFB )"
+        directfb? ( virtual/directfb )"
 
 #[[ ${PV} == *9999* ]] && DEPEND="${DEPEND}
 #	doc? (
