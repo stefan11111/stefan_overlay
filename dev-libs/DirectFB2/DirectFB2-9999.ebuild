@@ -11,18 +11,19 @@ inherit git-r3 meson
 LICENSE="MIT"
 SLOT="0"
 KEYWORDS="~amd64 ~x86"
-IUSE="cpu_flags_x86_mmx cpu_flags_x86_neon constructors drmkms fbdev linux_input memcpy-probing multi-application multi-kernel network piped-stream sentinels smooth-scaling text trace"
+IUSE="cpu_flags_x86_mmx cpu_flags_x86_neon drmkms fbdev linux_input memcpy-probing multi-application multi-kernel network piped-stream sentinels smooth-scaling text trace"
 
 DEPEND="|| (    sys-devel/gcc
                 sys-devel/clang )
-	dev-build/meson"
+	dev-build/meson
+	drmkms? (x11-libs/libdrm)"
 
 RDEPEND="${DEPEND}"
 BDEPEND="dev-libs/flux"
 
 src_configure() {
     local emesonargs=(
-        $(meson_use constructors)
+        -Dconstructors=true
         $(meson_use drmkms)
         $(meson_use fbdev)
         $(meson_use linux_input)
