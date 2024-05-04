@@ -16,7 +16,7 @@ IUSE="cpu_flags_x86_mmx cpu_flags_x86_neon drmkms fbdev linux_input memcpy-probi
 DEPEND="|| (    sys-devel/gcc
                 sys-devel/clang )
 	dev-build/meson
-	drmkms? (x11-libs/libdrm)"
+	drmkms? ( x11-libs/libdrm )"
 
 RDEPEND="${DEPEND}"
 BDEPEND="dev-libs/flux"
