@@ -16,6 +16,7 @@ IUSE=""
 DEPEND="|| (    sys-devel/gcc
                 sys-devel/clang )
 	dev-build/meson
+	x11-libs/tslib
 	virtual/directfb"
 RDEPEND="${DEPEND}"
 BDEPEND=""
