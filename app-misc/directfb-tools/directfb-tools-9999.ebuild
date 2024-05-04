@@ -17,9 +17,9 @@ DEPEND="|| (    sys-devel/gcc
                 sys-devel/clang )
 	dev-build/meson
 	virtual/directfb
-	ffmpeg? (media-video/ffmpeg)
-	freetype? (media-libs/freetype)
-	png? (media-libs/libpng)"
+	ffmpeg? ( media-video/ffmpeg )
+	freetype? ( media-libs/freetype )
+	png? ( media-libs/libpng )"
 
 RDEPEND="${DEPEND}"
 BDEPEND=""
