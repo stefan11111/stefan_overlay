@@ -16,7 +16,8 @@ IUSE="named-mmap pool-alloc"
 DEPEND="|| (    sys-devel/gcc
                 sys-devel/clang )
 	dev-build/meson
-	virtual/directfb"
+	virtual/directfb
+	sys-devel/llvm"
 RDEPEND="${DEPEND}"
 BDEPEND=""
 
