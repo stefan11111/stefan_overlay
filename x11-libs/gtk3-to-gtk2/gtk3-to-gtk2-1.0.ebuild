@@ -3,7 +3,7 @@
 
 EAPI=8
 
-DESCRIPTION=""
+DESCRIPTION="Compatibility library to run gtk3 apps with gtk2"
 HOMEPAGE="https://github.com/stefan11111/gtk3-to-gtk2"
 EGIT_REPO_URI="https://github.com/stefan11111/gtk3-to-gtk2.git"
 inherit git-r3
