@@ -28,5 +28,6 @@ src_compile() {
 }
 
 src_install() {
-    emake install PREFIX=/usr DESTDIR=${D}
+    use X && emake install PREFIX=/usr DESTDIR=${D} TARGET=x11
+    use directfb && emake install PREFIX=/usr DESTDIR=${D} TARGET=directfb
 }

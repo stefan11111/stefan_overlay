@@ -18,6 +18,7 @@ KEYWORDS="~amd64 ~x86"
 
 DEPEND="|| (    sys-devel/gcc
                 sys-devel/clang )
+	virtual/pkgconfig
 	X? ( x11-libs/gtk+:2[X] )
 	directfb? ( x11-libs/gtk+:2[directfb] )"
 RDEPEND="${DEPEND}"
