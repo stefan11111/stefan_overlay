@@ -17,14 +17,15 @@ REQUIRED_USE="^^ ( X directfb )"
 
 DEPEND="|| (    sys-devel/gcc
                 sys-devel/clang )
+        virtual/pkgconfig
         X? ( x11-libs/gtk+:2[X] )
         directfb? ( x11-libs/gtk+:2[directfb] )"
 RDEPEND="${DEPEND}"
 BDEPEND=""
 
 src_compile() {
-    use X && emake TARGET=x11
-    use directfb && emake TARGET=directfb
+    use X && emake TARGET=x11 GDK_WINDOWING=X11
+    use directfb && emake TARGET=directfb GDK_WINDOWING=DIRECTFB
 }
 
 src_install() {
