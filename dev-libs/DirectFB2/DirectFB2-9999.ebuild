@@ -19,7 +19,9 @@ DEPEND="|| (    sys-devel/gcc
 	drmkms? ( x11-libs/libdrm )"
 
 RDEPEND="${DEPEND}"
-BDEPEND="dev-libs/flux"
+BDEPEND="
+	!dev-libs/DirectFB
+	dev-libs/flux"
 
 src_configure() {
     local emesonargs=(

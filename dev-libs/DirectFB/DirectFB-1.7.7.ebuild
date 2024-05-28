@@ -70,6 +70,7 @@ RDEPEND="
 	zlib? ( sys-libs/zlib )	"
 
 BDEPEND="
+	!dev-libs/DirectFB2
 	dev-libs/flux "
 
 DEPEND="${RDEPEND} ${BDEPEND}"
