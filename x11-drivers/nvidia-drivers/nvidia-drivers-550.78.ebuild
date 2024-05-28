@@ -1,4 +1,4 @@
-# Copyright 1999-2023 Gentoo Authors
+# Copyright 1999-2024 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=8
@@ -7,7 +7,7 @@ MODULES_OPTIONAL_IUSE=+modules
 inherit desktop flag-o-matic linux-mod-r1 readme.gentoo-r1
 inherit systemd toolchain-funcs unpacker user-info
 
-MODULES_KERNEL_MAX=6.6
+MODULES_KERNEL_MAX=6.9
 NV_URI="https://download.nvidia.com/XFree86/"
 
 DESCRIPTION="NVIDIA Accelerated Graphics Driver"
@@ -24,8 +24,8 @@ S=${WORKDIR}
 
 LICENSE="NVIDIA-r2 Apache-2.0 BSD BSD-2 GPL-2 MIT ZLIB curl openssl"
 SLOT="0/${PV%%.*}"
-KEYWORDS="-* ~amd64 ~arm64"
-IUSE="+X abi_x86_32 abi_x86_64 kernel-open persistenced +static-libs +tools wayland"
+KEYWORDS="-* amd64 ~arm64"
+IUSE="+X abi_x86_32 abi_x86_64 kernel-open persistenced powerd +static-libs +tools wayland"
 REQUIRED_USE="kernel-open? ( modules )"
 
 COMMON_DEPEND="
@@ -58,6 +58,7 @@ RDEPEND="
 		x11-libs/libX11[abi_x86_32(-)?]
 		x11-libs/libXext[abi_x86_32(-)?]
 	)
+	powerd? ( sys-apps/dbus[abi_x86_32(-)?] )
 	wayland? (
 		gui-libs/egl-gbm
 		>=gui-libs/egl-wayland-1.1.10
@@ -66,6 +67,7 @@ RDEPEND="
 DEPEND="
 	${COMMON_DEPEND}
 	static-libs? (
+		x11-base/xorg-proto
 		x11-libs/libX11
 		x11-libs/libXext
 	)
@@ -100,6 +102,7 @@ pkg_setup() {
 		~!LOCKDEP
 		~!SLUB_DEBUG_ON
 		!DEBUG_MUTEXES
+		$(usev powerd '~CPU_FREQ')
 	"
 
 	local ERROR_DRM_KMS_HELPER="CONFIG_DRM_KMS_HELPER: is not set but needed for Xorg auto-detection
@@ -107,12 +110,6 @@ pkg_setup() {
 	Cannot be directly selected in the kernel's menuconfig, and may need
 	selection of a DRM device even if unused, e.g. CONFIG_DRM_AMDGPU=m or
 	DRM_I915=y, DRM_NOUVEAU=m also acceptable if a module and not built-in."
-
-	local ERROR_X86_KERNEL_IBT="CONFIG_X86_KERNEL_IBT: is set and, if the CPU supports the feature,
-	this *could* lead to modules load failure with ENDBR errors, or to
-	broken CUDA/NVENC. Please ignore if not having issues, but otherwise
-	try to unset or pass ibt=off to the kernel's command line." #911142
-	use kernel-open || CONFIG_CHECK+=" ~!X86_KERNEL_IBT"
 
 	use amd64 && kernel_is -ge 5 8 && CONFIG_CHECK+=" X86_PAT" #817764
 
@@ -142,7 +139,7 @@ src_prepare() {
 	sed 's/__USER__/nvpd/' \
 		nvidia-persistenced/init/systemd/nvidia-persistenced.service.template \
 		> "${T}"/nvidia-persistenced.service || die
-	use !amd64 || sed -i "s|/usr|${EPREFIX}/opt|" systemd/system/nvidia-powerd.service || die
+	sed -i "s|/usr|${EPREFIX}/opt|" systemd/system/nvidia-powerd.service || die
 
 	# use alternative vulkan icd option if USE=-X (bug #909181)
 	use X || sed -i 's/"libGLX/"libEGL/' nvidia_{layers,icd}.json || die
@@ -157,11 +154,11 @@ src_prepare() {
 }
 
 src_compile() {
-	tc-export AR CC CXX LD OBJCOPY OBJDUMP
+	tc-export AR CC CXX LD OBJCOPY OBJDUMP PKG_CONFIG
 
 	local xnvflags=-fPIC #840389
 	# lto static libraries tend to cause problems without fat objects
-	is-flagq '-flto@(|=*)' && xnvflags+=" $(test-flags-CC -ffat-lto-objects)"
+	tc-is-lto && xnvflags+=" $(test-flags-CC -ffat-lto-objects)"
 
 	NV_ARGS=(
 		PREFIX="${EPREFIX}"/usr
@@ -249,6 +246,7 @@ src_install() {
 	local skip_modules=(
 		$(usev !X "nvfbc vdpau xdriver")
 		$(usev !modules gsp)
+		$(usev !powerd powerd)
 		installer nvpd # handled separately / built from source
 	)
 	local skip_types=(
@@ -394,7 +392,8 @@ documentation that is installed alongside this README."
 	dobin nvidia-bug-report.sh
 
 	# MODULE:powerd extras
-	if use amd64; then
+	if use powerd; then
+		newinitd "${FILESDIR}"/nvidia-powerd.initd nvidia-powerd #923117
 		systemd_dounit systemd/system/nvidia-powerd.service
 
 		insinto /usr/share/dbus-1/system.d
@@ -408,12 +407,12 @@ documentation that is installed alongside this README."
 	# don't attempt to strip firmware files (silences errors)
 	dostrip -x ${paths[FIRMWARE]}
 
-	# sandbox issues with /dev/nvidiactl (and /dev/char wrt bug #904292)
+	# sandbox issues with /dev/nvidiactl others (bug #904292,#921578)
 	# are widespread and sometime affect revdeps of packages built with
 	# USE=opencl/cuda making it hard to manage in ebuilds (minimal set,
 	# ebuilds should handle manually if need others or addwrite)
 	insinto /etc/sandbox.d
-	newins - 20nvidia <<<'SANDBOX_PREDICT="/dev/nvidiactl:/dev/char"'
+	newins - 20nvidia <<<'SANDBOX_PREDICT="/dev/nvidiactl:/dev/nvidia-caps:/dev/char"'
 }
 
 pkg_preinst() {
