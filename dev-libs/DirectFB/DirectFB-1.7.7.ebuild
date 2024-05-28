@@ -34,8 +34,8 @@ KEYWORDS="alpha amd64 arm ~arm64 hppa ia64 -mips ppc ppc64 sh -sparc x86"
 IUSE="alsa wawe playlist bmp cddb debug divine drmkms +dynload doc egl fbcon fusiondale fusionsound gif gles2 gstreamer imlib2 input_hub jpeg jpeg2k mad cpu_flags_x86_mmx mng mpeg2 mpeg3 multicore opengl oss png pnm sawman sdl cpu_flags_x86_sse static-libs swfdec tiff timidity tremor truetype v4l vdpau vorbis webp X xine zlib ${IUV} ${IUD}"
 REQUIRED_USE="gles2? ( opengl )"
 
-CFLAGS="-fno-strict-aliasing ${CFLAGS}"
-CXXFLAGS="-fno-strict-aliasing ${CXXFLAGS}"
+CFLAGS="-fno-strict-aliasing -fpermissive ${CFLAGS}"
+CXXFLAGS="-fno-strict-aliasing -fpermissive ${CXXFLAGS}"
 
 # ffmpeg useflag broken
 # ffmpeg? ( virtual/ffmpeg )
