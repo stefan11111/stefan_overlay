@@ -3,11 +3,14 @@
 
 EAPI=8
 
-inherit xdg
+inherit git-r3
 
 DESCRIPTION="Simple GTK tetris game"
 HOMEPAGE="https://github.com/wader/gtktetris"
-SRC_URI="https://github.com/wader/gtktetris/archive/refs/tags/1.0.tar.gz"
+#SRC_URI="https://github.com/wader/gtktetris/archive/refs/tags/1.0.tar.gz"
+EGIT_REPO_URI="https://github.com/wader/gtktetris.git"
+
+CFLAGS="${CFLAGS} -fcommon"
 
 LICENSE="GPL-2"
 SLOT="0"
