@@ -6,7 +6,7 @@ EAPI=8
 DESCRIPTION="Minimal implementation of Gnome Accessibility Toolkit "
 HOMEPAGE="https://github.com/stefan11111/atk"
 EGIT_REPO_URI="https://github.com/stefan11111/atk.git"
-inherit git-r3
+inherit git-r3 multilib-minimal
 
 LICENSE="MIT"
 SLOT="0"
@@ -15,7 +15,8 @@ IUSE="abi_x86_32 abi_x86_64"
 
 DEPEND="|| (    sys-devel/gcc
                 sys-devel/clang )
-                dev-libs/glib:2"
+                dev-libs/glib:2[${MULTILIB_USEDEP}]
+                virtual/pkgconfig"
 RDEPEND="${DEPEND}"
 BDEPEND=""
 
