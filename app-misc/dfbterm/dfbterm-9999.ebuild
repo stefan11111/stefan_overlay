@@ -8,8 +8,8 @@ HOMEPAGE="https://github.com/directfb2/DFBTerm"
 EGIT_REPO_URI="https://github.com/directfb2/DFBTerm.git"
 inherit git-r3 meson
 
-#broken with lto
-CFLAGS="${CFLAGS} -fno-lto"
+#broken with lto otherwise
+CFLAGS="${CFLAGS} -fno-strict-aliasing"
 
 LICENSE="MIT"
 SLOT="0"
