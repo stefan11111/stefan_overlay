@@ -9,7 +9,7 @@ EGIT_REPO_URI="git://git.gnupg.org/ntbtls.git"
 inherit git-r3
 
 LICENSE="MIT"
-SLOT="0"
+SLOT="0/${PV}"
 KEYWORDS="~amd64 ~x86"
 IUSE=""
 
