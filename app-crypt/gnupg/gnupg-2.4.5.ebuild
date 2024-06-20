@@ -22,7 +22,7 @@ SRC_URI+=" verify-sig? ( mirror://gnupg/gnupg/${P}.tar.bz2.sig )"
 S="${WORKDIR}/${MY_P}"
 
 LICENSE="GPL-3+"
-SLOT="0"
+SLOT="0/${PV}"
 KEYWORDS="~alpha amd64 arm arm64 hppa ~ia64 ~loong ~m68k ~mips ppc ppc64 ~riscv ~s390 sparc x86 ~amd64-linux ~x86-linux ~arm64-macos ~ppc-macos ~x64-macos ~x64-solaris"
 IUSE="bzip2 doc ldap nls readline selinux +smartcard gpgsm ssl gnutls ntbtls test +tofu tpm tools usb user-socket wks-server"
 RESTRICT="!test? ( test )"
