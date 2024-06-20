@@ -24,9 +24,9 @@ S="${WORKDIR}/${MY_P}"
 LICENSE="GPL-3+"
 SLOT="0"
 KEYWORDS="~alpha amd64 arm arm64 hppa ~ia64 ~loong ~m68k ~mips ppc ppc64 ~riscv ~s390 sparc x86 ~amd64-linux ~x86-linux ~arm64-macos ~ppc-macos ~x64-macos ~x64-solaris"
-IUSE="bzip2 doc ldap nls readline selinux +smartcard gnutls ntbtls test +tofu tpm tools usb user-socket wks-server"
+IUSE="bzip2 doc ldap nls readline selinux +smartcard ssl gnutls ntbtls test +tofu tpm tools usb user-socket wks-server"
 RESTRICT="!test? ( test )"
-REQUIRED_USE="test? ( tofu ) ^^ ( gnutls ntbtls )"
+REQUIRED_USE="test? ( tofu ) ssl? ( ^^ ( gnutls ntbtls ) )"
 
 # Existence of executables is checked during configuration.
 # Note: On each bump, update dep bounds on each version from configure.ac!
