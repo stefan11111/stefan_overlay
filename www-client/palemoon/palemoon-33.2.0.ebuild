@@ -43,7 +43,6 @@ EGIT_REPO_URI="https://repo.palemoon.org/MoonchildProductions/Pale-Moon.git"
 EGIT_COMMIT="${PV}_Release"
 
 DEPEND="
-	>=dev-build/autoconf-2.13:2.1
 	dev-lang/python:2.7
 	>=dev-lang/perl-5.6
 	dev-lang/yasm
@@ -104,7 +103,7 @@ src_configure() {
 	# Basic configuration:
 	mozconfig_init
 
-	mozconfig_disable updater accessibility gconf webrtc
+	mozconfig_disable updater accessibility gconf webrtc gold
 
 	if use npapi; then
 		mozconfig_enable npapi
