@@ -219,7 +219,6 @@ src_configure() {
 
 	export MOZBUILD_STATE_PATH="${WORKDIR}/mach_state"
 	mozconfig_var PYTHON $(which python2)
-	mozconfig_var AUTOCONF $(which autoconf-2.13)
 	mozconfig_var MOZ_MAKE_FLAGS "\"${MAKEOPTS}\""
 
 	# Shorten obj dir to limit some errors linked to the path size hitting
