@@ -1,7 +1,7 @@
 # Copyright 1999-2020 Gentoo Authors and Martin V\"ath
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=6
+EAPI=8
 GNOME2_LA_PUNT="yes"
 GNOME2_EAUTORECONF="yes"
 
