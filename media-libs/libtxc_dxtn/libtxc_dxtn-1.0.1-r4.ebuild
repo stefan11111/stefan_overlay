@@ -14,7 +14,9 @@ SLOT="0"
 KEYWORDS="amd64 ~arm ~arm64 ~ppc ~ppc64 x86"
 IUSE=""
 
-DEPEND=""
+DEPEND="|| (    sys-devel/gcc
+                sys-devel/clang )
+        dev-build/libtool"
 RDEPEND=""
 
 multilib_src_configure() {
