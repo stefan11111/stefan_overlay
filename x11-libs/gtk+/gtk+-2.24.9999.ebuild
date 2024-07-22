@@ -10,6 +10,7 @@ DESCRIPTION="Gimp ToolKit +"
 HOMEPAGE="https://www.gtk.org/"
 #SRC_URI=${SRC_URI}
 EGIT_REPO_URI="https://github.com/stefan11111/gtk2.git"
+SRC_URI=""
 #EGIT_BRANCH="devel"
 
 LICENSE="LGPL-2+"
@@ -19,8 +20,6 @@ IUSE="adwaita-icon-theme X directfb print cups +introspection vim-syntax xineram
 
 # Disable deprecation warnings
 #CFLAGS="-Wno-deprecated-declarations ${CFLAGS}"
-
-KEYWORDS="~alpha amd64 arm arm64 ~hppa ~ia64 ~loong ~mips ppc ppc64 ~riscv ~s390 sparc x86 ~amd64-linux ~x86-linux ~ppc-macos ~x64-macos ~sparc-solaris ~sparc64-solaris ~x64-solaris ~x86-solaris"
 
 # Upstream wants us to do their job:
 # https://bugzilla.gnome.org/show_bug.cgi?id=768663#c1
@@ -73,7 +72,6 @@ RDEPEND="${COMMON_DEPEND}
 		>=x11-themes/adwaita-icon-theme-3.14
 		x11-themes/gnome-themes-standard
 	)
-	!<dev-util/gtk-builder-convert-${PV}
 "
 # librsvg for svg icons (PDEPEND to avoid circular dep), bug #547710
 PDEPEND="
