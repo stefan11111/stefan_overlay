@@ -15,7 +15,8 @@ IUSE=""
 
 DEPEND="|| (    sys-devel/gcc
                 sys-devel/clang )
-        x11-libs/libXfont"
+        x11-libs/libXfont
+        x11-libs/libXtst"
 RDEPEND="${DEPEND}"
 BDEPEND=""
 
