@@ -23,7 +23,7 @@ CFLAGS="-fpermissive ${CFLAGS}"
 
 src_configure() {
     ./autogen.sh
-    econf ----with-fontdir=/usr/share/fonts
+    econf --with-fontdir=/usr/share/fonts
 }
 
 src_install() {
