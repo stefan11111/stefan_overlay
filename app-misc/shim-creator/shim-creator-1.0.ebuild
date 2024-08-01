@@ -3,9 +3,9 @@
 
 EAPI=8
 
-DESCRIPTION="Terminal irc client"
-HOMEPAGE="https://github.com/stefan11111/kirc"
-EGIT_REPO_URI="https://github.com/stefan11111/kirc.git"
+DESCRIPTION="small utility to create shims"
+HOMEPAGE="https://github.com/stefan11111/shim-creator"
+EGIT_REPO_URI="https://github.com/stefan11111/shim-creator.git"
 inherit git-r3
 
 LICENSE="MIT"
