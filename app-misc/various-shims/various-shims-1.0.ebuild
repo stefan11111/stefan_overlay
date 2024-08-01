@@ -13,7 +13,7 @@ CFLAGS="${CFLAGS}"
 LICENSE="GPL-3"
 SLOT="0"
 KEYWORDS="~amd64 ~x86"
-IUSE="vala xmlto intltool gettext dbus"
+IUSE="vala xmlto itstool intltool gettext dbus"
 
 DEPEND=""
 RDEPEND="${DEPEND}"
@@ -28,6 +28,10 @@ src_install() {
 
 	if use xmlto; then
 		emake xmlto DESTDIR=${D}
+	fi
+
+	if use itstool; then
+		emake itstool DESTDIR=${D}
 	fi
 
 	if use intltool; then
