@@ -13,7 +13,7 @@ CFLAGS="${CFLAGS}"
 LICENSE="GPL-3"
 SLOT="0"
 KEYWORDS="~amd64 ~x86"
-IUSE="vala xmlto itstool intltool gettext dbus"
+IUSE="vala xmlto itstool polkit intltool gettext dbus"
 
 DEPEND=""
 RDEPEND="${DEPEND}"
@@ -32,6 +32,10 @@ src_install() {
 
 	if use itstool; then
 		emake itstool DESTDIR=${D}
+	fi
+
+	if use polkit; then
+		emake polkit DESTDIR=${D}
 	fi
 
 	if use intltool; then
