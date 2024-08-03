@@ -6,7 +6,7 @@ DESCRIPTION="dummy at-spi2-code implementation"
 HOMEPAGE=""
 
 LICENSE="MIT"
-SLOT="0"
+SLOT="2"
 KEYWORDS="~amd64 ~x86"
 IUSE=""
 
