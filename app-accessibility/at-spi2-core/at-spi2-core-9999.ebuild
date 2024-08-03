@@ -5,6 +5,8 @@ EAPI=8
 DESCRIPTION="dummy at-spi2-code implementation"
 HOMEPAGE=""
 
+inherit multilib-minimal
+
 LICENSE="MIT"
 SLOT="2"
 KEYWORDS="~amd64 ~x86"
