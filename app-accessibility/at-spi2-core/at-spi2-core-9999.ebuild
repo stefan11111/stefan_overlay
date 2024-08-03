@@ -13,6 +13,6 @@ KEYWORDS="~amd64 ~x86"
 IUSE="introspection X"
 
 DEPEND="
-	<dev-libs/atk-2.46.0[X?, introspection?, ${MULTILIB_USEDEP}]"
+	<dev-libs/atk-2.46.0[X(+)?,introspection(+)?,${MULTILIB_USEDEP}]"
 RDEPEND=""
 BDEPEND=""
