@@ -10,9 +10,9 @@ inherit multilib-minimal
 LICENSE="MIT"
 SLOT="2"
 KEYWORDS="~amd64 ~x86"
-IUSE=""
+IUSE="introspection X"
 
 DEPEND="
-	<dev-libs/atk-2.46.0"
+	<dev-libs/atk-2.46.0[X?, introspection?, ${MULTILIB_USEDEP}]"
 RDEPEND=""
 BDEPEND=""
