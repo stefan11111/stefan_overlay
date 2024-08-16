@@ -16,7 +16,7 @@ EGIT_BRANCH="devel"
 LICENSE="LGPL-2+"
 SLOT="2"
 
-IUSE="adwaita-icon-theme X directfb print cups +introspection vim-syntax xinerama test perf"
+IUSE="adwaita-icon-theme X directfb print cups +introspection vim-syntax xinerama test"
 
 KEYWORDS="~x86 ~amd64"
 
@@ -124,8 +124,6 @@ multilib_src_configure() {
 	use cups && myeconfargs+=(CUPS_CONFIG="${EPREFIX}/usr/bin/${CHOST}-cups-config")
 
 	use test && myeconfargs+=(--enable-tests)
-
-	use perf && myeconfargs+=(--enable-perf)
 
 	ECONF_SOURCE="${S}" econf "${myeconfargs[@]}"
 }
