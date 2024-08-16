@@ -22,6 +22,5 @@ RDEPEND="${DEPEND}"
 BDEPEND=""
 
 src_install() {
-    emake
     emake install PREFIX=/usr DESTDIR=${D}
 }
