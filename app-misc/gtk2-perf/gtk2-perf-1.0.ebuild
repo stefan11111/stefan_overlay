@@ -16,7 +16,7 @@ IUSE=""
 DEPEND="|| (    sys-devel/gcc
                 sys-devel/clang )
         x11-libs/gtk+:2
-	dev-libs/glib-utils
+	dev-util/glib-utils
 	virtual/pkgconfig"
 RDEPEND="${DEPEND}"
 BDEPEND=""
