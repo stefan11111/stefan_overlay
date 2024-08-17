@@ -21,9 +21,9 @@ S="${WORKDIR}/wxWidgets-${PV}"
 LICENSE="wxWinLL-3 GPL-2 doc? ( wxWinFDL-3 )"
 SLOT="${WXRELEASE}"
 KEYWORDS="~alpha amd64 arm arm64 ~hppa ~ia64 ~loong ~mips ppc ppc64 ~riscv sparc x86 ~amd64-linux ~x86-linux"
-IUSE="+X doc debug gstreamer libnotify opengl pch sdl test tiff webkit compat26 compat28 nodebug zlib expat graphics_ctx gtkprint gui gtk2 gtk3 pcre png jpeg xrc unicode"
+IUSE="+X directfb doc debug gstreamer libnotify opengl pch sdl test tiff webkit compat26 compat28 nodebug zlib expat graphics_ctx gtkprint gui gtk2 gtk3 pcre png jpeg xrc unicode"
 REQUIRED_USE="test? ( tiff ) tiff? ( X )"
-RESTRICT="!test? ( test )"
+RESTRICT="!test? ( test ) directfb? ( !gtk3 )"
 
 RDEPEND="
 	>=app-eselect/eselect-wxwidgets-20131230
@@ -44,7 +44,7 @@ RDEPEND="
 		)
 		x11-libs/cairo[${MULTILIB_USEDEP}]
 		gtk2? (
-			x11-libs/gtk+:2[${MULTILIB_USEDEP}]
+			x11-libs/gtk+:2[X(+),${MULTILIB_USEDEP}]
 		)
 		gtk3? (
 			x11-libs/gtk+:3[${MULTILIB_USEDEP}]
@@ -62,7 +62,13 @@ RDEPEND="
 		opengl? ( virtual/opengl[${MULTILIB_USEDEP}] )
 		tiff? ( media-libs/tiff:=[${MULTILIB_USEDEP}] )
 		webkit? ( net-libs/webkit-gtk:4 )
-	)"
+	)
+	directfb? (
+		gtk2? (
+			x11-libs/gtk+:2[directfb(+),${MULTILIB_USEDEP}]
+		)
+	)
+	"
 DEPEND="${RDEPEND}
 	opengl? ( virtual/glu[${MULTILIB_USEDEP}] )
 	X? ( x11-base/xorg-proto )"
@@ -164,7 +170,7 @@ multilib_src_configure() {
 	# wxGTK options
 	#   --enable-graphics_ctx - needed for webkit, editra
 	#   --without-gnomevfs - bug #203389
-	use X && myeconfargs+=(
+	( use X || use directfb ) && myeconfargs+=(
 		--without-gnomevfs
 		$(use_enable gstreamer mediactrl)
 		$(multilib_native_use_enable webkit webview)
@@ -174,8 +180,11 @@ multilib_src_configure() {
 		$(use_enable test tests)
 	)
 
+	use X && myeconfargs+=( --with-x11 )
+	use directfb && myeconfargs+=( --with-directfb )
+
 	# wxBase options
-	! use X && myeconfargs+=( --disable-gui )
+	! ( use X || use directfb ) && myeconfargs+=( --disable-gui )
 
 	ECONF_SOURCE="${S}" econf "${myeconfargs[@]}"
 }
