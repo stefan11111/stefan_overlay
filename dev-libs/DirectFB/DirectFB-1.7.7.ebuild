@@ -2,7 +2,7 @@
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=8
-inherit autotools toolchain-funcs
+inherit autotools toolchain-funcs multilib-minimal
 
 # Map Gentoo IUSE expand vars to DirectFB drivers
 # echo `sed -n '/Possible gfxdrivers are:/,/^$/{/Possible/d;s:\[ *::;s:\].*::;s:,::g;p}' configure.in`
@@ -117,7 +117,7 @@ driver_list() {
 	echo ${devs:-none}
 }
 
-src_configure() {
+multilib_src_configure() {
 	local myaudio=""
 
 	use wawe && myaudio+="wawe"
@@ -149,7 +149,7 @@ src_configure() {
 
 	# The xine-vdpau flag requires a custom patch to xine-lib which we don't carry:
 	# http://git.directfb.org/?p=extras/DirectFB-extra.git;a=blob;f=interfaces/IDirectFBVideoProvider/xine-lib-1.2-vdpau-hooks.patch;hb=HEAD
-	econf \
+	local myconf=( \
 		$(use_enable static-libs static) \
 		$(use_enable X x11) \
 		$(use_enable divine) \
@@ -203,12 +203,23 @@ src_configure() {
 		--with-gfxdrivers="${gfxdrivers}" \
 		--with-inputdrivers="${inputdrivers}" \
 		--disable-vnc
+	)
+	ECONF_SOURCE=${S} econf "${myconf[@]}"
 }
 
-src_install() {
+multilib_src_compile() {
+    default
+}
+
+multilib_src_install() {
 	default
+}
+
+multilib_src_install_all() {
 	dodoc fb.modes
 	use doc && dohtml -r docs/html/*
+	einstalldocs
+	prune_libtool_files --all
 }
 
 pkg_postinst() {
