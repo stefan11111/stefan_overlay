@@ -20,7 +20,7 @@ DEPEND="|| (    sys-devel/gcc
                 sys-devel/clang )
 	virtual/pkgconfig
 	|| ( x11-libs/gtk+:2[X(+)]
-	     x11-libs/gtk+:2[directfb] )"
+	     x11-libs/gtk+:2[directfb(+)] )"
 RDEPEND="${DEPEND}"
 BDEPEND=""
 
