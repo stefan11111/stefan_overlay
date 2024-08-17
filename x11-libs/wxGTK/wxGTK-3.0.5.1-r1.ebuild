@@ -63,6 +63,7 @@ RDEPEND="
 		tiff? ( media-libs/tiff:=[${MULTILIB_USEDEP}] )
 		webkit? ( net-libs/webkit-gtk:4 )
 	)
+	directfb? ( virtual/directfb )
 	"
 DEPEND="${RDEPEND}
 	opengl? ( virtual/glu[${MULTILIB_USEDEP}] )
@@ -165,7 +166,7 @@ multilib_src_configure() {
 	# wxGTK options
 	#   --enable-graphics_ctx - needed for webkit, editra
 	#   --without-gnomevfs - bug #203389
-	( use X || use directfb ) && myeconfargs+=(
+	( use X || use directfb || use X11) && myeconfargs+=(
 		--without-gnomevfs
 		$(use_enable gstreamer mediactrl)
 		$(multilib_native_use_enable webkit webview)
@@ -179,7 +180,7 @@ multilib_src_configure() {
 	use directfb && myeconfargs+=( --with-directfb )
 
 	# wxBase options
-	! ( use X || use directfb ) && myeconfargs+=( --disable-gui )
+	! ( use X || use directfb || use X11 ) && myeconfargs+=( --disable-gui )
 
 	ECONF_SOURCE="${S}" econf "${myeconfargs[@]}"
 }
