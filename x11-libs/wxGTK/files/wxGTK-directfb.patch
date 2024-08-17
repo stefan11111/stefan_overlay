@@ -1,0 +1,11 @@
+--- a/src/dfb/bitmap.cpp	2024-08-17 18:17:53.364922362 +0300
++++ b/src/dfb/bitmap.cpp	2024-08-17 18:18:19.198256185 +0300
+@@ -320,7 +320,7 @@
+             break;
+ 
+         case DSPF_RGB32:
+-            CopyBits<wxUint32, 0xffffffff, 0>(width, height, bits, locked);
++            CopyBits<wxUint32, (int)(0xffffffff), 0>(width, height, bits, locked);
+             break;
+ 
+         default:

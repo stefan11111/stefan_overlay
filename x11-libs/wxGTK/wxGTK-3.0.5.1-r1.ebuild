@@ -79,6 +79,7 @@ PATCHES=(
 	"${FILESDIR}"/wxGTK-ignore-c++-abi.patch #676878
 	"${FILESDIR}"/${PN}-configure-tests.patch
 	"${FILESDIR}"/${PN}-3.0.5.1-configure-modern-c.patch
+	"${FILESDIR}"/wxGTK-directfb.patch
 )
 
 src_prepare() {
