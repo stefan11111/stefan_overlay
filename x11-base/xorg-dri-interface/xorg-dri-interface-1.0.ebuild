@@ -10,12 +10,18 @@ inherit git-r3
 LICENSE="MIT"
 SLOT="0"
 KEYWORDS="~amd64 ~x86"
-IUSE=""
+IUSE="abi_x86_64 abi_x86_32"
 
 DEPEND=""
 RDEPEND=""
 BDEPEND=""
 
 src_install() {
-    emake install DESTDIR=${D}
+    if use abi_x86_64; then
+        emake install DESTDIR=${D}
+    fi
+
+    if use abi_x86_32; then
+        emake install DESTDIR=${D} LIBDIR=/usr/lib
+    fi
 }
