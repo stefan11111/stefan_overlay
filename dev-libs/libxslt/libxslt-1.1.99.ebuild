@@ -22,10 +22,10 @@ BDEPEND=""
 
 src_install() {
 	if use abi_x86_64; then
-		emake install-shared PREFIX=/usr DESTDIR=${D} LIBDIR=/lib64
+		emake install PREFIX=/usr DESTDIR=${D} LIBDIR=/usr/lib64 PKGCONF_LIBDIR=/lib64
 	fi
 	if use abi_x86_32; then
 		emake clean
-		emake install-shared PREFIX=/usr DESTDIR=${D} LIBDIR=/lib CFLAGS="${CFLAGS} -m32"
+		emake install PREFIX=/usr DESTDIR=${D} LIBDIR=/usr/lib PKGCONF_LIBDIR=/lib64 CFLAGS="${CFLAGS} -m32"
 	fi
 }
