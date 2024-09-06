@@ -2,15 +2,29 @@
 # Distributed under the terms of the MIT License
 
 EAPI=8
-DESCRIPTION="dummy gettext implementation"
-HOMEPAGE=""
+DESCRIPTION="minimal gettext implementation"
+HOMEPAGE="https://github.com/stefan11111/fake-gettext"
+EGIT_REPO_URI="https://github.com/stefan11111/fake-gettext.git"
+inherit git-r3
 
 LICENSE="MIT"
-SLOT="0.56"
+SLOT="0"
 KEYWORDS="~amd64 ~x86"
-IUSE=""
+IUSE="minimal"
 
-DEPEND="
-	app-misc/various-shims[gettext(+)]"
-RDEPEND=""
+DEPEND="|| (    sys-devel/gcc
+                sys-devel/clang )"
+RDEPEND="${DEPEND}"
 BDEPEND=""
+
+src_compile() {
+    if use minimal; then
+        emake minimal
+    else
+        emake
+    fi
+}
+
+src_install() {
+    emake install DESTDIR=${D}
+}
