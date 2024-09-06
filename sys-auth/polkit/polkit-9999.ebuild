@@ -3,14 +3,20 @@
 
 EAPI=8
 DESCRIPTION="dummy polkit implementation"
-HOMEPAGE=""
+HOMEPAGE="https://github.com/stefan11111/fake-polkit"
+EGIT_REPO_URI="https://github.com/stefan11111/fake-polkit.git"
+inherit git-r3
 
 LICENSE="MIT"
 SLOT="0"
 KEYWORDS="~amd64 ~x86"
 IUSE=""
 
-DEPEND="
-	app-misc/various-shims[polkit(+)]"
-RDEPEND=""
+DEPEND="|| (    sys-devel/gcc
+                sys-devel/clang )"
+RDEPEND="${DEPEND}"
 BDEPEND=""
+
+src_install() {
+    emake install DESTDIR=${D}
+}
