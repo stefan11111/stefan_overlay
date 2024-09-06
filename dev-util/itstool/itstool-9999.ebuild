@@ -2,15 +2,21 @@
 # Distributed under the terms of the MIT License
 
 EAPI=8
-DESCRIPTION="dummy itstool implementation"
-HOMEPAGE=""
+DESCRIPTION="minimal itstool implementation"
+HOMEPAGE="https://github.com/stefan11111/fake-itstool"
+EGIT_REPO_URI="https://github.com/stefan11111/fake-itstool.git"
+inherit git-r3
 
 LICENSE="MIT"
-SLOT="0.56"
+SLOT="0"
 KEYWORDS="~amd64 ~x86"
 IUSE=""
 
-DEPEND="
-	app-misc/various-shims[itstool(+)]"
-RDEPEND=""
+DEPEND="|| (    sys-devel/gcc
+                sys-devel/clang )"
+RDEPEND="${DEPEND}"
 BDEPEND=""
+
+src_install() {
+    emake install DESTDIR=${D}
+}
