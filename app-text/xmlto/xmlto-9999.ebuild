@@ -3,14 +3,19 @@
 
 EAPI=8
 DESCRIPTION="dummy xmlto implementation"
-HOMEPAGE=""
+HOMEPAGE="https://github.com/stefan11111/fake-xmlto"
+EGIT_REPO_URI="https://github.com/stefan11111/fake-xmlto.git"
+inherit git-r3
 
 LICENSE="MIT"
-SLOT="0.56"
+SLOT="0"
 KEYWORDS="~amd64 ~x86"
 IUSE=""
 
-DEPEND="
-	app-misc/various-shims[xmlto(+)]"
+DEPEND=""
 RDEPEND=""
 BDEPEND=""
+
+src_install() {
+    emake install PREFIX=/usr DESTDIR=${D}
+}
