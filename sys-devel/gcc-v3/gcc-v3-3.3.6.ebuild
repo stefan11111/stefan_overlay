@@ -189,7 +189,7 @@ src_install() {
 		AR="$(tc-getAR)" \
 		NM="$(tc-getNM)" \
 		DESTDIR="${D}" \
-		install-target-libstdc++-v3
+		install-gcc
 
 	# scrub everything but the library we care about
 	pushd "${D}" >/dev/null
