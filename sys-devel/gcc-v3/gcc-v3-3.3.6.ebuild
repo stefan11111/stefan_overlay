@@ -15,7 +15,7 @@ SRC_URI="ftp://gcc.gnu.org/pub/gcc/releases/gcc-${PV}/gcc-${PV}.tar.bz2
 LICENSE="GPL-2 LGPL-2.1"
 SLOT="5"
 KEYWORDS="~amd64 ~x86"
-IUSE="multilib nls"
+IUSE="multilib nls system-compiler"
 
 RDEPEND="sys-libs/zlib"
 DEPEND="
@@ -191,11 +191,15 @@ src_install() {
 		DESTDIR="${D}" \
 		install-gcc
 
-	# scrub everything but the library we care about
-	pushd "${D}" >/dev/null
-	mv usr/lib* . || die
-	rm -rf usr
-	rm -f lib*/*.{a,la,so} || die
-	dodir /usr
-	mv lib* usr/ || die
+	if ! use system-compiler; then
+		mv "${D}/usr/bin/gcc" "${D}/usr/bin/gcc3"
+		mv "${D}/usr/bin/gcov" "${D}/usr/bin/gcov3"
+		mv "${D}/usr/bin/x86_64-pc-linux-gnu-gcc" "${D}/usr/bin/x86_64-pc-linux-gnu-gcc3"
+		mv "${D}/usr/bin/cpp" "${D}/usr/bin/cpp3"
+		mv "${D}/usr/bin/c++" "${D}/usr/bin/c++3"
+		mv "${D}/usr/bin/g++" "${D}/usr/bin/g++3"
+		mv "${D}/usr/bin/gccbug" "${D}/usr/bin/gccbug3"
+		mv "${D}/usr/bin/x86_64-pc-linux-gnu-c++" "${D}/usr/bin/x86_64-pc-linux-gnu-c++3"
+		mv "${D}/usr/bin/x86_64-pc-linux-gnu-g++" "${D}/usr/bin/x86_64-pc-linux-gnu-g++3"
+	fi
 }
