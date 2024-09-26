@@ -6,6 +6,7 @@ EAPI=8
 DESCRIPTION="suckless system status"
 HOMEPAGE="https://github.com/stefan11111/slstatus"
 EGIT_REPO_URI="https://github.com/stefan11111/slstatus.git"
+EGIT_BRANCH="lite"
 inherit git-r3
 
 LICENSE="ISC"
