@@ -8,8 +8,7 @@ inherit flag-o-matic gnome2 multilib multilib-minimal readme.gentoo-r1 virtualx
 
 DESCRIPTION="Gimp ToolKit +"
 HOMEPAGE="https://www.gtk.org/"
-SRC_URI="https://github.com/stefan11111/gtk2/releases/download/gtk%2B-2.24.35/gtk-2.24.35.tar.gz"
-
+SRC_URI="https://github.com/stefan11111/gtk2/releases/download/gtk%2B-2.24.35/gtk+-2.24.35.tar.gz"
 LICENSE="LGPL-2+"
 SLOT="2"
 
