@@ -4,14 +4,11 @@
 EAPI=8
 GNOME2_EAUTORECONF="yes"
 
-inherit git-r3 flag-o-matic gnome2 multilib multilib-minimal readme.gentoo-r1 virtualx
+inherit flag-o-matic gnome2 multilib multilib-minimal readme.gentoo-r1 virtualx
 
 DESCRIPTION="Gimp ToolKit +"
 HOMEPAGE="https://www.gtk.org/"
-#SRC_URI=${SRC_URI}
-EGIT_REPO_URI="https://github.com/stefan11111/gtk2.git"
-SRC_URI=""
-#EGIT_BRANCH="devel"
+SRC_URI="https://github.com/stefan11111/gtk2/releases/download/gtk%2B-2.24.35/gtk-2.24.35.tar.gz"
 
 LICENSE="LGPL-2+"
 SLOT="2"
