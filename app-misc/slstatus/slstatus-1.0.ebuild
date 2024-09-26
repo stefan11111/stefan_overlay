@@ -18,10 +18,6 @@ DEPEND="|| (    sys-devel/gcc
 RDEPEND="${DEPEND}"
 BDEPEND=""
 
-PATCHES=(
-    "${FILESDIR}/static-dev.patch"
-)
-
 src_install() {
     emake install PREFIX=/usr DESTDIR=${D}
 }
