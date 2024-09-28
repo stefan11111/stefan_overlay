@@ -31,7 +31,7 @@ multilib_src_configure() {
         $(meson_use linux_input)
         $(meson_use memcpy-probing)
         $(meson_use cpu_flags_x86_mmx mmx)
-        $(meson_use cpu_flags_x86_neon neon)
+        $(meson_use cpu_flags_arm_neon neon)
         $(meson_use multi-application multi)
         $(meson_use multi-kernel)
         $(meson_use network)
