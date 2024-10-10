@@ -15,6 +15,7 @@ LICENSE="MPL-2.0 GPL-2 LGPL-2.1"
 IUSE="
 	+official-branding
 	+optimize
+	cpu_flags_x86_avx
 	cpu_flags_x86_sse
 	cpu_flags_x86_sse2
 	threads
@@ -144,12 +145,15 @@ src_configure() {
 
 	if use optimize; then
 		O='-O2'
+		if use cpu_flags_x86_avx; then
+			O="${O} -mavx"
+		fi
 		if use cpu_flags_x86_sse && use cpu_flags_x86_sse2; then
 			O="${O} -msse2 -mfpmath=sse"
 		fi
 		mozconfig_enable "optimize=\"${O}\""
 		# -ffast-math causes runtime failures
-		filter-flags '-O*' '-msse2' '-mfpmath=sse' '-ffast-math'
+		filter-flags '-O*' '-mavx' '-msse2' '-mfpmath=sse' '-ffast-math'
 	else
 		mozconfig_disable optimize
 	fi
