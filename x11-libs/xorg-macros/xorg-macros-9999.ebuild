@@ -6,7 +6,7 @@ EAPI=8
 DESCRIPTION="GNU autoconf macros shared across X.Org projects"
 HOMEPAGE="https://gitlab.freedesktop.org/xorg/util/macros"
 EGIT_REPO_URI="https://gitlab.freedesktop.org/xorg/util/macros.git"
-inherit git-r3
+inherit git-r3 autotools
 
 LICENSE="MIT"
 SLOT="0"
@@ -21,9 +21,11 @@ RDEPEND="${DEPEND}"
 BDEPEND=""
 
 src_configure() {
+    ./autogen.sh
     eautoreconf
+    econf
 }
 
 src_install() {
-    emake
+    emake install DESTDIR=${D}
 }
