@@ -11,7 +11,7 @@ inherit git-r3
 LICENSE="MIT"
 SLOT="0"
 KEYWORDS="~amd64 ~x86"
-IUSE=""
+IUSE="suid"
 
 DEPEND="|| (    sys-devel/gcc
                 sys-devel/clang )
@@ -29,4 +29,6 @@ src_configure() {
 
 src_install() {
     emake install DESTDIR=${D}
+    use suid && chmod 4755 ${D}/usr/bin/Xfbdev
+    use suid && chmod 4755 ${D}/usr/bin/Xvesa
 }
