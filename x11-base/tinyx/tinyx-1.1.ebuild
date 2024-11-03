@@ -9,7 +9,7 @@ EGIT_REPO_URI="https://github.com/stefan11111/tinyx.git"
 inherit git-r3
 
 LICENSE="MIT"
-SLOT="libXfont2"
+SLOT="0"
 KEYWORDS="~amd64 ~x86"
 IUSE=""
 
