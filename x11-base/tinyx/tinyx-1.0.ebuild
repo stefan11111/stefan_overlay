@@ -4,23 +4,34 @@
 EAPI=8
 
 DESCRIPTION="tinyx/kdrive X11 server"
-HOMEPAGE="https://github.com/tinycorelinux/tinyx"
-EGIT_REPO_URI="https://github.com/tinycorelinux/tinyx.git"
+HOMEPAGE="https://github.com/stefan11111/tinyx https://github.com/tinycorelinux/tinyx"
+#EGIT_REPO_URI="https://github.com/stefan11111/tinyx.git"
 inherit git-r3
 
 LICENSE="MIT"
 SLOT="0"
 KEYWORDS="~amd64 ~x86"
-IUSE=""
+IUSE="libxfont2 suid"
 
 DEPEND="|| (    sys-devel/gcc
                 sys-devel/clang )
-        x11-libs/libXfont
+        libxfont2? ( x11-libs/libXfont2 )
+        !libxfont2? ( x11-libs/libXfont )
         x11-libs/libXtst"
 RDEPEND="${DEPEND}"
 BDEPEND=""
 
 CFLAGS="-fpermissive ${CFLAGS}"
+
+src_unpack() {
+    local EGIT_REPO_URI
+    if use libxfont2; then
+        EGIT_REPO_URI=https://github.com/stefan11111/tinyx.git
+    else
+        EGIT_REPO_URI=https://github.com/tinycorelinux/tinyx.git
+    fi
+    git-r3_src_unpack
+}
 
 src_configure() {
     ./autogen.sh
@@ -29,4 +40,6 @@ src_configure() {
 
 src_install() {
     emake install DESTDIR=${D}
+    use suid && chmod 4755 ${D}/usr/bin/Xfbdev
+    use suid && chmod 4755 ${D}/usr/bin/Xvesa
 }
