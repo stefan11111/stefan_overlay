@@ -6,7 +6,7 @@ EAPI=8
 DESCRIPTION="tinyx/kdrive X11 server"
 HOMEPAGE="https://github.com/stefan11111/tinyx https://github.com/tinycorelinux/tinyx"
 #EGIT_REPO_URI="https://github.com/stefan11111/tinyx.git"
-inherit git-r3
+inherit git-r3 autotools
 
 LICENSE="MIT"
 SLOT="0"
@@ -33,8 +33,12 @@ src_unpack() {
     git-r3_src_unpack
 }
 
+src_prepare() {
+    default
+    eautoreconf
+}
+
 src_configure() {
-    ./autogen.sh
     econf --with-fontdir=/usr/share/fonts
 }
 
