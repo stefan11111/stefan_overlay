@@ -6,6 +6,7 @@ EAPI=8
 DESCRIPTION="tinyx/kdrive X11 server"
 HOMEPAGE="https://github.com/stefan11111/tinyx https://github.com/tinycorelinux/tinyx"
 #EGIT_REPO_URI="https://github.com/stefan11111/tinyx.git"
+EGIT_REPO_URI=https://github.com/tinycorelinux/tinyx.git
 inherit git-r3 autotools
 
 LICENSE="MIT"
@@ -24,7 +25,7 @@ BDEPEND=""
 CFLAGS="-fpermissive ${CFLAGS}"
 
 src_unpack() {
-    local EGIT_REPO_URI
+    local -x EGIT_REPO_URI
     if use libxfont2; then
         EGIT_REPO_URI=https://github.com/stefan11111/tinyx.git
     else
