@@ -328,6 +328,10 @@ src_unpack() {
 	eapply ${FILESDIR}/fix-acecad.patch
 	eapply ${FILESDIR}/fix-ar.patch
 	eapply ${FILESDIR}/fix-kbdrate.patch
+	mkdir -p ${D}/usr/include/linux
+	cp ${FILESDIR}/missing-includes/linux/config.h ${D}/usr/include/linux/config.h
+	mkdir -p ${D}/usr/include/asm
+	cp ${FILESDIR}/missing-includes/asm/page.h ${D}/usr/include/asm/page.h
 	cd ${S}/programs/Xserver/hw/xfree86/
 
 	# Update Wacom Driver, hopefully resolving bug #1632
