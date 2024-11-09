@@ -1,0 +1,11 @@
+--- ttmkfdir-3.0.9/ttf.cpp.orig	2003-07-21 23:14:21.000000000 +0200
++++ ttmkfdir-3.0.9/ttf.cpp	2003-07-21 23:15:35.000000000 +0200
+@@ -239,7 +239,7 @@
+ 	for (i = 0; i < n; i++) {
+ 	    if ((fterror = FT_Get_Sfnt_Name (face, i, &NamePtr)) != FT_Err_Ok) {
+                     std::cout << "Warning: Can't SFNT name : " << FileName << "(" << fterror << ")" << std::endl;
+-	            return;
++	            return "invalid";
+             };
+             platform = NamePtr.platform_id;
+             encoding = NamePtr.encoding_id;

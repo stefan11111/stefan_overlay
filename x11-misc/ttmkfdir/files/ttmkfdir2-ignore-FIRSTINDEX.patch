@@ -1,0 +1,11 @@
+--- ttmkfdir2/encoding.l.orig	2002-12-23 03:22:27.000000000 +0200
++++ ttmkfdir2/encoding.l	2002-12-23 03:28:39.000000000 +0200
+@@ -167,7 +167,7 @@
+ }
+ 
+ [[:alnum:]]+ {
+-    if (YY_START != INSIDE_UNKNOWN_MAP) {
++    if ((YY_START != INSIDE_UNKNOWN_MAP) && (0 != strcmp(yytext,"FIRSTINDEX"))) {
+ 	std::cerr << "unexpected token " << yytext << " in file " <<
+ 	    current_file << ", line " << line_number << std::endl;
+ 	switch (YY_START) {

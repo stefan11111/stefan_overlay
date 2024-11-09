@@ -1,0 +1,14 @@
+--- a/lib/X11/XlcDL.c	2024-11-09 15:01:36.535268965 +0200
++++ b/lib/X11/XlcDL.c	2024-11-09 15:02:21.467953380 +0200
+@@ -58,10 +58,8 @@
+ #ifdef _LP64
+ # if defined(__sparcv9)
+ #  define	_MACH64_NAME		"sparcv9"
+-# elif defined(__ia64__) 
+-#  undef MACH64_NAME
+ # else
+-#  error "Unknown architecture"
++#  undef MACH64_NAME
+ # endif /* defined(__sparcv9) */
+ # ifdef _MACH64_NAME
+ #  define	_MACH64_NAME_LEN	(sizeof (_MACH64_NAME) - 1)

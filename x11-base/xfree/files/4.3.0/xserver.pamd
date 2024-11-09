@@ -1,0 +1,8 @@
+#%PAM-1.0
+
+auth       sufficient   /lib/security/pam_rootok.so
+# Next line you need console ownership to be able to start X 
+#auth       required     /lib/security/pam_console.so
+auth       required     /lib/security/pam_permit.so
+
+account    required     /lib/security/pam_permit.so

@@ -1,0 +1,117 @@
+/* Use buildin zlib to try and fix segfaults. Bug #4777 */
+#define HasZlib                NO
+#define HasNCurses             YES
+#define HasLibCrypt            YES
+#define HasTk                  NO
+#define HasTcl                 NO
+#define FSUseSyslog            YES
+#define HasExpat               YES
+
+#define LocalThreads           YES
+#define ThreadedX              YES
+#define HasPosixThreads        YES
+#define HasThreadSafeAPI       YES
+
+#define HasGcc2ForCplusplus    YES
+
+#define BuildXinerama          YES
+#define BuildXineramaLibrary   YES
+
+/* Do not change, as it can break things like gdm */
+#define SharedLibXau           YES
+/* Needed for 104_all_4.2.1-fix-shared-libXau-link.v2.patch.bz2 */
+
+#define HasFreetype2           YES
+#define UseFreetype2           YES
+#define Freetype2LibDir        /usr/lib
+/* #define BuildFreetype2Library  YES */
+#define UseFontconfig          YES
+/* This is currently broken, so we depend on fontconfig, and then
+   just do not install any fontconfig related files ... */
+/* #define HasFontconfig          YES */
+
+/* We PDEPEND on Xft2, and link XFree86 only to the static lib,
+   so that we will not have conflicting files for Xft2 from 
+   x11-base/xfree and x11-libs/xft ... */
+/* #define SharedLibXft           NO */
+#define SharedLibXft1          YES
+
+#define BuildFonts             YES
+/* #define BuildCyrillicFonts     YES */
+#define DefaultCursorTheme	whiteglass
+#define BuildXF86MiscExt       YES
+#define BuildXInputExt         YES
+#define BuildXKB               YES
+#define BuildDBE               YES
+#define BuildScreenSaverExt    YES
+#define BuildRman              YES
+#define BuildHtmlManPages      NO
+#define BuildAllSpecsDocs      NO
+#define BuildSpecsDocs         NO
+
+#define BuildXF86DRI           YES
+/* #define BuildXF86DRM           YES */
+#define HasAgpGart             YES
+#define BuildGLXLibrary        YES
+#define BuildGlxExt            YES
+/* #define GlxUseSGISI            YES */
+#define BuildGLULibrary        YES
+#define SharedLibGLU           YES
+#define NormalLibGLU           YES
+#define BuildXvExt             YES
+#define BuildXF86DGA           YES
+#define BuildRender            YES
+
+/* Need this to build libs with -fPIC */
+#undef StaticNeedsPicForShared
+#undef BuildLibGlxWithoutPIC
+#define StaticNeedsPicForShared YES
+#define BuildLibGlxWithoutPIC   NO
+
+/* Broken in 4.x */
+#define JoystickSupport        NO
+
+#define DoLoadableServer       YES
+
+#define BuildRECORD            YES
+
+#define UseXserverWrapper      YES
+#define UseMatroxHal           NO
+
+#define UseConfDirForXkb          NO
+/* #define UseConfDirForAppDefaults  NO */
+
+#undef  DefaultUserPath
+#define DefaultUserPath        /usr/local/bin:/bin:/usr/bin
+#undef  DefaultSystemPath
+#define DefaultSystemPath      /usr/local/sbin:/sbin:/usr/sbin:/bin:/usr/bin
+
+#define AdmDir                 /var/log
+#define LbxproxyDir            /etc/X11/lbxproxy
+#define ProxyManagerDir        /etc/X11/proxymngr
+#define ServerConfigDir        /etc/X11/xserver
+#define XdmDir                 /etc/X11/xdm
+#define XConfigDir             /etc/X11
+#define XinitDir               /etc/X11/xinit
+
+/* BOTH XIE and PEX were deprecated in XFree86 4.1.0 and are now obsolete */
+#define BuildPhigs      NO
+#define BuildPexExt     NO
+#define BuildPexLib     NO
+#define BuildXIE        NO
+#define BuildXIElib     NO
+
+/* required for Lokis Erics Ultimate Solitaire */
+#define UseInternalMalloc NO
+#define ForceNormalLib YES
+#define SharedLibXxf86vm YES
+#define SharedLibXxf86dga YES
+#define SharedLibXxf86misc YES
+#define SharedLibXv YES
+
+/* binutils-2.9 */
+#define LinuxBinUtilsMajorVersion 29
+/* glibc-2.2 (6.2 because glibc is considered libc-6) */
+#define LinuxCLibMajorVersion 6
+#define LinuxClibMinorVersion 2
+

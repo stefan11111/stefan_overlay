@@ -1,0 +1,266 @@
+# ChangeLog for x11-base/opengl-update
+# Copyright 2002-2004 Gentoo Foundation; Distributed under the GPL v2
+# $Header: /var/cvsroot/gentoo-x86/x11-base/opengl-update/ChangeLog,v 1.53 2004/12/28 21:53:10 ciaranm Exp $
+
+  28 Dec 2004; Ciaran McCreesh <ciaranm@gentoo.org> :
+  Change encoding to UTF-8 for GLEP 31 compliance
+
+  27 Dec 2004; Andrew Bevitt <cyfred@gentoo.org>
+  -opengl-update-1.7.1.ebuild, -opengl-update-1.8.1-r1.ebuild,
+  -opengl-update-2.0_pre1.ebuild, -opengl-update-2.0_pre2.ebuild,
+  -opengl-update-2.0_pre3.ebuild:
+  Removing other 2.0_pre versions because of bad xorg-x11 check, pre4-r1 is
+  suitable; also removing the old MINOR versions.
+
+*opengl-update-2.0_pre4-r1 (27 Dec 2004)
+
+  27 Dec 2004; Andrew Bevitt <cyfred@gentoo.org>
+  files/opengl-update-2.0_pre4, +opengl-update-2.0_pre4-r1.ebuild,
+  -opengl-update-2.0_pre4.ebuild:
+  x11-base/xorg-x11-6.8.0-r2 doesn't exist, changing to die if revision is
+  less than 4
+
+*opengl-update-2.0_pre4 (19 Dec 2004)
+
+  19 Dec 2004; Donnie Berkholz <spyderous@gentoo.org>;
+  +files/opengl-update-2.0_pre4, +opengl-update-2.0_pre4.ebuild:
+  Old version died horribly on X versions lacking a revision number. Update
+  with regex match from portage code.
+
+*opengl-update-2.0_pre3 (30 Nov 2004)
+
+  30 Nov 2004; Andrew Bevitt <cyfred@gentoo.org> +files/opengl-update-1.8.2,
+  +files/opengl-update-2.0_pre3, +opengl-update-1.8.2.ebuild,
+  +opengl-update-2.0_pre3.ebuild:
+  Changes to the NPTL detection mechanism.
+
+  12 Nov 2004; Ferris McCormick <fmccor@gentoo.org>
+  opengl-update-1.8.1-r1.ebuild:
+  Stable for sparc.
+
+  09 Nov 2004; Bryan Østergaard <kloeri@gentoo.org>
+  opengl-update-1.8.1-r1.ebuild:
+  Stable on alpha.
+
+  07 Nov 2004; Andrew Bevitt <cyfred@gentoo.org>
+  opengl-update-1.8.1-r1.ebuild:
+  Fixed typo in reason for userspace change
+
+  07 Nov 2004; Andrew Bevitt <cyfred@gentoo.org>
+  opengl-update-1.8.1-r1.ebuild, -opengl-update-1.8.1.ebuild:
+  Marking 1.8.1-r1 stable for use with the stablising of
+  nvidia-glx/kernel-1.0.6111-r3
+
+*opengl-update-2.0_pre2 (03 Nov 2004)
+
+  03 Nov 2004; Donnie Berkholz <spyderous@gentoo.org>;
+  +files/opengl-update-2.0_pre2, +opengl-update-2.0_pre2.ebuild:
+  Add minimum version detection, and don't run without at least
+  xorg-x11-6.8.0-r2.
+
+*opengl-update-2.0_pre1 (28 Oct 2004)
+
+  28 Oct 2004; Donnie Berkholz <spyderous@gentoo.org>;
+  +files/opengl-update-2.0_pre1, +opengl-update-2.0_pre1.ebuild:
+  Add version compatible with >=xorg-x11-6.8.0-r2. It could use a little
+  testing. It also produces a nicer help message, based on available
+  implementations.
+
+*opengl-update-1.8.1-r1 (30 Aug 2004)
+
+  30 Aug 2004; Andrew Bevitt <cyfred@gentoo.org>;
+  +opengl-update-1.8.1-r1.ebuild:
+  New version of glext.h, bumped for xorg-x11 pre-release consistency
+
+  27 Aug 2004; Andrew Bevitt <cyfred@gentoo.org>; -files/glext.h-20040714.bz2,
+  opengl-update-1.8.1.ebuild:
+  Moving glext.h to distfiles
+
+  21 Aug 2004; Seemant Kulleen <seemant@gentoo.org> -files/glext.h-20040714,
+  +files/glext.h-20040714.bz2, opengl-update-1.8.1.ebuild:
+  use a bzip2 compressed version of glext.h to save on rsyncing bandwidth --
+  it's still a little big, and could do with mirror storing
+
+  31 Jul 2004; Donnie Berkholz <spyderous@gentoo.org>;
+  opengl-update-1.8.1.ebuild:
+  Keyword ~ppc ~sparc ~mips ~alpha ~arm ~hppa ~ia64 ~ppc64, since 1.7.x was
+  stabled on all these.
+
+  19 Jul 2004; Andrew Bevitt <cyfred@gentoo.org>; files/opengl-update-1.8.1:
+  Slight check added to make amd64 stuff more sensical.
+
+  18 Jul 2004; Travis Tilley <lv@gentoo.org> opengl-update-1.8.1.ebuild:
+  marking opengl-update 1.8.1 stable on amd64 so that i can un-break nvidia-glx
+
+*opengl-update-1.8.1 (18 Jul 2004)
+
+  18 Jul 2004; Andrew Bevitt <cyfred@gentoo.org>; -files/opengl-update-1.8,
+  +files/opengl-update-1.8.1, -opengl-update-1.8-r1.ebuild,
+  +opengl-update-1.8.1.ebuild, -opengl-update-1.8.ebuild:
+  Making /usr/lib/tls back into a directory again, for future compatibility
+
+  18 Jul 2004; Bart Lauwers <blauwers@gentoo.org> opengl-update-1.8.ebuild:
+  Corrected typo.
+
+*opengl-update-1.8-r1 (17 Jul 2004)
+
+  17 Jul 2004; Andrew Bevitt <cyfred@gentoo.org>;
+  +opengl-update-1.8-r1.ebuild:
+  OK Making userspace fix the xfree problem which allows everyone to use
+  opengl-update-1.8
+
+*opengl-update-1.8 (17 Jul 2004)
+
+  17 Jul 2004; Andrew Bevitt <cyfred@gentoo.org>; +files/glext.h-20040714,
+  +files/opengl-update-1.8, +opengl-update-1.8.ebuild:
+  Version bump. We now provide a system with glext.h file from here for GL
+  implementations that do not provide one them selves. Also support is now
+  available for 32 bit compatibility libraries and TLS under the nvidia drivers.
+
+  28 Jun 2004; Aron Griffis <agriffis@gentoo.org> opengl-update-1.5.ebuild,
+  opengl-update-1.7.1.ebuild, opengl-update-1.7.2.ebuild:
+  glibc -> libc
+
+  27 Jun 2004; Donnie Berkholz <spyderous@gentoo.org>; :
+  Fix Manifest, I hope.
+
+*opengl-update-1.7.2 (26 Jun 2004)
+
+  26 Jun 2004; Donnie Berkholz <spyderous@gentoo.org>;
+  +files/opengl-update-1.7.2, +opengl-update-1.7.2.ebuild:
+  Pushing out a fix for a really annoying hang, resulting from a grep that fails
+  after the first switch (#55120). Thanks to Michael Sterrett
+  <mr_bones_@gentoo.org>.
+
+  24 Jun 2004; Donnie Berkholz <spyderous@gentoo.org>;
+  -files/opengl-update-1.7, -opengl-update-1.7.ebuild:
+  Pull broken version.
+
+  24 Jun 2004; Donnie Berkholz <spyderous@gentoo.org>;
+  opengl-update-1.7.1.ebuild:
+  Stable on every other arch.
+
+  14 Jun 2004; Tom Gall <tgall@gentoo.org> opengl-update-1.7.1.ebuild:
+  ~ppc64, initial x support bug #53763
+
+  11 Jun 2004; Bryan Østergaard <kloeri@gentoo.org> opengl-update-1.7.ebuild:
+  Stable on alpha.
+
+  10 Jun 2004; Donnie Berkholz <spyderous@gentoo.org>;
+  -files/opengl-update-1.3, -files/opengl-update-1.4,
+  -files/opengl-update-1.6, -opengl-update-1.3.ebuild,
+  -opengl-update-1.4.ebuild, -opengl-update-1.6.ebuild:
+  Pull stale versions.
+
+  10 Jun 2004; Donnie Berkholz <spyderous@gentoo.org>;
+  opengl-update-1.7.1.ebuild:
+  ppc sparc arm amd64.
+
+*opengl-update-1.7.1 (08 Jun 2004)
+
+  08 Jun 2004; Donnie Berkholz <spyderous@gentoo.org>;
+  +files/opengl-update-1.7.1, +opengl-update-1.7.1.ebuild:
+  Remove extra backslash in a sed that resulted in hangs (#53268).
+
+  31 May 2004; Donnie Berkholz <spyderous@gentoo.org>;
+  files/opengl-update-1.7:
+  Add comments about --use-old and --get-implementation options (#21450).
+
+  29 May 2004; Ferris McCormick <fmccor@gentoo.org> opengl-update-1.7.ebuild:
+  Marked stable for sparc.
+
+  29 May 2004; Donnie Berkholz <spyderous@gentoo.org>;
+  opengl-update-1.7.ebuild:
+  Need to force this to stable for amd64 so everybody else works properly.
+
+*opengl-update-1.7 (28 May 2004)
+
+  28 May 2004; Donnie Berkholz <spyderous@gentoo.org>;
+  +files/opengl-update-1.7, +opengl-update-1.7.ebuild:
+  New version. Fixes libtool archives for new X implementations (#48297), adds
+  --get-implementation (#21450) and mentions xorg-x11 as available option
+  (#47247). Also cleans up the usage help a little and makes source more
+  portable.
+
+  09 Feb 2004; Martin Schlemmer <azarah@gentoo.org> files/opengl-update-1.6:
+  Rather remove the .la symlink *before* testing if the selected profile have
+  it, else we might run into issues with profiles not having .la files, and not
+  supporting them properly.
+
+*opengl-update-1.6 (04 Feb 2004)
+
+  04 Feb 2004; Donnie Berkholz <spyderous@gentoo.org>;
+  opengl-update-1.6.ebuild, files/opengl-update-1.6:
+  New version. Symlinks libGL.la whenever available, changes hardcoded
+  opengl-update to use basename in preparation for a possible symlink to
+  config-opengl, adds matrox and ati to supported list in help.
+
+  28 Dec 2003; Joshua Kinard <kumba@gentoo.org> opengl-update-1.5.ebuild:
+  Move to mips stable (~mips -> mips)
+
+  13 Nov 2003; <tuxus@gentoo.org> opengl-update-1.4.ebuild:
+  added mips to KEYWORDS
+
+*opengl-update-1.5 (30 Dec 2002)
+
+  04 Nov 2003; Joshua Kinard <kumba@gentoo.org> opengl-update-1.5.ebuild:
+  Added ~mips to KEYWORDS
+
+  16 Mar 2003; Guy Martin <gmsoft@gentoo.org> opengl-update-1.5.ebuild :
+  Added hppa to keywords.
+  
+  12 Mar 2003; Zach Welch <zwelch@gentoo.org> opengl-update-1.5.ebuild:
+  add arm keyword
+
+  30 Dec 2002; Martin Schlemmer <azarah@gentoo.org> opengl-update-1.5.ebuild :
+
+  Change test to show usage to:
+
+    [ "$#" -ne 1 -a "$#" -ne 2 ] || [ "$#" -eq 2 -a "$1" != "--use-old" ]
+
+  This should close bug #12827.
+
+  06 Dec 2002; Rodney Rees <manson@gentoo.org> :
+  
+  Changed sparc ~sparc keywords.
+ 
+*opengl-update-1.4 (9 Sep 2002)
+
+  16 Mar 2003; Guy Martin <gmsoft@gentoo.org> opengl-update-1.4.ebuild :
+  Added hppa to keywords.
+
+  9 Sep 2002; Martin Schlemmer <azarah@gentoo.org> opengl-update-1.4.ebuild :
+
+  New version that will keep user selected OpenGl implementation if "--use-old"
+  is given as first argument, followed by fallback implementation.
+
+*opengl-update-1.3 (1 June 2002)
+
+  15 Jul 2002; Owen Stampflee <owen@gentoo.org> :
+
+  Added PPC to KEYWORDS.
+
+  1 June 2002; Martin Schlemmer <azarah@gentoo.org> opengl-update-1.3.ebuild :
+
+  Fix error in opengl-update's help (should be "opengl-update xfree" and not
+  "opengl-update xfree86"); bug #3166.
+
+*opengl-update-1.2 (29 May 2002)
+
+  29 May 2002; Martin Schlemmer <azarah@gentoo.org> opengl-update-1.2.ebuild :
+
+  Ok, I promise to go to bed earlier ... removed the libGLU stuff again, as
+  it should not be moved.
+
+*opengl-update-1.1 (28 May 2002)
+
+  28 May 2002; Martin Schlemmer <azarah@gentoo.org> opengl-update-1.1.ebuild :
+
+  Update to also handle libGLU.so.
+
+*opengl-update-1.0 (12 May 2002)
+
+  12 May 2002; Martin Schlemmer <azarah@gentoo.org> ChangeLog :
+  
+  Added initial version of opengl-update.
+  

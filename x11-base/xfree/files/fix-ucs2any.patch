@@ -1,0 +1,11 @@
+--- a/fonts/util/ucs2any.pl	2024-11-09 14:41:47.912435079 +0200
++++ b/fonts/util/ucs2any.pl	2024-11-09 14:41:58.915609504 +0200
+@@ -274,7 +274,7 @@
+     for $target (@chars) {
+ 	$ucs = $map{$target};
+ 	if ($char{$ucs} =~ /^BBX\s+(\d+)\s+(\d+)\s+(-?\d+)\s+(-?\d+)\s*$/m) {
+-	    if (defined @bbx) {
++	    if (@bbx) {
+ 		@bbx = combine_bbx(@bbx, $1, $2, $3, $4);
+ 	    } else {
+ 		@bbx = ($1, $2, $3, $4);

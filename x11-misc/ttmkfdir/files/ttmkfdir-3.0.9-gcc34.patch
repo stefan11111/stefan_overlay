@@ -1,0 +1,55 @@
+--- ttmkfdir-3.0.9/builtin.cpp	2004-04-22 16:26:16.175065656 -0400
++++ ttmkfdir-3.0.9/builtin.cpp		2004-04-22 16:27:06.042484656 -0400
+@@ -600,7 +600,7 @@
+ 	0x00f8, 0x00f9, 0x00fa, 0x00fb, 0x00fc, 0x00fd, 0x00fe, 0x00ff
+     };
+ 
+-};
++}
+ 
+ Encoding::BuiltinEncoding_t Encoding::builtin_encodings[] = {
+     {256,191,32,{TT_PLATFORM_MICROSOFT,TT_MS_ID_UNICODE_CS,iso8859_1},{"iso8859-1",}},
+--- ttmkfdir-3.0.9/ttf.h	2004-04-22 16:26:16.176065504 -0400
++++ ttmkfdir-3.0.9/ttf.h	2004-04-22 16:27:06.042484656 -0400
+@@ -49,7 +49,7 @@
+ 	TT_Postscript	    *post;
+ 	std::string	    FileName;
+     };
+-};
++}
+ 
+ #endif /* TTF_H__ */
+ 
+--- ttmkfdir-3.0.9/util.h	2004-04-22 16:26:16.176065504 -0400
++++ ttmkfdir-3.0.9/util.h	2004-04-22 16:27:06.042484656 -0400
+@@ -17,6 +17,6 @@
+ 	Singleton (void) {};
+ 	~Singleton (void) {};
+     };
+-}; 
++}
+ 
+ #endif // TTMKFDIRUTIL_H__
+--- ttmkfdir-3.0.9/directory.cpp	2024-11-09 13:43:15.649825913 +0200
++++ ttmkfdir-3.0.9/directory.cpp	2024-11-09 13:43:25.349685828 +0200
+@@ -2,6 +2,7 @@
+ #include <dirent.h>
+ #include <sys/stat.h>
+ #include <unistd.h>
++#include <string.h>
+ 
+ #include "directory.h"
+ 
+--- ttmkfdir-3.0.9/Makefile	2024-11-09 13:57:16.554348219 +0200
++++ ttmkfdir-3.0.9/Makefile	2024-11-09 13:57:46.037255760 +0200
+@@ -21,8 +21,8 @@
+ # Autodetec the proper command used to build RPM packages
+ RPMBUILD=$(shell [ -x /usr/bin/rpmbuild ] && echo rpmbuild || echo rpm)
+ 
+-FREETYPE_INCL=$(shell freetype-config --cflags)
+-FREETYPE_LIB=$(shell freetype-config --libs)
++FREETYPE_INCL=$(shell pkg-config --cflags freetype2)
++FREETYPE_LIB=$(shell pkg-config --libs freetype2)
+ 
+ OPTFLAGS=
+ DEBUG=-ggdb

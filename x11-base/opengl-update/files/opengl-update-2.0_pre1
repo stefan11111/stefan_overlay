@@ -1,0 +1,338 @@
+#!/bin/bash
+# Copyright 1999-2004 Gentoo Foundation
+# Distributed under the terms of the GNU General Public License v2
+# $Header: /var/cvsroot/gentoo-x86/x11-base/opengl-update/files/opengl-update-2.0_pre1,v 1.1 2004/10/28 18:45:56 spyderous Exp $
+# Author:  Martin Schlemmer <azarah@gentoo.org>
+# Further modifications by Donnie Berkholz <spyderous@gentoo.org>
+# Further modifications based off submissions to bug #54984 <cyfred@gentoo.org>
+
+. /etc/init.d/functions.sh
+
+count_implementations() {
+	local DIR
+	COUNT="0"
+	for DIR in $(ls /usr/lib/opengl)
+	do
+		if [ "${DIR}" != "global" ]
+		then
+			DIRS="${DIRS} ${DIR}"
+			COUNT="$((COUNT + 1))"
+		fi
+	done
+}
+
+usage() {
+# In addition to the below function, there are two extra uses for this.
+#
+# They aren't in the printed help message because they're intended
+# 	for developer use.
+# 1) --use-old $NEW_IMPLEM will switch to the new implementation only if
+# 	no old setup existed (i.e., X has never been installed)
+# 2) --get-implementation will return the implementation
+
+count_implementations
+
+# Get grammar right in message
+local IS_ARE IMPLEM_PLURAL
+if [ ${COUNT} -eq 1 ]
+then
+	IS_ARE="is"
+	IMPLEM_PLURAL=""
+else
+	IS_ARE="are"
+	IMPLEM_PLURAL="s"
+fi
+
+cat << FOO
+usage: ${0##*/} <GL implementation>
+
+note:
+       This utility switches between OpenGL implementations.  There ${IS_ARE}
+       ${COUNT} available implementation${IMPLEM_PLURAL}: ${DIRS}.
+
+examples:
+       ${0##*/} xorg-x11
+       This will setup things to use libGL.so from X.org.
+
+       ${0##*/} nvidia
+       This will setup things to use libGL.so from the nVidia drivers.
+
+FOO
+	exit 1
+}
+
+if [ "$#" -ne 1 -a "$#" -ne 2 ] || \
+	[ "$#" -eq 2 -a "$1" != "--use-old" ]
+then
+	usage
+fi
+
+GL_IMPLEM=""
+
+# Discover GL implementation if it exists
+get_implem() {
+	if [ -f /etc/env.d/09opengl ]
+	then
+		source /etc/env.d/09opengl
+		if [ -n "${LDPATH}" ]
+		then
+			GL_IMPLEM="${LDPATH/:\*/}"
+			GL_IMPLEM="${GL_IMPLEM/\/usr\/lib\/opengl\/}"
+			GL_IMPLEM="${GL_IMPLEM/\/lib}"
+			unset LDPATH
+		fi
+	fi
+}
+
+# Return current GL implementation
+if [ "$1" = "--get-implementation" ]
+then
+	get_implem
+
+	if [ -n "${GL_IMPLEM}" ]
+	then
+		echo "${GL_IMPLEM}"
+	fi
+
+	if [ -z "${GL_IMPLEM}" ]
+	then
+		exit 2
+	fi
+
+	exit 0
+fi
+
+if [ $(id -u) -ne 0 ]
+then
+	eerror "${0}: must be root."
+	exit 1
+fi
+
+# Only use specified implementation if it is not already selected.
+if [ "$1" = "--use-old" ]
+then
+	shift
+
+	get_implem
+
+	if [ -z "${GL_IMPLEM}" ]
+	then
+		GL_IMPLEM="$1"
+	fi
+else
+	GL_IMPLEM="$1"
+fi
+
+if [ ! -d /usr/lib/opengl/${GL_IMPLEM} ]
+then
+	usage
+fi
+
+ebegin "Switching to ${GL_IMPLEM} OpenGL interface"
+
+	# Provide the right libnvidia-tls depending on ntpl or not
+	if [ "${GL_IMPLEM}" = "nvidia" ]
+	then
+		if [ -e /usr/lib/opengl/${GL_IMPLEM}/lib/tls ]
+		then
+			rm -f /usr/lib/opengl/${GL_IMPLEM}/lib/tls
+		fi
+		
+		/usr/lib/misc/tls_test /usr/lib/misc/tls_test_dso.so 2>/dev/null
+		if [ ${?} = 0 ]
+		then
+			ln -sf /usr/lib/opengl/${GL_IMPLEM}/tls /usr/lib/opengl/${GL_IMPLEM}/lib/tls
+			if [ -d /usr/lib32/opengl/${GL_IMPLEM} ]
+			then
+				ln -sf /usr/lib32/opengl/${GL_IMPLEM}/tls /usr/lib32/opengl/${GL_IMPLEM}/lib/tls
+			fi
+		fi
+	fi
+	
+	# Setup the $LDPATH
+	echo "LDPATH=/usr/lib/opengl/${GL_IMPLEM}/lib" > /etc/env.d/09opengl
+	# Check if we need 32 bit compatibility
+	if [ -d /usr/lib32/opengl/${GL_IMPLEM} ]
+	then
+		source /etc/env.d/09opengl
+		echo "LDPATH=${LDPATH}:/usr/lib32/opengl/${GL_IMPLEM}/lib" > /etc/env.d/09opengl
+		unset LDPATH
+
+		# We also need to make TLS directories now aswell, make 32bit one here
+		lib32="$(readlink /usr/lib32)"
+		if [ -h ${lib32}/tls ]
+		then
+			rm -f ${lib32}/tls
+		fi
+		if [ ! -d ${lib32}/tls ]
+		then
+			mkdir -p ${lib32}/tls
+		fi
+			
+	fi
+
+	# System wide tls stuff
+	if [ -h /usr/lib/tls ]
+	then
+		rm -f /usr/lib/tls
+	fi
+	if [ ! -d /usr/lib/tls ] 
+	then
+		mkdir -p /usr/lib/tls
+	fi
+	
+	/usr/sbin/env-update &>/dev/null
+
+	LIBDIRS="lib lib32"
+	for LIBDIR in ${LIBDIRS}
+	do
+		# If there is a 32 bit compatibility implementation we shall use it
+		# Otherwise we want to have some compatibility GL, use xorg-x11.
+		if [ "${LIBDIR}" = "lib32" ] && [ ! -d /usr/lib32/opengl/"${GL_IMPLEM}" ]
+		then
+			GL_LOCAL="xorg-x11"
+		else
+			GL_LOCAL="${GL_IMPLEM}"
+		fi
+		
+		#setup the /usr/lib/libGL.so symlink
+		if [ -e /usr/${LIBDIR}/libGL.so ]
+		then
+			rm -f /usr/${LIBDIR}/libGL.so
+		fi
+		if [ -e /usr/${LIBDIR}/libGL.so.1 ]
+		then
+			rm -f /usr/${LIBDIR}/libGL.so.1
+		fi
+		if [ -e /usr/${LIBDIR}/opengl/${GL_LOCAL}/lib/libGL.so ]
+		then
+			realname="$(readlink /usr/${LIBDIR}/opengl/${GL_LOCAL}/lib/libGL.so)"
+			ln -sf /usr/${LIBDIR}/opengl/${GL_LOCAL}/lib/${realname} \
+				/usr/${LIBDIR}/libGL.so
+			ln -sf /usr/${LIBDIR}/opengl/${GL_LOCAL}/lib/${realname} \
+				/usr/${LIBDIR}/libGL.so.1
+		fi
+
+		# Setup the /usr/lib/libGLcore.so symlink
+		if [ -e /usr/${LIBDIR}/libGLcore.so ]
+		then
+			rm -f /usr/${LIBDIR}/libGLcore.so
+		fi
+		if [ -e /usr/${LIBDIR}/libGLcore.so.1 ]
+		then
+			rm -f /usr/${LIBDIR}/libGLcore.so.1
+		fi
+		if [ -e /usr/${LIBDIR}/opengl/${GL_IMPLEM}/lib/libGLcore.so ]
+		then
+			realname="$(readlink /usr/${LIBDIR}/opengl/${GL_IMPLEM}/lib/libGLcore.so)"
+			ln -sf /usr/${LIBDIR}/opengl/${GL_LOCAL}/lib/${realname} \
+				/usr/${LIBDIR}/libGLcore.so
+			ln -sf /usr/${LIBDIR}/opengl/${GL_LOCAL}/lib/${realname} \
+				/usr/${LIBDIR}/libGLcore.so.1
+		fi
+
+		# Now setup the TLS library links
+		if [ -e /usr/${LIBDIR}/libnvidia-tls.so ]
+		then
+			rm -f /usr/${LIBDIR}/libnvidia-tls.so
+		fi
+		if [ -e /usr/${LIBDIR}/libnvidia-tls.so.1 ]
+		then
+			rm -f /usr/${LIBDIR}/libnvidia-tls.so.1
+		fi
+		if [ -e /usr/${LIBDIR}/opengl/${GL_LOCAL}/lib/tls/libnvidia-tls.so.1 ]
+		then
+			realtls="$(readlink /usr/${LIBDIR}/opengl/${GL_LOCAL}/lib/tls/libnvidia-tls.so.1)"
+			ln -sf /usr/${LIBDIR}/opengl/${GL_LOCAL}/lib/tls/${realtls} \
+				/usr/${LIBDIR}/tls/libnvidia-tls.so
+			ln -sf /usr/${LIBDIR}/opengl/${GL_LOCAL}/lib/tls/${realtls} \
+				/usr/${LIBDIR}/tls/libnvidia-tls.so.1
+		fi
+		if [ -e /usr/${LIBDIR}/opengl/${GL_LOCAL}/lib/libnvidia-tls.so.1 ]
+		then
+			realname="$(readlink /usr/${LIBDIR}/opengl/${GL_LOCAL}/lib/libnvidia-tls.so.1)"
+			ln -sf /usr/${LIBDIR}/opengl/${GL_LOCAL}/lib/${realname} \
+				/usr/${LIBDIR}/libnvidia-tls.so
+			ln -sf /usr/${LIBDIR}/opengl/${GL_LOCAL}/lib/${realname} \
+				/usr/${LIBDIR}/libnvidia-tls.so.1
+		fi
+	done
+
+	# Setup the /usr/lib/libMesaGL.so symlink
+	if [ -e /usr/lib/libMesaGL.so ]
+	then
+		rm -f /usr/lib/libMesaGL.so
+	fi
+	realname="$(readlink /usr/lib/opengl/${GL_IMPLEM}/lib/libGL.so)"
+	ln -sf /usr/lib/opengl/${GL_IMPLEM}/lib/${realname} \
+		/usr/lib/libMesaGL.so
+	
+	# Setup the /usr/lib/libGL.la symlink
+	if [ -e /usr/lib/libGL.la ]
+	then
+		rm -f /usr/lib/libGL.la
+	fi
+	if [ -e /usr/lib/opengl/${GL_IMPLEM}/lib/libGL.la ]
+	then
+		ln -sf /usr/lib/opengl/${GL_IMPLEM}/lib/libGL.la \
+			/usr/lib/libGL.la
+	fi
+
+	# Fix libtool archives (#48297)
+	CURDIR="$(pwd)"
+	cd /usr/lib
+	if [ "`grep -l /usr/lib/opengl *.la`" ]
+	then
+		sed -i 's:/usr/lib/opengl/[^/]*/lib/libGL.la:/usr/lib/libGL.la:' \
+			`grep -l /usr/lib/opengl *.la`
+	fi
+	cd ${CURDIR}
+
+	# Setup the /usr/lib/modules/extensions/libglx.so symlink
+	if [ -e /usr/lib/modules/extensions/libglx.so ]
+	then
+		rm -f /usr/lib/modules/extensions/libglx.so
+	fi
+	if [ -e /usr/lib/opengl/${GL_IMPLEM}/extensions/libglx.so ]
+	then
+		ln -sf /usr/lib/opengl/${GL_IMPLEM}/extensions/libglx.so \
+			/usr/lib/modules/extensions/libglx.so
+	fi
+
+	#setup the /usr/lib/modules/extensions/libglx.a symlink
+	if [ -e /usr/lib/modules/extensions/libglx.a ]
+	then
+		rm -f /usr/lib/modules/extensions/libglx.a
+	fi
+	if [ -e /usr/lib/opengl/${GL_IMPLEM}/extensions/libglx.a ]
+	then
+		ln -sf /usr/lib/opengl/${GL_IMPLEM}/extensions/libglx.a \
+			/usr/lib/modules/extensions/libglx.a
+	fi
+
+	#setup the includes
+	for x in gl.h glx.h glxtokens.h glext.h
+	do
+		if [ -e /usr/X11R6/include/GL/${x} ]
+		then
+			rm -f /usr/X11R6/include/GL/${x}
+		fi
+
+		# IMPORTANT
+		# It is preferable currently to use the standard glext.h file
+		# however if an OpenGL provider must use a self produced glext.h
+		# then it should be installed to ${GL_IMPLEM}/include
+		
+		if [ -e /usr/lib/opengl/${GL_IMPLEM}/include/${x} ]
+		then
+			ln -sf /usr/lib/opengl/${GL_IMPLEM}/include/${x} \
+				/usr/X11R6/include/GL/${x}
+		else
+			ln -sf /usr/lib/opengl/global/include/${x} \
+				/usr/X11R6/include/GL/${x}
+		fi
+	done
+
+eend 0
+
+# vim:ts=4

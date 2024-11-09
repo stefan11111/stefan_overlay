@@ -1,0 +1,32 @@
+#!/bin/sh
+# $Xorg: Xsetup_0,v 1.3 2000/08/17 19:54:17 cpqbld Exp $
+#xconsole -geometry 480x130-0-0 -daemon -notify -verbose -fn fixed -exitOnFail
+
+# get KDEDIR value (only) and run kdmdesktop from there
+eval "`grep KDEDIR /etc/profile.env`"
+[ -x $KDEDIR/bin/kdmdesktop  ]  && ${KDEDIR}/bin/kdmdesktop
+
+# --- Gentoo ---
+# create list of sessions for kdm
+sessions="SessionTypes="
+for x in `ls /etc/X11/Sessions`
+do
+    sessions="${sessions}${x},"
+done
+echo sessions: $sessions
+
+# update all kdmrcs located; tries some pretty much impossible locations
+# to make sure we get 'em all
+source /etc/make.conf
+for dir in /usr/kde/* /usr $KDEDIR $KDE2DIR $KDE3DIR $KDE2LIBSDIR $KDE3LIBSDIR
+do
+
+    echo "Changing kdmrc in $dir"
+    cd ${dir}/share/config/kdm || continue
+    
+    cp kdmrc kdmrc.orig
+    sed -e "/SessionTypes=/c\
+${sessions}" kdmrc.orig > kdmrc
+    rm kdmrc.orig
+    
+done

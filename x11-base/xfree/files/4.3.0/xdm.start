@@ -1,0 +1,112 @@
+#!/sbin/runscript
+# Copyright 1999-2004 Gentoo Foundation
+# Distributed under the terms of the GNU General Public License v2
+# $Header: /var/cvsroot/gentoo-x86/x11-base/xfree/files/4.3.0/xdm.start,v 1.5 2004/07/15 01:03:31 agriffis Exp $
+
+# This is here to serve as a note to myself, and future developers.
+#
+# Any Display manager (gdm,kdm,xdm) have the following problem:  if
+# it is started before any getty, and no vt is specified, it will
+# usually run on vt2.  When the getty on vt2 then starts, and the
+# DM is already started, the getty will take control of the keyboard,
+# leaving us with a "dead" keyboard.
+#
+# Resolution: add the following line to /etc/inittab
+#
+#  x:a:once:/etc/X11/startDM.sh
+#
+# and have /etc/X11/startDM.sh start the DM in daemon mode if
+# a lock is present (with the info of what DM should be started),
+# else just fall through.
+#
+# How this basically works, is the "a" runlevel is a additional
+# runlevel that you can use to fork processes with init, but the
+# runlevel never gets changed to this runlevel.  Along with the "a"
+# runlevel, the "once" key word means that startDM.sh will only be
+# run when we specify it to run, thus eliminating respawning
+# startDM.sh when "xdm" is not added to the default runleve, as was
+# done previously.
+#
+# This script then just calls "tellinit a", and init will run
+# /etc/X11/startDM.sh after the current runlevel completes (this
+# script should only be added to the actual runlevel the user is
+# using).
+#
+# Martin Schlemmer
+# aka Azarah
+# 04 March 2002
+
+
+# Start X Font Server before X
+depend() {
+	use xfs hotplug
+}
+
+setup_dm() {
+	source /etc/profile.env
+	export PATH="/bin:/sbin:/usr/bin:/usr/sbin:${ROOTPATH}"
+
+	case "$(echo ${DISPLAYMANAGER} | awk '{ print toupper($1) }')" in
+		KDM|KDE|KDE2|KDE3)
+			EXE="$(which kdm)"
+			;;
+		ENTRANCE*)
+			EXE="$(which entranced)"
+			;;
+		GDM|GNOME)
+			EXE=/usr/bin/gdm
+			;;
+		WDM)
+			EXE=/usr/bin/wdm
+			;;		
+		*)
+			EXE=/usr/X11R6/bin/xdm
+			;;
+	esac
+
+	test ! -x "${EXE}" && EXE=/usr/X11R6/bin/xdm
+
+	SERVICE="${EXE##*/}"
+}
+
+start() {
+	setup_dm
+	
+	ebegin "Setting up ${SERVICE}"
+	#save the prefered DM
+	save_options "service" "${EXE}"
+	#tell init to run /etc/X11/startDM.sh after current
+	#runlevel is finished (should *not* be in the "boot"
+	#                      runlevel).
+	/sbin/telinit a &>/dev/null
+	eend 0
+}
+
+stop() {
+	local retval=0
+	local curvt="$(fgconsole)"
+	local myexe="$(get_options "service")"
+	local myservice="${myexe##*/}"
+	
+	ebegin "Stopping ${myservice}"
+	rm -f ${svcdir}/options/xdm/service
+	
+	if [ "$(ps -A | grep -e "${myservice}")" ]
+	then
+		start-stop-daemon --stop --quiet \
+			--exe ${myexe} &>/dev/null
+		
+		retval=$?
+	else
+		retval=1
+	fi
+	
+	#switch back to original vt
+	chvt "${curvt}" &>/dev/null
+	eend ${retval} "Error stopping ${myservice}."
+	
+	return ${retval}
+}
+
+
+# vim:ts=4

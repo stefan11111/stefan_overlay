@@ -1,0 +1,153 @@
+#!/bin/bash
+# Copyright 1999-2004 Gentoo Foundation
+# Distributed under the terms of the GNU General Public License v2
+# $Header: /var/cvsroot/gentoo-x86/x11-base/opengl-update/files/opengl-update-1.5,v 1.3 2004/07/15 00:27:54 agriffis Exp $
+# Author:  Martin Schlemmer <azarah@gentoo.org>
+
+source /etc/init.d/functions.sh
+
+if [ `id -u` -ne 0 ]
+then
+	eerror "${0}: must be root."
+	exit 1
+fi
+
+usage() {
+cat << FOO
+usage: opengl-update <GL implementation>
+
+note:  
+       This utility switch between OpenGL implementations.  Currently there
+       are two supported implementations, namely "xfree" and "nvidia", the
+       implementations for XFree86 and the NVidia drivers respectively.
+
+examples:
+       opengl-update xfree
+       This will setup things to use libGL.so from XFree86
+
+       opengl-update nvidia
+       This will setup things to use libGL.so from the NVidia drivers.
+	   
+FOO
+	exit 1
+}
+
+if [ "$#" -ne 1 -a "$#" -ne 2 ] || [ "$#" -eq 2 -a "$1" != "--use-old" ]
+then
+	usage
+fi
+
+GL_IMPLEM=""
+
+# Only use specified implementation if it is not already selected.
+if [ "$1" = "--use-old" ]
+then
+	shift
+
+	if [ -f /etc/env.d/09opengl ]
+	then
+		source /etc/env.d/09opengl
+		if [ -n "${LDPATH}" ]
+		then
+			GL_IMPLEM="${LDPATH/\/usr\/lib\/opengl\/}"
+			GL_IMPLEM="${GL_IMPLEM/\/lib}"
+			unset LDPATH
+		fi
+	fi
+	
+	if [ -z "${GL_IMPLEM}" ]
+	then
+		GL_IMPLEM="$1"
+	fi
+else
+	GL_IMPLEM="$1"
+fi
+if [ ! -d /usr/lib/opengl/${GL_IMPLEM} ]
+then
+	usage
+else
+	ebegin "Switching to ${GL_IMPLEM} OpenGL interface"
+
+	#setup the $LDPATH
+	echo "LDPATH=/usr/lib/opengl/${GL_IMPLEM}/lib" >/etc/env.d/09opengl
+	/usr/sbin/env-update &>/dev/null
+
+	#setup the /usr/lib/libGL.so symlink
+	if [ -e /usr/lib/libGL.so ]
+	then
+		rm -f /usr/lib/libGL.so
+	fi
+	if [ -e /usr/lib/libGL.so.1 ]
+	then
+		rm -f /usr/lib/libGL.so.1
+	fi
+	realname="$(readlink /usr/lib/opengl/${GL_IMPLEM}/lib/libGL.so)"
+	ln -sf /usr/lib/opengl/${GL_IMPLEM}/lib/${realname} \
+		/usr/lib/libGL.so
+	ln -sf /usr/lib/opengl/${GL_IMPLEM}/lib/${realname} \
+		/usr/lib/libGL.so.1
+
+	#setup the /usr/X11R6/lib/libMesaGL.so symlink
+	if [ -e /usr/X11R6/lib/libMesaGL.so ]
+	then
+		rm -f /usr/X11R6/lib/libMesaGL.so
+	fi
+	realname="$(readlink /usr/lib/opengl/${GL_IMPLEM}/lib/libGL.so)"
+	ln -sf /usr/lib/opengl/${GL_IMPLEM}/lib/${realname} \
+		/usr/X11R6/lib/libMesaGL.so
+
+	#setup the /usr/lib/libGLcore.so symlink
+	if [ -e /usr/lib/libGLcore.so ]
+	then
+		rm -f /usr/lib/libGLcore.so
+	fi
+	if [ -e /usr/lib/libGLcore.so.1 ]
+	then
+		rm -f /usr/lib/libGLcore.so.1
+	fi
+	if [ -e /usr/lib/opengl/${GL_IMPLEM}/lib/libGLcore.so ]
+	then
+		realname="$(readlink /usr/lib/opengl/${GL_IMPLEM}/lib/libGLcore.so)"
+		ln -sf /usr/lib/opengl/${GL_IMPLEM}/lib/${realname} \
+			/usr/lib/libGLcore.so
+		ln -sf /usr/lib/opengl/${GL_IMPLEM}/lib/${realname} \
+			/usr/lib/libGLcore.so.1
+	fi
+
+	#setup the /usr/X11R6/lib/modules/extensions/libglx.so symlink
+	if [ -e /usr/X11R6/lib/modules/extensions/libglx.so ]
+	then
+		rm -f /usr/X11R6/lib/modules/extensions/libglx.so
+	fi
+	if [ -e /usr/lib/opengl/${GL_IMPLEM}/extensions/libglx.so ]
+	then
+		ln -sf /usr/lib/opengl/${GL_IMPLEM}/extensions/libglx.so \
+			/usr/X11R6/lib/modules/extensions/libglx.so
+	fi
+	#setup the /usr/X11R6/lib/modules/extensions/libglx.a symlink
+	if [ -e /usr/X11R6/lib/modules/extensions/libglx.a ]
+	then
+		rm -f /usr/X11R6/lib/modules/extensions/libglx.a
+	fi
+	if [ -e /usr/lib/opengl/${GL_IMPLEM}/extensions/libglx.a ]
+	then
+		ln -sf /usr/lib/opengl/${GL_IMPLEM}/extensions/libglx.a \
+			/usr/X11R6/lib/modules/extensions/libglx.a
+	fi
+
+	#setup the includes
+	for x in gl.h glx.h glxtokens.h
+	do
+		if [ -e /usr/X11R6/include/GL/${x} ]
+		then
+			rm -f /usr/X11R6/include/GL/${x}
+		fi
+		ln -sf /usr/lib/opengl/${GL_IMPLEM}/include/${x} \
+			/usr/X11R6/include/GL/${x}
+	done
+
+	eend 0
+fi
+
+
+# vim:ts=4

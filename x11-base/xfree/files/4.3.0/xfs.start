@@ -1,0 +1,320 @@
+#!/sbin/runscript
+# Copyright 1999-2004 Gentoo Foundation
+# Distributed under the terms of the GNU General Public License v2
+# Author:  Martin Schlemmer <azarah@gentoo.org>
+# $Header: /var/cvsroot/gentoo-x86/x11-base/xfree/files/4.3.0/xfs.start,v 1.5 2004/08/02 08:57:41 spyderous Exp $
+
+#NB: Config is in /etc/conf.d/xfs
+
+
+opts="${opts} mkfontdirs"
+
+depend() {
+	use logger
+}
+
+check_config() {
+	if [ -z "${XFS_PORT}" ]
+	then
+		eerror "Please set \$XFS_PORT in /etc/conf.d/xfs!"
+		return 1
+	fi
+	return 0
+}
+
+# Return 0 on change, or 1 on no change, or if dir do not exist
+check_changed() {
+	local x=""
+	local fontlist=""
+	
+	# If the dir do not exist, e
+	if [ ! -d $1 ]
+	then
+		return 1
+	fi
+
+	# Create a list of all non known config files in the font dir
+	fontlist="$(find $1/ -type f -maxdepth 1 | \
+	            gawk '$0 !~ /fonts\..*$|^.*\.dir$|XftCache/ {print}')"
+	
+	if [ ! -f $1/fonts.list ]
+	then
+		if [ -n "${fontlist}" ]
+		then
+			# No list file exist, so create it and return 0 to add
+			# this font dir as a candidate for updating...
+			echo "${fontlist}" > $1/fonts.list
+
+			return 0
+		fi
+	else
+		local retval=1
+
+		# All the fonts was removed, so cleanup
+		if [ -z "${fontlist}" ]
+		then
+			for x in $1/fonts.* $1/encodings.dir $1/XftCache
+			do
+				if [ -f ${x} ]
+				then
+					rm -f ${x}
+				fi
+			done
+
+			return 1
+		fi
+		
+		# Check that no files was added or removed....
+		if [ "$(cat $1/fonts.list | md5sum)" != "$(echo "${fontlist}" | md5sum)" ]
+		then
+			retval=0
+		fi
+
+		# Check that no files was updated....
+		if [ "${retval}" -ne 0 ]
+		then
+			local changed_list=""
+
+# It should be more consistant if we consider a change to fonts.scale, or
+# encodings.dir files as a need for an update as well ...
+#			changed_list="$(find $1/ -type f -cnewer $1/fonts.dir | \
+#			                gawk '$0 !~ /fonts\..*$|^.*\.dir$|XftCache/ {print}')"
+			changed_list="$(find $1/ -type f -cnewer $1/fonts.dir | \
+			                gawk '$0 !~ /fonts\.(list|cache-1)$|XftCache/ {print}')"
+
+			if [ -n "${changed_list}" ]
+			then
+				retval=0
+			fi
+		fi
+
+		# OK, something changed, so recreate fonts.list and add as candidate
+		# for updating...
+		if [ "${retval}" -eq 0 ]
+		then
+			echo "${fontlist}" > $1/fonts.list
+
+			return 0
+		fi
+	fi
+
+	return 1
+}
+
+# This is a function to extract font dirs from
+# the xfs config file (/etc/X11/fs/config).
+get_fontdir_list() {
+	[ ! -r /etc/X11/fs/config ] && return 0
+	
+	gawk '
+		BEGIN {
+
+			while((getline xfsconf_data < ("/etc/X11/fs/config")) > 0) {
+
+				# Strip any comments
+				if (xfsconf_data !~ /^[[:space:]]*#/) {
+
+					# Dont bother if its a blank line
+					if (xfsconf_data == "") continue
+
+					# If we have a line that contain 'catalogue=', we
+					# should be where the list of font dirs are
+					if (xfsconf_data ~ /catalogue[[:space:]]*=/)
+						DO_WRITE = 1
+
+					# Ok, we got our que, so start
+					if (DO_WRITE) {
+
+						# Strip and suffixes from the directory lists
+						sub(/\:[[:alnum:]]*/, "", xfsconf_data)
+
+						# Strip any leading spaces and tabs
+						sub(/^[[:space:]]*/, "", xfsconf_data)
+						# Strip the 'catalogue=' part
+						sub(/catalogue[[:space:]]*=[[:space:]]*/, "", xfsconf_data)
+
+						# The last font dir will not have a ',', so this will
+						# be the last line we read ...
+						if (xfsconf_data !~ /,$/) {
+						
+							DO_WRITE = 0
+							DONE = 1
+						}
+							
+						# Strip the ending ',' ...
+						sub(/,$/, "", xfsconf_data)
+
+						# If we have a valid font path, print it
+						if (xfsconf_data != "") {
+
+							have_dup = 0
+
+							# Check for duplicates ...
+							for (x in DIRLIST)
+								if (DIRLIST[x] == xfsconf_data) {
+
+									have_dup = 1
+									break
+								}
+						
+							if (!have_dup) {
+								print xfsconf_data
+								DIRLIST[++i] = xfsconf_data
+							}
+						}
+					}
+					
+					# No need to continue reading the file ...
+					if (DONE) break
+				}
+			}
+
+			close("/etc/X11/fs/config")
+		}'
+
+	return 0
+}
+
+# This is the main beast for setting up the font dirs
+setup_font_dirs() {
+	local x=""
+	local pending_fontdirs=""
+	local changed="no"
+
+	umask 022
+
+	local NEEDED_BIN
+	local NEEDED_BINS="/usr/X11R6/bin/mkfontdir
+		/usr/X11R6/bin/mkfontscale
+		/usr/X11R6/bin/ttmkfdir"
+	for NEEDED_BIN in ${NEEDED_BINS}
+	do
+		if [ ! -x ${NEEDED_BIN} ]
+		then
+			ewarn "Could not find the `basename ${NEEDED_BIN}` binary!"
+			return 0
+		fi
+	done
+
+	if [ ! -d /usr/X11R6/lib/X11/fonts/encodings ]
+	then
+		ewarn "Encodings directory are missing!"
+		ewarn "Please restore /usr/X11R6/lib/X11/fonts/encodings ..."
+		return 0
+	fi
+
+	# Generate the encodings.dir ...
+	/usr/X11R6/bin/mkfontdir -n \
+		-e /usr/X11R6/lib/X11/fonts/encodings \
+		-e /usr/X11R6/lib/X11/fonts/encodings/large \
+		-- /usr/X11R6/lib/X11/fonts/encodings
+	
+	ebegin "Scanning font directories"
+	for x in $(get_fontdir_list)
+	do
+		if test -d ${x} && check_changed ${x}
+		then
+			if [ -z "${pending_fontdirs}" ]
+			then
+				pending_fontdirs="${x}"
+			else
+				pending_fontdirs="${pending_fontdirs} ${x}"
+			fi
+		fi
+	done
+	eend 0
+
+	if [ -n "${pending_fontdirs}" ]
+	then
+		ebegin "Indexing font directories"
+		for x in ${pending_fontdirs}
+		do
+			ebegin "  ${x}"
+
+			# Only generate .scale files if truetype, opentype or type1
+			# fonts are present ...
+
+			# First truetype (ttf,ttc)
+			# NOTE: ttmkfdir does NOT work on type1 fonts (#53753)
+			# Also, there is no way to regenerate Speedo/CID fonts.scale
+			# <spyderous@gentoo.org> 2 August 2004
+			if [ "${x/encodings}" = "${x}" -a \
+			     -n "$(find ${x} -iname '*.tt[cf]' -print)" ]
+			then
+				/usr/X11R6/bin/ttmkfdir -x 2 \
+					-e /usr/X11R6/lib/X11/fonts/encodings/encodings.dir \
+					-o ${x}/fonts.scale -d ${x} > /dev/null
+
+			# Next type1 and opentype (pfa,pfb,otf,otc)
+			elif [ "${x/encodings}" = "${x}" -a \
+				-n "$(find ${x} -iname '*.[po][ft][abcf]' -print)" ]
+			then
+				/usr/X11R6/bin/mkfontscale \
+					-a /usr/X11R6/lib/X11/fonts/encodings/encodings.dir \
+					-- ${x}
+			fi
+          
+		  	# Now generate fonts.dir files ...
+			if [ "${x/encodings}" = "${x}" ]
+			then
+				/usr/X11R6/bin/mkfontdir \
+					-e /usr/X11R6/lib/X11/fonts/encodings \
+					-e /usr/X11R6/lib/X11/fonts/encodings/large \
+					-- ${x} > /dev/null
+			fi
+
+			if [ "${x/encodings}" = "${x}" -a -x /usr/X11R6/bin/xftcache ] && \
+			   [ -n "$(find ${x} -iname '*.[otps][pft][cfad]' -print)" ]
+			then
+				# xftcache is broken, but run it anyhow ...
+				/usr/X11R6/bin/xftcache ${x} &> /dev/null
+			fi
+			eend 0
+
+			changed="yes"
+		done
+	fi
+
+	# While we at it, update fontconfig's cache as well
+	if [ -x /usr/bin/fc-cache -a "${changed}" = "yes" ]
+	then
+		ebegin "Updating FC cache"
+		HOME="/root" /usr/bin/fc-cache -f
+		eend 0
+	fi
+}
+
+mkfontdirs() {
+	setup_font_dirs
+}
+
+start() {
+	check_config || return 1
+
+	if [ "${SETUP_FONTDIRS}" = "yes" ]
+	then
+		setup_font_dirs
+	fi
+	
+	ebegin "Starting X Font Server"
+	if [ "`grep -e "^xfs:" /etc/passwd`" ] ; then
+		start-stop-daemon --start --quiet --exec /usr/X11R6/bin/xfs \
+			-- -daemon -config /etc/X11/fs/config \
+				-droppriv -user xfs -port ${XFS_PORT} 1>&2
+	else
+		start-stop-daemon --start --quiet --exec /usr/X11R6/bin/xfs \
+			-- -daemon -config /etc/X11/fs/config \
+				-port ${XFS_PORT} 1>&2
+	fi
+	eend $?
+}
+
+stop() {
+	ebegin "Stopping X Font Server"
+	start-stop-daemon --stop --quiet --exec /usr/X11R6/bin/xfs 1>&2
+	rm -rf /tmp/.font-unix
+	eend $?
+}
+
+
+# vim:ts=4

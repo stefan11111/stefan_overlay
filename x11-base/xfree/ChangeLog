@@ -1,0 +1,1798 @@
+# ChangeLog for x11-base/xfree
+# Copyright 2002-2004 Gentoo Foundation; Distributed under the GPL v2
+# $Header: /var/cvsroot/gentoo-x86/x11-base/xfree/ChangeLog,v 1.370 2004/12/28 21:54:22 ciaranm Exp $
+
+  28 Dec 2004; Ciaran McCreesh <ciaranm@gentoo.org> :
+  Change encoding to UTF-8 for GLEP 31 compliance
+
+  06 Dec 2004; Donnie Berkholz <spyderous@gentoo.org>;
+  xfree-4.3.0-r7.ebuild, xfree-4.3.0-r8.ebuild:
+  Move from custom is_kernel() in x11.eclass to kernel_is() in
+  linux-info.eclass. It's not maintained by us, and that's a plus in itself.
+
+  17 Nov 2004; Donnie Berkholz <spyderous@gentoo.org>; :
+  Update credits on xpm-secfix-thomas.diff.
+
+  17 Nov 2004; Donnie Berkholz <spyderous@gentoo.org>;
+  xfree-4.3.0-r8.ebuild:
+  Remove check for CC variable and use tc-getCC() everywhere, so this works
+  better with new gcc-config.
+
+*xfree-4.3.0-r8 (17 Nov 2004)
+
+  17 Nov 2004; Donnie Berkholz <spyderous@gentoo.org>;
+  +files/xpm-secfix-thomas.diff, +xfree-4.3.0-r8.ebuild:
+  Security update: Add xpm-secfix-thomas.diff to fix many issues, including:
+  integer issues resulting in infinite loops and buffer overflows; a one-byte
+  buffer overflow; stack-based overflows with sprintf() and string functions;
+  replaces popen() with s_popen(); path traversal issues; buffer underruns;
+  and memory leaks (missing free(), found by Egbert Eich). Patch by Thomas
+  Biege and Matthiew Herrb. Petr Mladek identified the initial vulnerabilities
+  and provided a patch that was later expanded on. Jacques A. Vidrine aided in
+  the code audit and patch review. This issue is identified as CAN-2004-0914.
+
+  10 Nov 2004; Donnie Berkholz <spyderous@gentoo.org>;
+  xfree-4.3.0-r7.ebuild:
+  Respect new gcc-config that doesn't set CC.
+
+  20 Oct 2004; Donnie Berkholz <spyderous@gentoo.org>; xfree-4.3.0-r7.ebuild:
+  Update inherit to toolchain-funcs instead of gcc and x11 instead of xfree.
+  Make one fix related to a hard-coded gcc. Update license syntax so I can
+  commit.
+
+  29 Sep 2004; Donnie Berkholz <spyderous@gentoo.org>; -xfree-4.3.0-r5.ebuild,
+  -xfree-4.3.0-r6.ebuild:
+  Pull vulnerable versions (#64152).
+
+  22 Sep 2004; Donnie Berkholz <spyderous@gentoo.org>; xfree-4.3.0-r7.ebuild:
+  x86 (#64152).
+
+  18 Sep 2004; Bryan Østergaard,,, <kloeri@gentoo.org> xfree-4.3.0-r7.ebuild:
+  Stable on alpha, bug 64152.
+
+  17 Sep 2004; Travis Tilley <lv@gentoo.org> xfree-4.3.0-r5.ebuild,
+  xfree-4.3.0-r6.ebuild:
+  marking all amd64 keyworded xfree ebuilds ~amd64 since we no longer support
+  xfree
+
+  16 Sep 2004; Donnie Berkholz <spyderous@gentoo.org>; xfree-4.3.0-r7.ebuild:
+  PATCH_VER 2.1.25.8. This ebuild is *not* the hard-masked enhanced version it
+  once was. It is now a security bump to 4.3.0-r6, our standard 4.3.0 release.
+  Add 9925_all_6.7.0-libXpm-CAN-2004-0687-CAN-2004-0688.patch to fix stack and
+  integer overflows in libXpm (Chris Evans, Alan Coopersmith, Matthiew Herrb)
+  (#64152).
+
+  06 Sep 2004; Ciaran McCreesh <ciaranm@gentoo.org> xfree-4.3.0-r7.ebuild:
+  Switch to use epause and ebeep, bug #62950
+
+  02 Aug 2004; Donnie Berkholz <spyderous@gentoo.org>; xfree-4.3.0-r5.ebuild,
+  xfree-4.3.0-r6.ebuild, xfree-4.3.0-r7.ebuild:
+  fc-cache -f breaks the font eclass, according to foser.
+
+  02 Aug 2004; Donnie Berkholz <spyderous@gentoo.org>; files/4.3.0/10xfree,
+  files/4.3.0/xfs.start, xfree-4.3.0-r5.ebuild, xfree-4.3.0-r6.ebuild:
+  Fix font setup (#53753). Previously we trashed fonts.scale for all scalable
+  fonts, even though we only regenerated it for TrueType fonts. ttmkfdir can't
+  regenerate fonts.scale for Type1 or OpenType fonts, so we start using
+  mkfontscale for that. We trashed any other fonts.scale files that happened to
+  be around, such as Speedo/CID. We stop doing that. Also fixed the regexps in
+  the ebuild and the xfs init script to use ttmkfdir for TrueType only and
+  mkfontscale for Type1 and OpenType. Change INFODIR to INFOPATH also (#54275).
+
+  01 Aug 2004; Donnie Berkholz <spyderous@gentoo.org>; xfree-4.3.0-r5.ebuild,
+  xfree-4.3.0-r6.ebuild:
+  When fixing #30698, forgot to set G_FONTDIRS, so nothing was deleted, even the
+  things that should have been.
+
+  26 Jul 2004; Donnie Berkholz <spyderous@gentoo.org>; xfree-4.3.0-r5.ebuild,
+  xfree-4.3.0-r6.ebuild, xfree-4.3.0-r7.ebuild:
+  /usr/src/linux needs ${ROOT}.
+
+  20 Jul 2004; Donnie Berkholz <spyderous@gentoo.org>; xfree-4.3.0-r6.ebuild:
+  PATCH_VER 2.1.25.7. No changes from .6, just fixing a corruption issue --
+  somehow an old, broken version of .6 got mirrored.
+
+  16 Jul 2004; Brandon Hale <tseng@gentoo.org> xfree-4.3.0-r6.ebuild:
+  Revert to patchver 2.1.25.5 for now, see bug #57316. The digest is incorrect
+  and cyfred says the xbox patches are broken anyway.
+
+  16 Jul 2004; Donnie Berkholz <spyderous@gentoo.org>; xfree-4.3.0-r6.ebuild:
+  PATCH_VER 2.1.25.6. Add 9300_all_4.3.0-x86-xbox-nv-driver.patch and
+  9305_all_4.3.0-x86-xbox-xf86PciInfo.patch to get things working on xbox
+  (#51868).
+
+  01 Jul 2004; Luca Barbato <lu_zero@gentoo.org> xfree-4.3.0-r6.ebuild:
+  Maked ppc
+
+  23 Jun 2004; Aron Griffis <agriffis@gentoo.org> xfree-4.3.0-r5.ebuild,
+  xfree-4.3.0-r6.ebuild, xfree-4.3.0-r7.ebuild:
+  QA - fix use invocation
+
+  22 Jun 2004; Gustavo Zacarias <gustavoz@gentoo.org> xfree-4.3.0-r6.ebuild:
+  Keyworded for hppa, bug #53226
+
+  13 Jun 2004; Stephen P. Becker <geoman@gentoo.org> xfree-4.3.0-r6.ebuild:
+  Stable on mips - bug 53226
+
+  12 Jun 2004; Bryan Østergaard <kloeri@gentoo.org> xfree-4.3.0-r6.ebuild:
+  alpha keyword, bug #53226.
+
+  11 Jun 2004; Ferris McCormick <fmccor@gentoo.org> xfree-4.3.0-r6.ebuild:
+  Add ~sparc keyword. (Bug 53226)
+
+  11 Jun 2004; Donnie Berkholz <spyderous@gentoo.org>; xfree-4.3.0-r7.ebuild:
+  Make it tough to emerge this, as it's still got a security hole (#53226).
+
+  11 Jun 2004; Donnie Berkholz <spyderous@gentoo.org>;
+  -xfree-4.3.99.902-r2.ebuild:
+  Pull version vulnerable to #53226.
+
+  11 Jun 2004; Donnie Berkholz <spyderous@gentoo.org>; xfree-4.3.0-r6.ebuild:
+  PATCH_VER 2.1.25.5. Security update:
+  9920_all_4.3.0-xdm-open-chooserfd-CAN-2004-0419.patch and
+  9921_all_4.3.0-xdm-open-chooserfd-CAN-2004-0419-ipv6.patch. They stop xdm from
+  ignoring its \DisplayManager.requestPort" setting. xdm opens its "chooserFd"
+  TCP socket on all network interfaces without this patch (xf86 #1376). The two
+  patches are mutually exclusive; 9921 applies in conjunction with patch 2000.
+
+*xfree-4.3.0-r7 (11 Jun 2004)
+
+  11 Jun 2004; Donnie Berkholz <spyderous@gentoo.org>; +xfree-4.3.0-r7.ebuild:
+  Move current -r6 to -r7 to make room for security update to -r5.
+
+  07 Jun 2004; Michael Sterrett <mr_bones_@gentoo.org> xfree-4.3.0-r5.ebuild:
+  remove obsolete comment
+
+  03 Jun 2004; Donnie Berkholz <spyderous@gentoo.org>; xfree-4.3.0-r6.ebuild:
+  Fix typo in xrender.pc generation, includ to include.
+
+  02 Jun 2004; Donnie Berkholz <spyderous@gentoo.org>; xfree-4.3.0-r6.ebuild:
+  Fix generation of xrender.pc so version is resolved (#52843).
+
+  29 May 2004; Donnie Berkholz <spyderous@gentoo.org>; xfree-4.3.0-r6.ebuild:
+  Force opengl-update to change to xfree if xorg-x11 is currently selected, else
+  default to old behavior.
+
+  28 May 2004; Donnie Berkholz <spyderous@gentoo.org>; xfree-4.3.0-r5.ebuild:
+  Add explicit x11-base/xorg-x11 blocker.
+
+  12 May 2004; Alexander Gabert <pappy@gentoo.org> xfree-4.3.0-r5.ebuild,
+  xfree-4.3.0-r6.ebuild:
+  removed hardened-gcc checks
+
+  05 May 2004; Donnie Berkholz <spyderous@gentoo.org>; xfree-4.3.0-r6.ebuild:
+  Remove our custom SharedLibraryLoadFlags as a workaround until #49038 (fd.o
+  #600) is fixed.
+
+  28 Apr 2004; Donnie Berkholz <spyderous@gentoo.org>; xfree-4.3.0-r6.ebuild:
+  PATCH_VER 2.1.26.18. Add
+  9375_all_4.3.0-keyboard-disable-ioport-access-v3.patch from Mike Harris to fix
+  a sub-issue reported in #46553 where the kernel log shows errors about
+  atkbd.c.
+
+  28 Apr 2004; Donnie Berkholz <spyderous@gentoo.org>; xfree-4.3.0-r6.ebuild:
+  PATCH_VER 2.1.26.17. Add
+  9350_all_4.3.0-Xserver-dix-xkb-key-repeating-bug-CVS-backport.patch, made by
+  Mike Harris (#23019). This fixes key repeats under heavy load, which occurs
+  more often when using XKB.
+
+  25 Apr 2004; Donnie Berkholz <spyderous@gentoo.org>; xfree-4.3.0-r6.ebuild:
+  Update so gcc-3.4 is respected (#48933).
+
+  25 Apr 2004; Donnie Berkholz <spyderous@gentoo.org>; xfree-4.3.0-r6.ebuild:
+  Modify TODO. Only thing holding this back from unmasking on our side is adding
+  the opengl-update with --get-implementation. On the portage side, Jason Stubbs
+  has a patch waiting to get committed that allows to-be-merged packages to
+  fulfill dependencies.
+
+  21 Apr 2004; Donnie Berkholz <spyderous@gentoo.org>; xfree-4.3.0-r6.ebuild:
+  Add a couple of missing definitions for USE=sse -- HasSSESupport and
+  MesaUseSSE, from eikke on Freenode.
+
+  19 Apr 2004; Donnie Berkholz <spyderous@gentoo.org>; xfree-4.3.0-r6.ebuild:
+  Add them to IUSE.
+
+  19 Apr 2004; Donnie Berkholz <spyderous@gentoo.org>; xfree-4.3.0-r6.ebuild:
+  Don't autodetect MMX/SSE/3DNOW, it breaks cross-compilation.
+
+  19 Apr 2004; Donnie Berkholz <spyderous@gentoo.org>; xfree-4.3.0-r5.ebuild:
+  Fix directory in last commit.
+
+  19 Apr 2004; Donnie Berkholz <spyderous@gentoo.org>; xfree-4.3.0-r5.ebuild,
+  xfree-4.3.0-r6.ebuild:
+  Don't remove fonts.* or encodings.dir in dirs not provided by this package
+  (#30698).
+
+  19 Apr 2004; Donnie Berkholz <spyderous@gentoo.org>; xfree-4.3.0-r6.ebuild:
+  Add more backwards compatibility things -- symlinks for all former font, doc
+  and man dirs as well as autogeneration of new config files. Old locations are
+  deprecated and will be removed in a future release.
+
+  18 Apr 2004; Donnie Berkholz <spyderous@gentoo.org>; xfree-4.3.0-r5.ebuild:
+  Revert last fix, it was some one-off error.
+
+  18 Apr 2004; Donnie Berkholz <spyderous@gentoo.org>; xfree-4.3.0-r5.ebuild:
+  Prevent 9017 from applying for now, some build breakage reported by jhuebel.
+
+  18 Apr 2004; Donnie Berkholz <spyderous@gentoo.org>; xfree-4.3.0-r5.ebuild:
+  PATCH_VER 2.1.25.3. Add 9017_amd64_4.3.0-IncludeSharedObjectInNormalLib.patch
+  from 4.3.0-r6, fixes 64-bit issues with libraries.
+
+  18 Apr 2004; Donnie Berkholz <spyderous@gentoo.org>; xfree-4.3.0-r6.ebuild,
+  xfree-4.3.99.902-r2.ebuild:
+  Add explicit xorg-x11 to blockers.
+
+  13 Apr 2004; Donnie Berkholz <spyderous@gentoo.org>; xfree-4.3.0-r6.ebuild:
+  PATCH_VER 2.1.26.16. Drop
+  9016_all_4.3.0-libfontenc-IncludeSharedObjectInNormalLib.patch and
+  9015_all_4.2.99.4-IncludeSharedObjectInNormalLib.patch, combine into one
+  larger patch 9015_all_4.3.0-IncludeSharedObjectInNormalLib.patch to force all
+  libs to PIC (#40646, #44274). solar says there shouldn't be any negative
+  performance impact on any arch from PIC static libs. Add
+  9300_all_4.3.0-ncurses-xf86cfg-bool-conflict.patch to avoid conflict of bool
+  between ncurses-5.4 and xf86cfg (#43491). Add
+  9550_all_4.3.0-nls-cjk-utf8.patch to change fontset order for UTF-8 in
+  XLC_LOCALE, from Kang-Ho Song <khsongdr@yahoo.com> (#46392). Ported from
+  upstream patches. Add 9113_all_4.3.0-xterm-make-optional.patch and use
+  external xterm (Mike Harris). This now depends on x11-terms/xterm. Fix a
+  doc-building error with BuildLinuxDocText, which actually prevents some docs
+  from building. Enhance XVendorString to show PATCH_VER and make it compliant
+  with upstream.
+
+  13 Apr 2004; Donnie Berkholz <spyderous@gentoo.org>; :
+  Restore ChangeLog. Somehow I managed to erase most of it on version 1.315.
+
+  12 Apr 2004; Donnie Berkholz <spyderous@gentoo.org>; xfree-4.3.0-r6.ebuild:
+  Move unpacking of NLS-related things earlier, so patches to them apply
+  properly.
+
+  08 Apr 2004; Donnie Berkholz <spyderous@gentoo.org>; xfree-4.3.0-r6.ebuild:
+  Add GccAliasingArgs to the optimized CFLAGS and CXXFLAGS setup, so we get
+  -fno-strict-aliasing. This avoids broken code, pending a patch from Luca to
+  fix.
+
+  08 Apr 2004; Donnie Berkholz <spyderous@gentoo.org>; xfree-4.3.0-r5.ebuild,
+  xfree-4.3.99.902-r2.ebuild:
+  Add blocker on virtual/x11.
+
+  05 Apr 2004; Travis Tilley <lv@gentoo.org> xfree-4.3.0-r6.ebuild:
+  masking on amd64 until bug #44274 and related -fPIC issues are resolved
+
+  04 Apr 2004; Donnie Berkholz <spyderous@gentoo.org>; xfree-4.3.0-r6.ebuild:
+  Change has_version to best_version for PAM check.
+
+  01 Apr 2004; Donnie Berkholz <spyderous@gentoo.org>; xfree-4.3.0-r6.ebuild:
+  Modify TODO.
+
+  01 Apr 2004; Donnie Berkholz <spyderous@gentoo.org>; xfree-4.3.0-r6.ebuild:
+  Change fontdir definition to host.def setting.
+
+  31 Mar 2004; Donnie Berkholz <spyderous@gentoo.org>; xfree-4.2.1-r4.ebuild:
+  Drop 4.2. It's two years old.
+
+  29 Mar 2004; Donnie Berkholz <spyderous@gentoo.org>; xfree-4.3.0-r6.ebuild:
+  Adding blocker on virtual/x11. Only one should be installed at a time.
+
+  27 Mar 2004; Donnie Berkholz <spyderous@gentoo.org>; xfree-4.2.1-r4.ebuild,
+  xfree-4.3.0-r5.ebuild, xfree-4.3.0-r6.ebuild, xfree-4.3.99.902-r2.ebuild:
+  Fix descriptions.
+
+  27 Mar 2004; Donnie Berkholz <spyderous@gentoo.org>;
+  xfree-4.3.99.902-r2.ebuild:
+  Add wacom to input devices.
+
+  22 Mar 2004; Donnie Berkholz <spyderous@gentoo.org>; xfree-4.3.0-r6.ebuild:
+  Bump libXft to 2.1.6 to fix freedesktop.org bug #308.
+
+  20 Mar 2004; Donnie Berkholz <spyderous@gentoo.org>; xfree-4.3.0-r6.ebuild:
+  Get rid of no-pam hack in favor of pam USE.
+
+  19 Mar 2004; Donnie Berkholz <spyderous@gentoo.org>; xfree-4.3.0-r6.ebuild:
+  Update TODO.
+
+  19 Mar 2004; Donnie Berkholz <spyderous@gentoo.org>; xfree-4.2.1-r4.ebuild,
+  xfree-4.3.0-r5.ebuild, xfree-4.3.0-r6.ebuild, xfree-4.3.99.902-r2.ebuild:
+  Updating licenses.
+
+  17 Mar 2004; Donnie Berkholz <spyderous@gentoo.org>; xfree-4.3.0-r6.ebuild:
+  Changing build-time FONTDIR in attempt to fix #44854.
+
+  16 Mar 2004; Donnie Berkholz <spyderous@gentoo.org>; xfree-4.3.0-r6.ebuild:
+  Change rm to rm -f for external xlib Makefile deletions, got a report on
+  read-only permissions.
+
+  16 Mar 2004; Donnie Berkholz <spyderous@gentoo.org>; :
+  Fixing donnie@gentoo.org changelog entry.
+
+  15 Mar 2004; Donnie Berkholz <spyderous@gentoo.org>; xfree-4.3.0-r6.ebuild:
+  Add dodir so misc fonts emergency symlink works.
+
+  14 Mar 2004; Donnie Berkholz <spyderous@gentoo.org>; xfree-4.3.0-r6.ebuild:
+  PATCH_VER 2.1.26.15. Drop patch 0181 in favor of ebuild magic. This gets rid
+  of lib64.
+
+  14 Mar 2004; Donnie Berkholz <spyderous@gentoo.org>; xfree-4.3.0-r6.ebuild:
+  Move as much global stuff as possible to pkg_setup(), move inherit to top of
+  ebuild, add IUSE_INPUT_DEVICES, fix PDEPEND on synaptics, linuxwacom and
+  glide-v3 so they're x86-only to fix weird configurations on other arches.
+
+  14 Mar 2004; Donnie Berkholz <spyderous@gentoo.org>; xfree-4.3.0-r6.ebuild:
+  Removing DONE stuff from TODO, it's just cluttering things up.
+
+  14 Mar 2004; Donnie Berkholz <spyderous@gentoo.org>; xfree-4.3.0-r6.ebuild:
+  Cosmetic fix in ebuild warning, update files to 0.1.5 to change license from
+  GPL v2 or later to GPL v2.
+
+*xfree-4.3.0-r6 (14 Mar 2004)
+
+  14 Mar 2004; Donnie Berkholz <spyderous@gentoo.org>; xfree-4.3.0-r6.ebuild:
+  Adding for testing. Critical change for end-users: fonts now install to
+  /usr/share/fonts. This will require changes in configuration files. Other than
+  that, minor features: updated libXft/libXrender/render; generates xrender.pc;
+  works with media-video/ati-gatos, x11-misc/linuxwacom and x11-misc/synaptics;
+  closes #21417, #21120, #35468, #36923, #42235, #8927, #38232, #23023, #29953,
+  #23957; branch update patch works with ipv6; patches added for hardened build;
+  build autodetects SSE/MMX/3DNOW; docs and man pages install to /usr/share; SiS
+  driver update; FILESDIR stuff moved to tarball so we can get rid of
+  files/4.3.0/ once 4.3.0-r5 is gone; PDEPEND on media-fonts/ttf-bitstream-vera,
+  it was added to newer upstream sources.
+
+  10 Mar 2004; Luca Barbato <lu_zero@gentoo.org> xfree-4.3.99.902-r2.ebuild:
+  Removed some old warnings
+
+  07 Mar 2004; Bret Curtis <psi29a@gentoo.org> xfree-4.3.99.902-r2.ebuild:
+  Added ~mips to KEYWORDS
+
+  29 Feb 2004; Donnie Berkholz <spyderous@gentoo.org>; xfree-4.3.0-r5.ebuild,
+  xfree-4.3.99.902-r2.ebuild:
+  Check for existence of CC variable, since some old gcc versions didn't supply
+  a proper env.d file.
+
+  23 Feb 2004; Donnie Berkholz <spyderous@gentoo.org>; xfree-4.3.0-r5.ebuild:
+  Add bindist support for binary distribution in GRP sets.
+
+  18 Feb 2004; Donnie Berkholz <spyderous@gentoo.org>; xfree-4.2.1-r3.ebuild,
+  xfree-4.3.0-r4.ebuild:
+  Pulling vulnerable versions.
+
+  17 Feb 2004; Donnie Berkholz <spyderous@gentoo.org>; xfree-4.2.1-r3.ebuild,
+  xfree-4.2.1-r4.ebuild, xfree-4.3.0-r4.ebuild, xfree-4.3.0-r5.ebuild,
+  xfree-4.3.99.902-r2.ebuild:
+  Updating comment about tahoma font requiring a Windows license to actually
+  mention the word Tahoma.
+
+  17 Feb 2004; Andrew Bevitt <cyfred@gentoo.org>; xfree-4.3.99.902-r1.ebuild:
+  Pulling last vunerable version of 4.3.99.902
+
+*xfree-4.3.99.902-r2 (17 Feb 2004)
+
+  17 Feb 2004; Andrew Bevitt <cyfred@gentoo.org>; xfree-4.3.99.902-r2.ebuild:
+  Buffer over flow fix for 4.3.99.902 see the below log entry.
+
+*xfree-4.2.1-r4 (14 Feb 2004)
+*xfree-4.3.0-r5 (14 Feb 2004)
+
+  14 Feb 2004; Seemant Kulleen <seemant@gentoo.org> xfree-4.2.1-r4.ebuild,
+  xfree-4.3.0-r5.ebuild:
+  Buffer overflow fix for 4.3.0 and 4.2.1. See:
+  http://www.securityfocus.com/archive/1/353692/2004-02-10/2004-02-16/0 Font
+  Information File Buffer Overflow *PART 2* Thanks to everyone who tested
+  this.
+
+  10 Feb 2004; Donnie Berkholz <spyderous@gentoo.org>; :
+  The buffer overflow prompting the last version bump was CAN-2004-0083.
+
+  10 Feb 2004; Donnie Berkholz <spyderous@gentoo.org>; xfree-4.3.0-r3.ebuild:
+  Pulling last vulnerable version.
+
+  09 Feb 2004; Aron Griffis <agriffis@gentoo.org> xfree-4.3.0-r4.ebuild:
+  stable on alpha
+
+  09 Feb 2004; Donnie Berkholz <spyderous@gentoo.org>; xfree-4.2.1-r2.ebuild,
+  xfree-4.3.0-r2.ebuild, xfree-4.3.99.902.ebuild:
+  Pulling vulnerable versions.
+
+  09 Feb 2004; Donnie Berkholz <spyderous@gentoo.org>; :
+  Fix ChangeLog entries.
+
+  09 Feb 2004; Donnie Berkholz <spyderous@gentoo.org>; xfree-4.3.0-r4.ebuild:
+  Stable on mips, report by psi29a.
+
+*xfree-4.3.0-r4 (09 Feb 2004)
+
+  09 Feb 2004; Donnie Berkholz <spyderous@gentoo.org>; xfree-4.2.1-r3.ebuild,
+  xfree-4.3.0-r4.ebuild, xfree-4.3.99.902-r1.ebuild:
+  Security bumps for exploitable buffer overflow in font library. Committed
+  straight to stable except ~alpha and ~mips on 4.3.0-r4 because no compilations
+  were reported for those. PATCH_VER 1.5 for 4.2.1, 2.1.25.2 for 4.3.0, 0.4 for
+  4.3.99.902. Added 920*_all_4.*.0-libxfont-buffer-overflow.patch. Also for
+  4.3.0: Add 9020_all_4.3.0-fix-2.5-headers-rate-period.patch to close bug
+  #17345. Thanks to Andrew Kirilenko <icedank@gmx.net> on bug #36683 and
+  jack_mort <mort_jack@yahoo.fr> on bug #36535 for providing backport patches
+  from XFree86 CVS; Update 0100_all_4.3.0-xf-4_3-branch-01-19.patch -- this
+  includes security fixes for font library vulnerabilities (CAN-2003-0730) and
+  PAM authentication (CAN-2003-0690); Update 2000_all_4.3.0-ipv6-server-v3.patch
+  since 0100 update broke it. To clarify, CAN-2003-0690 and CAN-2003-0730 were
+  fixed in 4.3.0 PATCH_VER 2.1.15 on 6 Oct. 2003, but 4.3.0-r3 did not receive a
+  revision bump so early adopters of 4.3.0-r3 may need this update for those
+  fixes as well.
+
+  09 Feb 2004; Donnie Berkholz <spyderous@gentoo.org>; xfree-4.3.99.16.ebuild,
+  xfree-4.3.99.901.ebuild:
+  Pulling old snapshots.
+
+  07 Feb 2004; Andrew Bevitt <cyfred@gentoo.org>; xfree-4.3.0-r3.ebuild,
+  xfree-4.3.99.16.ebuild, xfree-4.3.99.901.ebuild, xfree-4.3.99.902.ebuild:
+  Updating to exclude 7500_all_4.0.1-s390-nohardware.patch on any arch except
+  non-existant s390
+
+  31 Jan 2004; Donnie Berkholz <spyderous@gentoo.org>; xfree-4.3.99.16.ebuild,
+  xfree-4.3.99.901.ebuild, xfree-4.3.99.902.ebuild:
+  Removing gatos USE from 4.3.99 until gatos is ported to it.
+
+  27 Jan 2004; Donnie Berkholz <spyderous@gentoo.org>; xfree-4.2.1-r2.ebuild:
+  Fix fowners syntax again, it got broken in the last commit.
+
+  27 Jan 2004; Andrew Bevitt <cyfred@gentoo.org>; xfree-4.2.1-r2.ebuild,
+  xfree-4.3.0-r2.ebuild, xfree-4.3.0-r3.ebuild, xfree-4.3.99.16.ebuild,
+  xfree-4.3.99.901.ebuild, xfree-4.3.99.902.ebuild:
+  Fixing various ARCH problems with synaptics, and porting to files / patch
+  tarballs for 4.2.1-r2 to reduce portage tree size
+
+  13 Jan 2004; Donnie Berkholz <spyderous@gentoo.org>; xfree-4.2.1-r2.ebuild,
+  xfree-4.3.0-r2.ebuild, xfree-4.3.0-r3.ebuild:
+  Fixing obsolete fowners syntax for bug #38043.
+
+  06 Jan 2004; Donnie Berkholz <spyderous@gentoo.org>;
+  xfree-4.3.99.902.ebuild:
+  Marking ~amd64 at Brad House's request.
+
+  06 Jan 2004; Donnie Berkholz <spyderous@gentoo.org>;
+  xfree-4.3.99.902.ebuild:
+  PATCH_VER 0.3. Skipped 0.2. Add 0181_all_4.3.0-amd64-nolib64.patch from
+  4.3.0-r3, because upstream 32/64 lib separation appears screwed up (Brad
+  House). This makes sure it's all 64-bit and gets installed to /usr/X11R6/lib/.
+  Rename all patches from _arch_ to _all_ to try to prevent possible breakage
+  with all the combinations. Drop 0280 in favor of using
+  0251_all_4.3.0-alpha-hppa-build-zlib-with-fpic.patch for both hppa and alpha.
+  This required some ebuild modifications to exclude it for other archs. Drop
+  0180_amd64_4.2.99.4-glx-nopic.patch, because -fPIC is required on AMD64 for
+  all shared objects (Brad House).
+
+  30 Dec 2003; Jason Wever <weeve@gentoo.org> xfree-4.3.99.902.ebuild:
+  Added ~sparc for those crazed /etc/portage/package.unmask denizens.
+
+  21 Dec 2003; Donnie Berkholz <spyderous@gentoo.org>;
+  xfree-4.3.99.902.ebuild:
+  Deleting encodings that caused ttmkfdir to segfault.
+
+  20 Dec 2003; Donnie Berkholz <spyderous@gentoo.org>;
+  xfree-4.3.99.902.ebuild:
+  Marking ~ppc.
+
+  20 Dec 2003; Donnie Berkholz <spyderous@gentoo.org>; :
+  Fixing digest for USE=nls.
+
+*xfree-4.3.99.902 (19 Dec 2003)
+
+  19 Dec 2003; Donnie Berkholz <spyderous@gentoo.org>;
+  xfree-4.3.99.902.ebuild:
+  4.4 RC2. Added 0124_all_4.3.0-XF86Config-xfs-example.patch, which will also be
+  in 4.3.0 PATCH_VER 2.1.26 for bug #21417.
+
+  14 Dec 2003; Donnie Berkholz <spyderous@gentoo.org>; xfree-4.3.0-r2.ebuild,
+  xfree-4.3.0-r3.ebuild, xfree-4.3.99.16.ebuild, xfree-4.3.99.901.ebuild:
+  Updating patchset locations.
+
+  14 Dec 2003; Donnie Berkholz <spyderous@gentoo.org>; xfree-4.1.0-r6.ebuild,
+  files/4.1.0-r6/10xfree, files/4.1.0-r6/XftConfig, files/4.1.0-r6/Xsession,
+  files/4.1.0-r6/site.def, files/4.1.0-r6/xdm, files/4.1.0-r6/xdm.start,
+  files/4.1.0-r6/xfs.config, files/4.1.0-r6/xfs.start, files/4.1.0-r6/xinitrc:
+  Pulling 4.1.0 -- it's obsolete and should not be used by anyone.
+
+  14 Dec 2003; Donnie Berkholz <spyderous@gentoo.org>; xfree-4.2.0-r12.ebuild,
+  files/4.2.0/XFree-4.2.0-imake-tmpdir.patch.bz2,
+  files/4.2.0/XFree86-4.2.0-GeForce2Go.patch.bz2,
+  files/4.2.0/XFree86-4.2.0-Suse-Updates.patch.bz2,
+  files/4.2.0/XFree86-4.2.0-agpgart-load.patch.bz2,
+  files/4.2.0/XFree86-4.2.0-fixkbd.patch.bz2,
+  files/4.2.0/XFree86-4.2.0-i18n.patch.bz2,
+  files/4.2.0/XFree86-4.2.0-i810-dri.patch.bz2,
+  files/4.2.0/XFree86-4.2.0-i810_i845_20020524.patch.bz2,
+  files/4.2.0/XFree86-4.2.0-r128-lockup.patch.bz2,
+  files/4.2.0/XFree86-4.2.0-v4l.patch.bz2,
+  files/4.2.0/XFree86-4.2.0-xft-leak.patch.bz2, files/4.2.0-r12/10xfree,
+  files/4.2.0-r12/XftConfig, files/4.2.0-r12/Xsession,
+  files/4.2.0-r12/Xsetup_0, files/4.2.0-r12/chooser.sh,
+  files/4.2.0-r12/site.def, files/4.2.0-r12/startDM.sh, files/4.2.0-r12/xdm,
+  files/4.2.0-r12/xdm.start, files/4.2.0-r12/xfs.conf.d,
+  files/4.2.0-r12/xfs.config, files/4.2.0-r12/xfs.start,
+  files/4.2.0-r12/xft-quality.diff, files/4.2.0-r12/xinitrc,
+  files/4.2.0-r12/Sessions/Xsession, files/4.2.0-r12/lib/libGL.la,
+  files/4.2.0-r12/lib/libGLU.la, files/4.2.0-r12/lib/libOSMesa.la:
+  Pulling 4.2.0. Anyone wanting to use 4.2.x should use 4.2.1 instead.
+
+  14 Dec 2003; Donnie Berkholz <spyderous@gentoo.org>; xfree-4.3.99.16.ebuild,
+  xfree-4.3.99.901.ebuild:
+  Removing append-flags -fPIC for hppa, which also had a typo, precluded by
+  0280_hppa_4.3.0-build-zlib-with-fpic.patch.
+
+  14 Dec 2003; Donnie Berkholz <spyderous@gentoo.org>; xfree-4.3.99.15.ebuild:
+  Pulling old snapshot.
+
+  09 Dec 2003; Heinrich Wendel <lanius@gentoo.org> xfree-4.3.99.15.ebuild,
+  xfree-4.3.99.16.ebuild, xfree-4.3.99.901.ebuild:
+  changed app-text/ghostscript to virtual/ghostscript
+
+  08 Dec 2003; Donnie Berkholz <spyderous@gentoo.org>; xfree-4.2.0-r12.ebuild:
+  Using keepdir instead of touching .keep to fix bug #35308.
+
+  06 Dec 2003; Luca Barbato <lu_zero@gentoo.org> xfree-4.3.99.901.ebuild:
+  Marked ~ppc
+
+  04 Dec 2003; Donnie Berkholz <spyderous@gentoo.org>; xfree-4.3.0-r3.ebuild:
+  PATCH_VER 2.1.25. Adding 0207_all_4.3.0-xman-no-grotty-sgr.patch to close bug
+  #25324. Thanks to bartron@gmx.net for providing this patch, backported from
+  4.3.99 sources.
+
+  04 Dec 2003; Donnie Berkholz <spyderous@gentoo.org>; xfree-4.3.0-r3.ebuild:
+  PATCH_VER 2.1.24. Fixing bug #24445 with 2000_all_4.3.0-ipv6-server-v2.patch.
+  Small change in 'if (getaddrinfo(hostname,NULL,NULL,&ai) != 0) {' from != to
+  ==.
+
+  04 Dec 2003; Donnie Berkholz <spyderous@gentoo.org>; files/4.3.0/Xsetup_0,
+  files/4.3.0/startDM.sh, files/4.3.0/xdm.start:
+  Fix bugs #21140, #23957 and #26125.
+
+  03 Dec 2003; Donnie Berkholz <spyderous@gentoo.org>; :
+  Fixing bad digest that slipped through somehow.
+
+  03 Dec 2003; Donnie Berkholz <spyderous@gentoo.org>; xfree-4.3.0-r3.ebuild:
+  PATCH_VER 2.1.23. Rename
+  0160_all_4.2.99.4-IncludeSharedObjectInNormalLib.patch to
+  9015_all_4.2.99.4-IncludeSharedObjectInNormalLib.patch. Add
+  9016_all_4.3.0-libfontenc-IncludeSharedObjectInNormalLib.patch for amd64 issue
+  with KDE -- from Mike Harris. Add 0263_ia64_4.3.0-elfloader-dup-case.patch to
+  close bug #33353.
+
+*xfree-4.3.99.901 (03 Dec 2003)
+
+  03 Dec 2003; Donnie Berkholz <spyderous@gentoo.org>;
+  xfree-4.3.99.901.ebuild:
+  4.4.0 RC 1. Fix bugs #21140 (Xsetup kdm), #23957 (wdm as *dm) and #26125 (wait
+  for gdm). Add 9960_all_4.3.0-exec-shield-GNU-stack.patch,
+  9961_all_4.3.0-libGL-exec-shield-fixes-v2.patch and
+  9962_all_text-relocations-BUSmemcpy.S.patch for hardened team. However, 9960
+  and 9961 aren't applied because they need to be ported from 4.3.0. Add
+  9840_all_4.3.0-sdk-gatos.patch, 9841_all_4.3.0-gatos-mesa-offset.patch and
+  9860_all_4.3.0-synaptics-sdk-includes.patch for building ati-gatos and
+  synaptics against the SDK. Update to 0119_all_exports-lib-v2.patch and fix
+  0127_all_4.3.99-makefile-fastbuild.patch accordingly.
+
+  02 Dec 2003; Alexander Gabert <pappy@gentoo.org> xfree-4.3.0-r3.ebuild,
+  xfree-4.3.99.15.ebuild, xfree-4.3.99.16.ebuild:
+  removed hardened-gcc disabling of elf module load mechanism
+
+  25 Nov 2003; Luca Barbato <lu_zero@gentoo.org> xfree-4.3.99.16.ebuild:
+  Marked ~ppc
+
+  24 Nov 2003; Donnie Berkholz <spyderous@gentoo.org>; xfree-4.3.99.16.ebuild:
+  Stopping PDF docs from building. With X and doc in USE, this creates a
+  circular dep with ghostscript.
+
+  23 Nov 2003; Donnie Berkholz <spyderous@gentoo.org>; xfree-4.3.99.14.ebuild:
+  Pulling old snapshot.
+
+*xfree-4.3.99.16 (23 Nov 2003)
+
+  23 Nov 2003; Donnie Berkholz <spyderous@gentoo.org>; xfree-4.3.99.16.ebuild:
+  New snapshot. I've got PDF docs working now, of course with USE=doc. Reworked
+  docs setup somewhat. Also trying to use only external zlib. Added
+  -fomit-frame-pointer to ALLOWED_FLAGS. Fixed an obsolete chown problem that
+  slipped by because it used fowners. Not adding external SiS driver because it
+  makes no sense, the internal is just as current. Some changes in the default
+  host.def: pulled docs-related things and fontconfig, since both are done in
+  the ebuild.
+
+  18 Nov 2003; Luca Barbato <lu_zero@gentoo.org> xfree-4.3.99.15.ebuild:
+  Marked ~ppc
+
+  11 Nov 2003; Alexander Gabert <pappy@gentoo.org> xfree-4.3.0-r3.ebuild,
+  xfree-4.3.99.15.ebuild:
+  removed sleep statements from hardened-gcc if statements
+
+  09 Nov 2003; Donnie Berkholz <spyderous@gentoo.org>; xfree-4.3.99.13.ebuild:
+  Pulling old dev snapshot.
+
+  09 Nov 2003; Alexander Gabert <pappy@gentoo.org> xfree-4.3.0-r3.ebuild:
+  changed CC -yet_exec for hardened-gcc again to be honoured by the ebuild
+
+  09 Nov 2003; Donnie Berkholz <spyderous@gentoo.org>; xfree-4.3.0-r3.ebuild:
+  Reverting matrox change, causes compilation problems for some people.
+
+  09 Nov 2003; Alexander Gabert <pappy@gentoo.org> xfree-4.3.0-r3.ebuild:
+  added CC yet_exec again for hardened-gcc not to fail with the xfree building
+
+  04 Nov 2003; Donnie Berkholz <spyderous@gentoo.org>; xfree-4.3.0-r3.ebuild:
+  PATCH_VER 2.1.22. Most significant changes are fixing the Mesa patch to work
+  on 2.4 and 2.6 as well as changing ucs2any Perl script to a C program, which
+  is much faster. Add
+  9145_all_4.3.0-RandR-refresh-rate-rounding-error-fix-from-CVSHEAD.patch. Add
+  9146_all_4.3.0-vidmode-SEGV-fix-from-CVS-HEAD.patch to fix SEGV in vidmode
+  extension. Add
+  1701_all_4.3.0-rendition-complete-driver-backport-CVS20031031.patch, full
+  backport of rendition driver. Obsoletes
+  5500_all_4.3.0-rendition-disable-cause-of-SEGV.patch. Update to
+  9132_all_4.3.0-Mesa-SSE-fixes-from-MesaCVS-v2.patch, which doesn't break 2.6
+  kernels. Remove big warning for previous patch #9132. Add
+  9142_all_4.3.0-ucs2any-C-implementation.patch and a little bit in ebuild to
+  compile it. It's faster than the previous Perl script. Thanks Mike Harris for
+  some wonderful patches. Update ebuild to only build static for USE=static and
+  not USE=debug. Add incompatibility warning for static and sdk. Update ebuild
+  to build support for later adding mga HAL lib but not to build or expect the
+  lib. Also always apply fastbuild patch (0127).
+
+*xfree-4.3.99.15 (02 Nov 2003)
+
+  02 Nov 2003; Donnie Berkholz <spyderous@gentoo.org>; xfree-4.3.99.15.ebuild:
+  This is the first feature-complete snapshot for 4.4. PDF docs aren't working
+  yet, but everything else seems great.
+
+  02 Nov 2003; Donnie Berkholz <spyderous@gentoo.org>; xfree-4.3.0-r1.ebuild:
+  Pulling 4.3.0-r1, now that gmsoft marked 4.3.0-r3 stable on hppa.
+
+  02 Nov 2003; Guy Martin <gmsoft@gentoo.org>; xfree-4.3.0-r3.ebuild :
+  Marked stable on hppa.
+
+  02 Nov 2003; Donnie Berkholz <spyderous@gentoo.org>; xfree-4.2.1-r2.ebuild,
+  xfree-4.3.0-r1.ebuild, xfree-4.3.0-r2.ebuild, xfree-4.3.0-r3.ebuild,
+  xfree-4.3.99.13.ebuild, xfree-4.3.99.14.ebuild:
+  Updating SiS driver to 311003-1.
+
+  31 Oct 2003; Donnie Berkholz <spyderous@gentoo.org>; xfree-4.3.0-r3.ebuild,
+  xfree-4.3.99.13.ebuild:
+  Install synclient to the right place.
+
+  27 Oct 2003; Donnie Berkholz <spyderous@gentoo.org>; xfree-4.3.0-r3.ebuild,
+  xfree-4.3.99.13.ebuild, xfree-4.3.99.14.ebuild:
+  New Synaptics driver 0.12.0. Initial support for ALPS touchpads.
+
+  26 Oct 2003; Donnie Berkholz <spyderous@gentoo.org>; xfree-4.2.1-r2.ebuild,
+  xfree-4.3.0-r1.ebuild, xfree-4.3.0-r2.ebuild, xfree-4.3.0-r3.ebuild,
+  xfree-4.3.99.13.ebuild, xfree-4.3.99.14.ebuild:
+  Updating SiS driver to 261003-1.
+
+  26 Oct 2003; Donnie Berkholz <spyderous@gentoo.org>; xfree-4.3.99.14.ebuild:
+  PATCH_VER 0.4. I swear I've pulled 5310_ppc_4.3.0-enable-nv.patch a few times
+  already, but it was still there. Now it's gone (again?).
+
+  25 Oct 2003; Donnie Berkholz <spyderous@gentoo.org>; xfree-4.3.99.14.ebuild:
+  PATCH_VER 0.3. Add 0280_hppa_4.3.0-build-zlib-with-fpic.patch and
+  0251_alpha_4.3.0-build-zlib-with-fpic.patch.
+
+  22 Oct 2003; Donnie Berkholz <spyderous@gentoo.org>; xfree-4.3.0-r3.ebuild:
+  Since emerge system on install could pull in xfree before a kernel, revised
+  the kernel checks. When /usr/src/linux doesn't exist, they default to 2.4 in
+  the case of patch 9132 and to uname in other cases.
+
+  22 Oct 2003; Donnie Berkholz <spyderous@gentoo.org>; xfree-4.3.0-r3.ebuild:
+  New PATCH_VER 2.1.21. Fix 0127_all_4.3.0-makefile-fastbuild.patch. It was
+  broken since cleaning up patch 0119 but got missed since USE=debug is needed
+  to apply it. Thanks to Geoff Kassel <geoffk@itee.uq.edu.au> on bug #31718.
+
+  19 Oct 2003; Donnie Berkholz <spyderous@gentoo.org>; xfree-4.3.0-r3.ebuild:
+  Added warning for patch 9132, since it's compile time. If one switches from
+  2.4 to 2.6 kernel after emerging xfree, one must recompile xfree against the
+  2.6 kernel or OpenGL applications will segfault.
+
+  19 Oct 2003; Donnie Berkholz <spyderous@gentoo.org>; xfree-4.3.0-r3.ebuild:
+  New PATCH_VER 2.1.20 does what should've been done in the first place. It
+  applies patch 9132 only if kernel is 2.4. Also inherit xfree eclass and change
+  bad uname things to is_kernel.
+
+  18 Oct 2003; Donnie Berkholz <spyderous@gentoo.org>; xfree-4.3.0-r3.ebuild:
+  New PATCH_VER 2.1.19. Pulling 9132_all_4.3.0-Mesa-SSE-fixes-from-MesaCVS.patch
+  because it broken OpenGL on 2.6 kernels, at least until a 2.6-compatible patch
+  can be made. This closes bug #30541.
+
+  18 Oct 2003; Donnie Berkholz <spyderous@gentoo.org>; xfree-4.3.0-r3.ebuild:
+  New PATCH_VER 2.1.18. Reverting stable branch update patch to 10-06 until ipv6
+  patch works properly with the new one.
+
+  18 Oct 2003; Donnie Berkholz <spyderous@gentoo.org>; xfree-4.3.0-r3.ebuild:
+  New PATCH_VER 2.1.17. 0803_all_4.3.0-xkb-broken-capslock-fix-CVS11006-v2.patch
+  to attempt closing bug #30821, and cleaner 0119_all_4.3.0-exports-lib-v2.patch
+  from splite on bug #23581.
+
+  17 Oct 2003; Donnie Berkholz <spyderous@gentoo.org>; xfree-4.3.0-r2.ebuild:
+  Adding dependency on >=sys-devel/patch-2.5.9, as some patches break without it.
+
+  17 Oct 2003; Donnie Berkholz <spyderous@gentoo.org>; xfree-4.3.0-r3.ebuild:
+  New PATCH_VER 2.1.16. Added patch 0192_all_4.3.0-missing-lib-sharedreqs.patch
+  (obsoleted 0191), 5118_all_4.3.0-radeon-autodetect-pci-or-agp-cards.patch,
+  5117_all_4.3.0-radeon-support-backport-from-CVS-v2.patch,
+  1109_all_4.3.0-ati-driver-message-cleanups.patch,
+  1101_all_4.3.0-ati-generic-shared-chip-data.patch (atichip.h unified patch),
+  0900_all_4.3.0-Xserver-xf86PciInfo-updates.patch (xf86PciInfo.h unified
+  patch), updated 5116_all_4.3.0-radeon-rh-forcelegacycrt-alan.patch,
+  5100_all_4.3.0-radeon-support-from-ATI-backport-from-CVS-v2.patch, updated a
+  few others to comply with 0900 and 1101. Updated xf-4_3-branch patch to 10-17
+  (obsoleted 5112, 5113, 5775).
+
+  13 Oct 2003; Donnie Berkholz <spyderous@gentoo.org>; xfree-4.3.0-r2.ebuild,
+  xfree-4.3.0-r3.ebuild, xfree-4.3.99.14.ebuild:
+  New SiS driver 131003-1.
+
+  13 Oct 2003; Donnie Berkholz <spyderous@gentoo.org>; xfree-4.3.99.14.ebuild:
+  Pulling patch 5310, which enabled the nv driver on ppc by default, since this
+  happens without the patch now.
+
+  13 Oct 2003; Donnie Berkholz <spyderous@gentoo.org>; xfree-4.3.99.12.ebuild,
+  files/synaptics-makefile-fixup-0.11.3p11.patch:
+  Pulling 4.3.99.12 and unused synaptics patch.
+
+  13 Oct 2003; Donnie Berkholz <spyderous@gentoo.org>; xfree-4.3.0-r3.ebuild:
+  New synaptics driver 0.11.8.
+
+*xfree-4.3.99.14 (12 Oct 2003)
+
+  12 Oct 2003; Donnie Berkholz <spyderous@gentoo.org>; xfree-4.3.99.14.ebuild:
+  New snapshot. Last regular snapshot before 4.4, new ones will be released as
+  necessary.
+
+  07 Oct 2003; Donnie Berkholz <spyderous@gentoo.org>; xfree-4.3.99.13.ebuild:
+  Adding patch #9960 to close bug #29216. Thanks to Marc <gigerstyle@gmx.ch> for
+  making me do this.
+
+  07 Oct 2003; Donnie Berkholz <spyderous@gentoo.org>; xfree-4.3.99.12.ebuild,
+  xfree-4.3.99.13.ebuild:
+  Fixing synaptics URLs for CVS snapshots, and bad digest.
+
+  07 Oct 2003; Donnie Berkholz <spyderous@gentoo.org>; xfree-4.3.0-r3.ebuild:
+  Fixing location of synaptics driver, thanks to Peter Ruskin.
+
+  06 Oct 2003; Donnie Berkholz <spyderous@gentoo.org>; xfree-4.3.99.13.ebuild:
+  Adding autoconfiguration patch. Try it out.
+
+  06 Oct 2003; Donnie Berkholz <spyderous@gentoo.org>; xfree-4.3.0-r3.ebuild:
+  Adding support for building SDK with USE flags sdk and gatos.
+
+  06 Oct 2003; Donnie Berkholz <spyderous@gentoo.org>; xfree-4.3.0-r3.ebuild:
+  Marking stable on arm (which is dead right now).
+
+  06 Oct 2003; Donnie Berkholz <spyderous@gentoo.org>; xfree-4.3.99.12.ebuild,
+  xfree-4.3.99.13.ebuild:
+  New synaptics version 0.11.7. Add pam USE flag.
+
+  06 Oct 2003; Donnie Berkholz <spyderous@gentoo.org>; xfree-4.3.0-r3.ebuild:
+  Marking stable on sparc and mips, from `Kumba and todd.
+
+  06 Oct 2003; Donnie Berkholz <spyderous@gentoo.org>; xfree-4.3.0-r3.ebuild:
+  New patchset 2.1.15, with CVS update from xf-4_3-branch including security
+  fixes. Pulled patch 9131 since it's included in 0100.
+
+  06 Oct 2003; Donnie Berkholz <spyderous@gentoo.org>; xfree-4.3.0-r3.ebuild:
+  Remarking stable on x86...somehow got unmarked?
+
+  06 Oct 2003; Donnie Berkholz <spyderous@gentoo.org>; xfree-4.3.0-r3.ebuild:
+  Cleaning up SRC_PATH for xfree by moving to mirror://xfree instead of ugly
+  hack.
+
+  06 Oct 2003; Donnie Berkholz <spyderous@gentoo.org>; xfree-4.3.0-r3.ebuild:
+  Marking stable on x86.
+
+  06 Oct 2003; Donnie Berkholz <spyderous@gentoo.org>; xfree-4.3.0-r3.ebuild:
+  Unpacking cleanup.
+
+  05 Oct 2003; Donnie Berkholz <spyderous@gentoo.org>; :
+  Add missing digest.
+
+  05 Oct 2003; Donnie Berkholz <spyderous@gentoo.org>; xfree-4.3.0-r3.ebuild,
+  files/synaptics-makefile-fixup-0.11.3p11.patch:
+  Cleaning up how synaptics driver is done.
+
+  05 Oct 2003; Alexander Gabert <pappy@gentoo.org> xfree-4.3.0-r2.ebuild:
+  added hardened-gcc exclusion CC, hcc compiles okay but at startup font and lib
+  errors
+
+  04 Oct 2003; Donnie Berkholz <spyderous@gentoo.org>; xfree-4.3.99.10.ebuild,
+  xfree-4.3.99.11.ebuild, xfree-4.3.99.9.ebuild:
+  Pulling older CVS snapshots.
+
+  02 Oct 2003; Martin Holzer <mholzer@gentoo.org> xfree-4.3.0-r1.ebuild,
+  xfree-4.3.0-r2.ebuild, xfree-4.3.0-r3.ebuild:
+  Added pam into IUSE.
+
+  29 Sep 2003; Aron Griffis <agriffis@gentoo.org> xfree-4.3.0-r3.ebuild:
+  Stable on alpha
+
+  26 Sep 2003; Bartosch Pixa <darkspecter@gentoo.org> xfree-4.3.0-r3.ebuild:
+  set ppc in keywords
+
+*xfree-4.3.99.13 (26 Sep 2003)
+
+  26 Sep 2003; Donnie Berkholz <spyderous@gentoo.org>; xfree-4.3.99.13.ebuild,
+  files/xfree-4.3.0-ia64-elfloader.patch:
+  Adding 4.3.99.13. Modified patch 0475, which customizes xterm settings. Pulled
+  ia64 patch since it's in the patchset for 4.3.0.
+
+  24 Sep 2003; Donnie Berkholz <spyderous@gentoo.org>; xfree-4.3.0-r3.ebuild:
+  Patchset 2.1.14. Adding patches 0261 and 0262 to fix module loading issues on
+  ia64. 0261 is from splite, 0262 I got from Mike Harris's patches. Fixing bug
+  #29430 as well.
+
+  21 Sep 2003; Jon Portnoy <avenj@gentoo.org> xfree-4.3.0-r3.ebuild,
+  files/xfree-4.3.0-ia64-elfloader.patch :
+  Tiny patch from splite for XFree86 on IA64. Added IA-64 keywords.
+
+  17 Sep 2003; Donnie Berkholz <spyderous@gentoo.org>; xfree-4.3.0-r2.ebuild:
+  Bumped patchset to 1.1.8. Added Savage memory leak patches from -r3, fixed
+  imake-tempdir patch 092, added nolisten-tcp patch 129.
+
+  16 Sep 2003; Donnie Berkholz <spyderous@gentoo.org>; xfree-4.3.0-r3.ebuild,
+  xfree-4.3.99.10.ebuild, xfree-4.3.99.11.ebuild, xfree-4.3.99.12.ebuild:
+  Making synclient executable to close bug #28857. Thanks to Hanno Boeck
+  <hanno@gentoo.org>.
+
+  16 Sep 2003; Donnie Berkholz <spyderous@gentoo.org>; xfree-4.3.0-r3.ebuild:
+  2.1.12 was bad. Moving to 2.1.13.
+
+  16 Sep 2003; Donnie Berkholz <spyderous@gentoo.org>; xfree-4.3.0-r3.ebuild:
+  New patchset 2.1.12. Patches from Mike Harris: 1214, 2002, 9128, 9131, 9132,
+  9133 (I get some credit for 9132 though). Patch 0129 disables our default tcp
+  listening on startx, which was insecure to begin with, one more step toward
+  closing bugs #10599 and #23293. Fix patch 0128 thanks to bartron
+  <bartron@gmx.net> on bug #28554.
+
+*xfree-4.3.99.12 (15 Sep 2003)
+
+  15 Sep 2003; Donnie Berkholz <spyderous@gentoo.org>; xfree-4.3.99.12.ebuild:
+  Initial commit. Added quite a few patches from 4.3.0 thanks to Jasmin Buchert
+  <jasmin@atlantica.ch> on bug #27477. Prevent listening on ipv4 by default with
+  startx to begin closing bugs #10599 and #23293. Add patch 0128 thanks to
+  bartron <bartron@gmx.net> on bug #28554.
+
+  14 Sep 2003; Seemant Kulleen <seemant@gentoo.org> xfree-4.3.0-r3.ebuild:
+  added patch-2.5.9 to the depends list, because lesser versions cause failures.
+  Closes bug #28618 reported by: Thomas Stein <thomas.stein@ngi.de>
+
+  09 Sep 2003; Donnie Berkholz <spyderous@gentoo.org>; xfree-4.3.0-r3.ebuild:
+  Preventing parallel make patch from being applied even if USE=debug. mharris
+  concurs that it is broken.
+
+  06 Sep 2003; Donnie Berkholz <spyderous@gentoo.org>; xfree-4.2.1-r2.ebuild:
+  Fixing broken patches to close bug #24046.
+
+  07 Sep 2003; Martin Schlemmer <azarah@gentoo.org> xfree-4.3.99.11.ebuild:
+  Rather use 'unpack' and not tar, as it already handle the invalid uid/gid
+  issues. Add back explicitly setting LD_LIBRARY_PATH when running bdftopcf etc
+  in src_install/pkg_postinst, as without it will break if this is the first
+  time we install X."
+
+  06 Sep 2003; Donnie Berkholz <spyderous@gentoo.org>; xfree-4.3.0-r3.ebuild,
+  xfree-4.3.0-r2.ebuild:
+  Added distcc crosscompiling support to fix bug #17243, thanks to Francois
+  Guimond <darkpope@hotmail.com>.
+
+  06 Sep 2003; Donnie Berkholz <spyderous@gentoo.org>; xfree-4.3.0-r3.ebuild:
+  Adding a bunch of xkb patches and other things. PATCH_VER is 2.1.11.
+
+  02 Sep 2003; Donnie Berkholz <spyderous@gentoo.org>; xfree-4.3.99.11.ebuild:
+  X compiles should now die after an error instead of going forever.
+
+*xfree-4.3.99.11 (30 Aug 2003)
+
+  30 Aug 2003; Donnie Berkholz <spyderous@gentoo.org>; xfree-4.3.99.11.ebuild:
+  Initial commit.
+
+  28 Aug 2003; Donnie Berkholz <spyderous@gentoo.org>; xfree-4.3.99.8.ebuild,
+  files/4.3.99.8/10xfree, files/4.3.99.8/AuthLib.patch,
+  files/4.3.99.8/XftConfig, files/4.3.99.8/Xsession, files/4.3.99.8/Xsetup_0,
+  files/4.3.99.8/acecad.patch, files/4.3.99.8/chooser.sh,
+  files/4.3.99.8/exports-lib.patch, files/4.3.99.8/site.def,
+  files/4.3.99.8/startDM.sh, files/4.3.99.8/xdm.pamd,
+  files/4.3.99.8/xdm.start, files/4.3.99.8/xfs.conf.d,
+  files/4.3.99.8/xfs.config, files/4.3.99.8/xfs.start, files/4.3.99.8/xinitrc,
+  files/4.3.99.8/xserver.pamd, files/4.3.99.8/lib/libGL.la,
+  files/4.3.99.8/lib/libGLU.la, files/4.3.99.8/lib/libOSMesa.la:
+  Removing 4.3.99.8.
+
+  25 Aug 2003; Olivier Crete <tester@gentoo.org> xfree-4.3.0-r3.ebuild:
+  Fix ebuild to use system zlib on amd64 and mark stable on it
+
+  21 Aug 2003; Seemant Kulleen <seemant@gentoo.org> xfree-4.3.0-r3.ebuild:
+  updated patch tarball for some amd64 fixes thanks to Olivier (tester@gentoo.org)
+
+  18 Aug 2003; Donnie Berkholz <spyderous@gentoo.org>; xfree-4.3.0-r3.ebuild:
+  Added three Savage memory leak fixes from xfree86 bugs 274, 278 and 279.
+  PATCH_VER is 2.1.9.
+
+*xfree-4.3.99.10 (13 Aug 2003)
+
+  13 Aug 2003; Donnie Berkholz <spyderous@gentoo.org>; xfree-4.3.99.10.ebuild:
+  Initial commit.
+
+  11 Aug 2003; Donnie Berkholz <spyderous@gentoo.org>; xfree-4.3.0-r3.ebuild:
+  Updated synaptics and sis drivers, made patch 0251 also apply to hppa as patch
+  0280 at gmsoft's request. PATCH_VER is 2.1.8.
+
+  09 Aug 2003; Alexander Gabert <pappy@gentoo.org> xfree-4.3.0-r3.ebuild:
+  DoLoadableServer NO enables XFree86 binary to get protected by the PaX etdyn
+  patches at pageexec.virtualave.net
+
+*xfree-4.3.99.9 (03 Aug 2003)
+
+  03 Aug 2003; Donnie Berkholz <spyderous@gentoo.org>; xfree-4.3.99.9.ebuild:
+  Bump. Moved filesdir stuff to a downloaded tarball to save the tree.
+
+  31 Jul 2003; foser <foser@gentoo.org> xfree-4.3.0-r2.ebuild, xfree-4.3.0-r3.ebuild, xfree-4.3.99.8.ebuild :
+  Changed virtual/xft block to x11-libs/xft to actually work (#24111)
+
+  27 Jul 2003; Donnie Berkholz <spyderous@gentoo.org>; xfree-4.3.99.8.ebuild:
+  Changed freetype dep to 2.1.4 to close bug #25291.
+
+  17 Jul 2003; Donnie Berkholz <spyderous@gentoo.org>; xfree-4.3.0-r3.ebuild:
+  Fixed problem with problem fix.
+
+  17 Jul 2003; Donnie Berkholz <spyderous@gentoo.org>; xfree-4.3.0-r3.ebuild:
+  Fixed problem with synaptics-update patch, typo in ebuild.
+
+  17 Jul 2003; Donnie Berkholz <spyderous@gentoo.org>; xfree-4.3.0-r3.ebuild:
+  Added Synaptics touchpad driver v0.11.3p7.
+
+  14 Jul 2003; Seemant Kulleen <seemant@gentoo.org> xfree-4.3.0-r2.ebuild:
+  added bindist use support to filter out the ms stuff for grp
+
+  13 Jul 2003; Donnie Berkholz <spyderous@gentoo.org> xfree-4.3.0-r3.ebuild:
+  Removed via driver because it broke USE flags static and debug. Users who need
+  this should use 4.3.99.*. See bugs #22372, #19512.
+
+  12 Jul 2003; Donnie Berkholz <spyderous@gentoo.org>; xfree-4.3.99.8.ebuild:
+  Adding symlink from XFree86 to X; Xwrapper is no longer used.
+
+  12 Jul 2003; Donnie Berkholz <spyderous@gentoo.org>; xfree-4.3.0-r3.ebuild:
+  Removing silicon motion patches from patchset. PATCH_VER is 2.1.6.
+
+*xfree-4.3.99.8 (11 Jul 2003)
+
+  11 Jul 2003; Donnie Berkholz <spyderous@gentoo.org>; xfree-4.3.99.8.ebuild,
+  files/4.3.99.8/10xfree, files/4.3.99.8/AuthLib.patch,
+  files/4.3.99.8/XftConfig, files/4.3.99.8/Xsession, files/4.3.99.8/Xsetup_0,
+  files/4.3.99.8/acecad.patch, files/4.3.99.8/chooser.sh,
+  files/4.3.99.8/exports-lib.patch, files/4.3.99.8/site.def,
+  files/4.3.99.8/startDM.sh, files/4.3.99.8/xdm.pamd,
+  files/4.3.99.8/xdm.start, files/4.3.99.8/xfs.conf.d,
+  files/4.3.99.8/xfs.config, files/4.3.99.8/xfs.start, files/4.3.99.8/xinitrc,
+  files/4.3.99.8/xserver.pamd, files/4.3.99.8/Sessions/Xsession,
+  files/4.3.99.8/lib/libGL.la, files/4.3.99.8/lib/libGLU.la,
+  files/4.3.99.8/lib/libOSMesa.la:
+  Added first development series ebuild; masked in package.mask
+  Thanks to Andrew Bevitt <andrew@volutin.net>.
+
+  07 Jul 2003; Seemant Kulleen <seemant@gentoo.org> xfree-4.3.0-r3.ebuild:
+  some slight tweaks to have use checks not spawn a subshell -- will add proper
+  acknowledgements when -r2 is adjusted -- but Wout Mertens came up with this.
+  Also, patch_ver 2.1.5 has some amd64 fixes (and a rename from x86-64 to amd64
+  for the patches in there already)
+
+  27 Jun 2003; Seemant Kulleen <seemant@gentoo.org> xfree-4.3.0-r3.ebuild:
+  fixes for -fPIC on all platforms, thanks to Stefan Jones <cretin@gentoo.org>
+  in bug #23581
+
+  21 Jun 2003; Seemant Kulleen <seemant@gentoo.org> xfree-4.3.0-r3.ebuild:
+  patchball 2.1.4 has a patch to build successfulle on alpha platform -- build
+  zlib with -fPIC
+
+  16 Jun 2003; Martin Schlemmer <azarah@gentoo.org> xfree-4.3.0-r3.ebuild:
+  Fix generation of euro fonts when no X is installed by setting
+  LD_LIBRARY_PATH.
+
+  14 Jun 2003; Seemant Kulleen <seemant@gentoo.org> files/4.3.0/chooser.sh:
+  chooser.sh is now POSIX compliant. Thanks to: Bjorn Lindstrom
+  <bkhl@privat.utfors.se> in bug #20308
+
+  06 Jun 2003; Seemant Kulleen <seemant@gentoo.org> xfree-4.3.0-r3.ebuild:
+  gcc-2 fixes, closing bug #22239 by Tristan Henderson <T.Henderson@cs.ucl.ac.uk>
+
+  06 Jun 2003; Seemant Kulleen <seemant@gentoo.org> xfree-4.3.0-r3.ebuild:
+  xml to xml2 USE flag change.  Closes that bug
+
+  05 Jun 2003; Seemant Kulleen <seemant@gentoo.org> xfree-4.3.0-r3.ebuild:
+  the fastmake patch is not applied for debug in USE. Bumped patch_Ver to 2.1.3
+  because 2.1.2 was buggy. Closes bug #22283 by Roger Hawley
+  <karma911@pacbell.net>
+
+  05 Jun 2003; Seemant Kulleen <seemant@gentoo.org> xfree-4.3.0-r3.ebuild:
+  Added via driver from cvs X -- tarballed it onto the mirrors. This should
+  close bug #19512 by Henrik Treadup <hetr9922@student.su.se>. Also added a
+  patch for dri corruption with i8x0 chipsets -- should close bug #8927 by
+  Jan Knipper <jan-gentoo@spline.de>.  PATCH_VER is 2.1.2
+
+  04 Jun 2003; Seemant Kulleen <seemant@gentoo.org> xfree-4.3.0-r3.ebuild:
+  oops patch-2.1.1 is new replacement. 2.1.0 was slightly wonky. Also,
+  activating fast build option
+
+  04 Jun 2003; Seemant Kulleen <seemant@gentoo.org> xfree-4.3.0-r2.ebuild:
+  added the savage driver to sparc's list of cards. Should close bug #21406
+  by Michael Siebecker <michael.siebecker@lcsys.ch>
+
+  04 Jun 2003; Seemant Kulleen <seemant@gentoo.org> xfree-4.3.0-r3.ebuild:
+  Ready for release into ~arch testing. This revision bump adds the radeon
+  ap10 fix from daenzer, as well as a number of r128 fixes from redhat's
+  srpm, which includes the chip names touchupk, the ecp divisor and an
+  updated unresolved symbols patch.  The mga unresolved symbols patch was
+  updated as well.  New patches for the nv driver include: new chip ids,
+  filter-imagerect-pixel-range, dpms for broken monitors, a dualhead patch
+  for riva cards, and unresolved symbols patch.  Additionally, the acecad
+  debug patch was added back in.  Added a patch for the non-exec stack in 
+  linux's elfloader.  Also, a null pointer dereference fix in libXfont is
+  patched, as well as a patch to allow xscreensaver to work in xinerama.
+  New drivers patched are siliconmotion and rendition and trident.
+  Additionally a patch for the i8x0 440EX-LX video.  New drivers patched are
+  siliconmotion and rendition and trident.  Additionally a patch for the
+  i8x0 440EX-LX video.  Finally, the coup de grace is the ipv6 patches that
+  latexer managed to pin down.  
+  The patch structure is changed -- now patches not to
+  be appled are no longer deleted, they are moved into an excluded
+  subdirectory.  The last update is TaD's gentoo cursors with a thinner I
+  bar.  Speaking of cursors -- For system wide defaults, put the
+  default/index.theme file into /usr/local/share/cursors/xfree to avoid
+  getting it overwritten at every new emerge.  Also, ~/.cursors is added to
+  the search path for private cursor settings.
+
+  02 Jun 2003; Seemant Kulleen <seemant@gentoo.org> xfree-4.3.0-r2.ebuild:
+  did similar things for mmx and sse use flag disables, at Tom's suggestion in
+  the bug
+
+  02 Jun 2003; Seemant Kulleen <seemant@gentoo.org> xfree-4.3.0-r2.ebuild:
+  3dnow support disabled if USE flag for it is disabled. Thanks to: Tom
+  Molesworth <tetrarch@tom.molesworth.name> in bug #20273
+
+  02 Jun 2003; Seemant Kulleen <seemant@gentoo.org> xfree-4.3.0-r2.ebuild:
+  Bumped to patch_ver 1.1.7 which contains a patch to fix the crappy displaying
+  of underlined truetype fonts. The patch was given from the 4.3.99 series in
+  cvs to me by: Juliusz Chroboczek <jch@xfree86.org> in xfree's bug #330. Closes
+  our bug #19965 by DC <ddcc@email.com>
+
+  02 Jun 2003; Seemant Kulleen <seemant@gentoo.org> xfree-4.3.0-r2.ebuild:
+  Added a patch to the patch tarball for Sun Type6 keyboards. Thanks to: Jeremy
+  Huddleston <jeremyhu@cory.eecs.berkeley.edu> in bug #21120 for the patch.
+  Note patch level is now 1.1.6
+
+  02 Jun 2003; Seemant Kulleen <seemant@gentoo.org> xfree-4.3.0-r2.ebuild,
+  xfree-4.3.0-r3.ebuild:
+  works with debug in USE now.  Closes bug #20511, by Cesar Eduardo Barros
+  <cesarb@nitnet.com.br> 
+
+  31 May 2003; Seemant Kulleen <seemant@gentoo.org> xfree-4.3.0-r2.ebuild,
+  xfree-4.3.0-r3.ebuild:
+  The locale fixes should be in place now. The only change was to the
+  XFree86-compose.dir.bz2 file on the mirrors. It was changed as suggested in:
+  http://bugs.xfree86.org//cgi-bin/bugzilla/show_bug.cgi?id=224 by Ivan Pascal
+  <pascal@tsu.ru>
+
+  30 May 2003; Seemant Kulleen <seemant@gentoo.org> xfree-4.3.0-r2.ebuild:
+  Updated to patch 1.1.5 which contains a patch for libXi when using
+  XinitThreads -- thanks to foser@gentoo.org in bug #21336
+
+  30 May 2003; Seemant Kulleen <seemant@gentoo.org> xfree-4.3.0-r3.ebuild:
+  switch from using xml to xml2 USE flag. Closes bug #19710 by Phil Richards
+  <gentoo@derived-software.ltd.uk>
+
+*xfree-4.3.0-r1 (29 May 2003)
+
+  14 Jul 2003; Guy Martin <gmsoft@gentoo.org> xfree-4.3.0-r1.ebuild :
+  Forced the -fPIC CFLAGS needed by kde to link against some libs.   
+  
+  31 May 2003; Guy Martin <gmsoft@gentoo.org> xfree-4.3.0-r1.ebuild:
+  Unmasked for hppa.
+
+  29 May 2003; Grant Goodyear <g2boojum@gentoo.org> xfree-4.3.0-r1.ebuild:
+  Added 4.3.0-r1 back in, since it's required for hppa (by request of GMsoft).
+
+*xfree-4.3.0-r3 (28 May 2003)
+
+  28 May 2003; Seemant Kulleen <seemant@gentoo.org> xfree-4.3.0-r2.ebuild,
+  xfree-4.3.0-r3.ebuild:
+  added patch to fix some i810 issues, to try and solve bug #8927 by Jan Knipper
+  <jan-gentoo@spline.de>
+
+  20 May 2003; Seemant Kulleen <seemant@gentoo.org> xfree-4.2.1-r1.ebuild,
+  xfree-4.2.1-r1.ebuild, xfree-4.3.0-r1.ebuild, xfree-4.3.0-r1.ebuild,
+  xfree-4.3.0.ebuild, xfree-4.3.0.ebuild,
+  files/4.2.1-r1/108_all_4.2.1-xterm-enable-backspace.patch,
+  files/4.2.1-r1/109_ppc_4.2.1-xterm-eightBitInput-fix.patch,
+  files/4.2.1-r1/10xfree,
+  files/4.2.1-r1/110_all_4.2.1-xf86_h-missing-bracket-fix.patch,
+  files/4.2.1-r1/XftConfig, files/4.2.1-r1/Xsession, files/4.2.1-r1/Xsetup_0,
+  files/4.2.1-r1/chooser.sh, files/4.2.1-r1/site.def,
+  files/4.2.1-r1/startDM.sh, files/4.2.1-r1/xdm.pamd,
+  files/4.2.1-r1/xdm.start, files/4.2.1-r1/xfs.conf.d,
+  files/4.2.1-r1/xfs.config, files/4.2.1-r1/xfs.start,
+  files/4.2.1-r1/xft-quality.diff, files/4.2.1-r1/xinitrc,
+  files/4.2.1-r1/xserver.pamd, files/4.2.1-r1/Sessions/Xsession,
+  files/4.2.1-r1/lib/libGL.la, files/4.2.1-r1/lib/libGLU.la,
+  files/4.2.1-r1/lib/libOSMesa.la,
+  files/4.3.0-patches/XFree86-4.3.0-enable-nv-on-ppc.patch,
+  files/4.3.0-patches/XFree86-4.3.0-sparc-kb.patch:
+  removed crusty ebuilds
+
+  05 May 2003; Daniel Robbins <drobbins@gentoo.org>: xfree-4.3.0*.ebuild: moved
+  "inherit" line below DEPEND definition, since the "newdepend" lines in the
+  eclass were causing RDEPEND to get fried. RDEPEND should now be set
+  correctly.
+
+*xfree-4.3.0-r2 (08 Apr 2003)
+
+  23 Apr 2003; Michael Fitzpatrick <leahcim@gentoo.org> xfree-4.3.0-r2.ebuild:
+  Updated patch tarball to v1.1.3. Adds a tdfx patch to prevent a dri hang bug
+  #19812. Allow X to auto use vc13(+) bug #19844.
+
+  20 Apr 2003; Seemant Kulleen <seemant@gentoo.org> Manifest,
+  xfree-4.3.0-r2.ebuild:
+  Added TaD's three gentoo themes, changed the default cursor to core. Also,
+  i18n fonts are built when "nls" is set in USE. and CJK fonts when both
+  "nls" and "cjk" are set in USE.
+
+  19 Apr 2003; Seemant Kulleen <seemant@gentoo.org> Manifest,
+  xfree-4.3.0-r2.ebuild:
+  Updated the patch tarball - this time to 1.1.1 -- this contains two more DRI
+  patches for radeon -- one is Mesa, the other is a reinit patch
+
+  15 Apr 2003; Seemant Kulleen <seemant@gentoo.org> xfree-4.3.0-r2.ebuild:
+  changed default to core (black) pointer instead of whiteglass, at vlado's
+  request.  The patch version is updated.  The previous patchset caused the
+  compilation to fail on virgin systems (ie, those without X already
+  installed).  Thanks to Bret Towe (Magnade in #gentoo-dev), the problem is
+  fixed (the parallel make patch was a little wonky).  I want to express my
+  thanks to lu_zero for helping out with the ATi stuff, the lads in #gentoo
+  and the forums, and the chix0rs in #linuxchics for testing this
+  extensively and pointing out my mistakes.  Please note that for this
+  ebuild, Xinerama extensions on DRI enabled Radeon displays is disabled.  I
+  will get to try and fixing this (one of the crucial patches for Radeon
+  users disables this) for the more advanced users.  Everyone else -- enjoy!
+  Also added newest SiS driver. Note that patch version is now 1.1.0
+
+  15 Apr 2003; Seemant Kulleen <seemant@gentoo.org> Manifest,
+  xfree-4.3.0-r2.ebuild:
+  moved fc-cache step to be the last font related stuff in postinst -- thanks to
+  danarmak@gentoo.org <Dan Armak, king of KDE> for the fix
+
+  14 Apr 2003; Seemant Kulleen <seemant@gentoo.org> Manifest,
+  xfree-4.3.0-r2.ebuild:
+  upgrade to patch 1.0.8, which includes the fix for radeon/rage cards crashing
+  with kdm logout. bug 94 on xfree's bugzilla has the oneliner patch from
+  daenzer. The other option, apparently, is to make kdm actually restart x.
+  Also, the ebuild now builds xfree with xft2 support -- thanks to
+  foser@gentoo.org
+
+  13 Apr 2003; Seemant Kulleen <seemant@gentoo.org> Manifest,
+  xfree-4.3.0-r2.ebuild:
+  updated the PATCH to 1.0.7 -- the gb-xtt-enc patch (#063) was including header
+  files from <X11/....> which indicates a need for a current installation of X.
+  Ashmodai in #gentoo and Rroet in #gentoo-sparc discovered that it wouldn't
+  compile on a system without X. Thanks to Ashmodai for testing the fix
+
+  13 Apr 2003; Seemant Kulleen <seemant@gentoo.org> Manifest,
+  xfree-4.3.0-r2.ebuild:
+  Added patch 1.0.6 -- the gb stuff is now separated again, and more radeon
+  patches from daenzer
+
+  13 Apr 2003; Seemant Kulleen <seemant@gentoo.org> xfree-4.3.0-r2.ebuild :
+
+  Removed the generating koi8 fonts section thanks to Azarah :).  Also,
+  added patches for radeon: first one that mharris pointed me to (a patch by
+  daenzer, which fixes an issue with xcursors and xinerama); and a few more
+  by daenzer that I found in his directory: http://penguinppc.org/~daenzer.
+  Hopefully, this takes care of the issue where X crashes after logging out
+  with kdm (using a radeon with drm/glx)
+
+  12 Apr 2003; Martin Schlemmer <azarah@gentoo.org> xfree-4.3.0-r2.ebuild,
+  files/4.3.0/xfs.start :
+  Add 'mkfontdirs' target for users that do not use xfs to be able to
+  regenerate the font dirs.  Some small tweaks to the ebuild for corner
+  cases.
+
+  11 Apr 2003; Seemant Kulleen <seemant@gentoo.org> xfree-4.3.0-r2.ebuild :
+
+  The patch version is now 1.0.5.  Some redhat patches were added (the
+  trivial and notable one is the die-die-die patch, which gets rid of the
+  ugly initial checkerboard screen when X starts).  Also, the gb0830 patches
+  were combined.  In previous tarball versions I had to add patches to undo
+  duplicate effects.  The duplicate and undo patches are removed.
+  Additionally, related patches have been combined.  Next stop -- xfree-drm
+
+  08 Apr 2003; Seemant Kulleen <seemant@gentoo.org> xfree-4.3.0-r2.ebuild,
+  xfree-4.3.0.ebuild, xfree-4.3.0.ebuild:
+  many fixes in this ebuild -- using the old keymaps from 4.2 to sort out the
+  keymap situation. Added patches from Mandrake. Additionally, this uses
+  Xwrapper so normal X binaries are not installed SUID. Added additional
+  european fonts and asien fonts, and freetype encodings for X font server. The
+  next -r version will have the ability to slim down the compile a little bit,
+  and only install the drivers needed
+
+  24 Mar 2003; Martin Schlemmer <azarah@gentoo.org> xfree-4.2.1-r2.ebuild,
+                                                    xfree-4.3.0-r1.ebuild :
+  Update SiS driver to version 210303-1, bug #18069.
+
+  20 Mar 2003; Martin Schlemmer <azarah@gentoo.org> xfree-4.2.1-r2.ebuild :
+  Unset MAKE_OPTS here as well, closing bug #17102
+
+  10 Mar 2003; Martin Schlemmer <azarah@gentoo.org> xfree-4.3.0-r1.ebuild :
+  Add back Drobbins's fix that was dropped by mistake.  Move DRI patch
+  to X_PATCHES as this was what its intended for.  Remove fc-{cache,list}
+  from /usr/X11R6/bin.
+
+*xfree-4.3.0-r1 (09 Mar 2003)
+
+  20 Mar 2003; Jason Wever <weeve@gentoo.org> xfree-4.3.0-r1.ebuild:
+  Removed sparc kb patch as it breaks on xfree upgrades.
+
+  20 Mar 2003; Jason Wever <weeve@gentoo.org> xfree-4.3.0-r1.ebuild,
+  files/4.3.0-patches/XFree86-4.3.0-gentoo-sparc-kb.patch:
+  Added XFree86-4.3.0-gentoo-sparc-kb.patch to fix the Ctrl+Alt+FKeys so that
+  key sequence now works. Patch is applied after install.
+
+  12 Mar 2003; Zach Welch <zwelch@gentoo.org> xfree-4.3.0-r1.ebuild:
+  add arm keyword
+
+  09 Mar 2003; Guy Martin <gmsoft@gentoo.org> xfree-4.3.0-r1.ebuild :
+  Added ~hppa to keywords.
+
+  09 Mar 2003; Seemant Kulleen <seemant@gentoo.org> xfree-4.3.0-r1.ebuild:
+  added a patch for sparc keyboards from the xfree86 mailing list:
+  http://www.mail-archive.com/devel%40xfree86.org/msg01156.html
+
+  09 Mar 2003; Seemant Kulleen <seemant@gentoo.org> xfree-4.3.0-r1.ebuild:
+  Luca Barbato <lu_zero@gentoo.org> added some fixes for radeon issues
+
+  08 Mar 2003; Daniel Robbins <drobbins@gentoo.org> xfree-4.3.0.ebuild: unset
+  MAKE_OPTS before "emake World," since MAKE_OPTS is an internal XFree86
+  Makefile variable. If a user mistakenly defined MAKE_OPTS in /etc/make.conf
+  (instead of MAKEOPTS,) then the build will silently die. Since this is hard
+  to track down, I'm adding a preemptive fix to the ebuild.
+  
+  06 Mar 2003; Martin Schlemmer <azarah@gentoo.org> xfree-4.2.1-r2.ebuild :
+  Fix savage driver unpacking in wrong dir, thanks to
+  roma1390 <roma1390@uosis.mif.vu.lt>, bug #16794.
+
+*xfree-4.3.0 (27 Feb 2003)
+
+  15 Mar 2003; Mark Guertin <gerk@gentoo.org> xfree-4.3.0.ebuild:
+  set ppc in keywords
+
+  09 Mar 2003; Guy Martin <gmsoft@gentoo.org> xfree-4.3.0.ebuild :
+  Patched for hppa (thanks to Stephane Wirtel for his help).
+  Added hppa to keywords.
+
+  27 Feb 2003; Mark Guertin <gerk@gentoo.org> xfree-4.3.0.ebuild files/4.3.0-patches/XFree86-4.3.0-enable-nv-on-ppc.patch :
+  updated nv patch for 4.3.0
+
+  27 Feb 2003; Seemant Kulleen <seemant@gentoo.org> xfree-4.3.0.ebuild	
+  files/digest-xfree-4.3.0 files/4.3.0 :
+
+  Version bump to newest release.
+
+*xfree-4.2.99.902 (24 Feb 2003)
+
+  24 Feb 2003; Seemant Kulleen <seemant@gentoo.org> xfree-4.2.99.902.ebuild
+  files/digest-xfree-4.2.99.902 :
+
+  Version bump to release candidate 3 for X-4.3
+
+  23 Feb 2003; Martin Schlemmer <azarah@gentoo.org> xfree-4.2.1-r2.ebuild :
+
+  Do not disable DRI for 3dfx cards if resolution higher than 1024x768,
+  bug #15001.
+
+  17 Feb 2003; Martin Schlemmer <azarah@gentoo.org> xfree-4.2.1-r2.ebuild :
+
+  Add unzip to DEPEND, needed by new savage driver.  Closes bug #15831.
+
+  16 Feb 2003; Martin Schlemmer <azarah@gentoo.org> xfree-4.2.1-r2.ebuild,
+                                                    xfree-4.2.99.4.ebuild :
+
+  Add a patch for HOME and END keys not working in xterm.  Should fix bugs
+  #15254 and #15608.  Update savage driver in xfree-4.2.1-r2, fixing bug
+  #14534.
+
+  15 Feb 2003; Hannes Mehnert <hannes@gentoo.org> xfree-4.2.99.4.ebuild :
+
+  bumped savage driver to 1.1.27t (prior versions do not work). also added
+  dep on app-arch/unzip (because 1.1.27t is a .zip)
+
+  09 Feb 2003; Luca Barbato <lu_zero@gentoo.org> :
+
+  Added some warnings to avoid reports for already known issues.
+  
+  05 Feb 2003; Martin Schlemmer <azarah@gentoo.org> :
+
+  Fix the /usr/lib/X11 symlink to point to the correct ../X11R6/lib/X11.
+  Some ebuild had this still wrong.  This closes bug #15017.
+
+  04 Feb 2003; Olivier Reisch <doctomoe@gentoo.org> xfree-4.2.99.4.ebuild :
+  
+  Temporarily set to -ppc as we had to mask the fontconfig dependency, which
+  tends to break fonts on ppc unless you recompile everything depending on it.
+  Still pondering what to do about it :)
+
+  Later, same day, a bit wiser: set back to ~ppc, tell ppl to recompile qt
+  and kdelibs.
+
+*xfree-4.2.99.4 (02 Feb 2003)
+
+  24 Feb 2003; Seemant Kulleen <seemant@gentoo.org> xfree-4.2.99.4.ebuild files/4.2.99.4-patches/4.2.99.4-enable-nv-on-ppc.patch :
+  moved nv-on-ppc patch to proper location
+
+  23 Feb 2003; Aron Griffis <agriffis@gentoo.org> xfree-4.2.99.4.ebuild :
+  Fix minor error in the ebuild where "die" could be called from within
+  a subshell.
+
+  15 Feb 2003; Mark Guertin <gerk@gentoo.org> xfree-4.2.99.4.ebuild :
+  added patch to enable nv driver on ppc, thanks DarkSpecter.
+
+  02 Feb 2003; Seemant Kulleen <seemant@gentoo.org> xfree-4.2.99.4.ebuild
+  files/digest-xfree-4.2.99.4 files/4.2.99.4/* files/4.2.99.4-patches/* :
+
+  Updated to newest cvs frozen branch (4_2_99_4) Same patches are still applying
+  Also, this will be permanently ~arch masked and removed from package mask.
+
+*xfree-4.2.99.3-r2 (16 Jan 2003)
+
+  16 Jan 2002; Seemant Kulleen <seemant@gentoo.org> xfree-4.2.99.3-r2.ebuild
+  files/digest-xfree-4.2.99.3-r2 files/4.2.99.3-r2/* :
+
+  new ebuild for updated snapshot.  this seems to be frozen code for the
+  X_4_2_99_3 branch.
+
+*xfree-4.2.99.3-r1 (23 Dec 2002)
+
+  24 Dec 2002; Martin Schlemmer <azarah@gentoo.org> xfree-4.2.1-r2.ebuild,
+                                                    xfree-4.2.99.3-r1.ebuild :
+
+  Do not let portage strip binaries and libraries, as then it stips the
+  DRI modules, which breaks things.  Change 4.2.99.3-r1 to compile fontconfig,
+  but then we just remove all fontconfig related stuff.  This should fix things
+  for Seemant and others.
+
+  23 Dec 2002; Martin Schlemmer <azarah@gentoo.org> xfree-4.2.1-r2.ebuild,
+                                                    xfree-4.2.99.3-r1.ebuild :
+
+  Fix bug #12599 (type o in Xsession).
+  Update trident patches to fix bug #10624 again.
+  Fix check for $DEBUGBUILD to test for "yes" and not "true",
+  fixing bug #12572.
+
+  23 Dec 2002; Martin Schlemmer <azarah@gentoo.org> xfree-4.2.99.3-r1.ebuild :
+  Some form fixes.  Added some patches back in, although I should verify some
+  of the left out ones.  Fix to not build Xft2.0 and fontconfig .. we rather
+  depend on fontconfig and PDEPEND on x11-libs/xft.  Get it to depend on
+  fixed ttmkfdir.  Fix permissons on modules and drivers.  Some other things
+  I forgot.
+
+  16 Dec 2002; Martin Schlemmer <azarah@gentoo.org> xfree-4.2.1-r2.ebuild :
+  Fix /usr/lib/X11 symlink.
+
+  13 Dec 2002; Martin Schlemmer <azarah@gentoo.org> xfree-4.2.1-r2.ebuild :
+  Update Xrender to that of fontconfig-2.1.  Update fontconfig dep to 2.1.
+  Add glide-v3 to PDEPEND if '3dfx' in USE.
+
+  09 Dec 2002; Martin Schlemmer <azarah@gentoo.org> xfree-4.2.1-r2.ebuild :
+  Also do not overwrite Xft headers if Xft2.0 are installed.
+
+  06 Dec 2002; Rodney Rees <manson@gentoo.org> :
+  Changed sparc ~sparc keywords.
+ 
+*xfree-4.2.1-r2 (05 Dec 2002)
+
+  06 Apr 2003; Christian Birchinger <joker@gentoo.org> xfree-4.2.1-r2.ebuild:
+  Changed replace-flags for sparc
+
+  09 Mar 2003; Seemant Kulleen <seemant@gentoo.org> xfree-4.2.1-r2.ebuild:
+  URL fix for SIS driver, thanks to: Ingo <inku@kangaroo.at> in bug #17144
+
+  30 Jan 2003; Jack Morgan <jmorgan@gentoo.org> xfree-4.2.1-r*.ebuild
+  Added replace-flags "-mcpu=ultrasparc" "-mcpu=v8" as per bug #14126 
+  Changed -sparc to sparc
+
+  15 Jan 2002; Mark Guertin <gerk@gentoo.org> xfree-4.2.1-r2.ebuild :
+  Removed patch 082 as it was the one breaking keycodes, set ppc in 
+  keywords. See bug #13073
+
+  11 Jan 2003; Jack Morgan <jmorgan@gentoo.org> xfree-4.2.1-r2.ebuild :
+  Changed sparc back to -sparc as it breakes keymaps
+
+  09 Jan 2003; Jack Morgan <jmorgan@gentoo.org> xfree-4.2.1-r2.ebuild :
+  Changed ~sparc to sparc
+
+  28 Dec 2002; Martin Schlemmer <azarah@gentoo.org> xfree-4.2.1-r2.ebuild :
+  XFree86 do not like CFLAGS="-Os", filter for this, bug #12775.
+
+  26 Dec 2002; Martin Schlemmer <azarah@gentoo.org> xfree-4.2.1-r2.ebuild :
+  Mark stable for x86.
+
+  26 Dec 2002; Martin Schlemmer <azarah@gentoo.org> 10xfree :
+  Add CONFIG_PROTECT=/usr/X11R6/lib/X11/xkb in the hopes to fix bug #6862.
+
+  25 Dec 2002; Martin Schlemmer <azarah@gentoo.org> xfs.start, xfs.config,
+                                                    Xsession :
+
+  Changes to xfs.start of xfree-4.2.1-r2:
+  - Update to that of xfree-4.2.99.3-r1 where we only run fc-cache if
+    something changed.
+  Changes to xfs.start of xfree-4.2.1-r2 and xfree-4.2.99.3-r1:
+  - Replace some code for xfs.start with awk versions to increase speed.
+  - Fix a bug where it did not drop duplicate font directories.
+  - Also consider changes to fonts.scale and encodings.dir as reason to
+    re-index that font directory.
+  Changes to xfs.config of xfree-4.2.1-r2 and xfree-4.2.99.3-r1:
+  - Remove a duplicate font directory entry.
+  Changes to Xsession of xfree-4.2.1-r2 and xfree-4.2.99.3-r1:
+  - Change the shell to '/bin/bash --login' to at least for xdm fix
+    the environment problem.
+
+  05 Dec 2002; Martin Schlemmer <azarah@gentoo.org> xfree-4.2.1-r2.ebuild :
+  Basically cleanup 4.2.1-r1.
+  - Resolve bug #10624 (Updated trident patch).
+  - Resolve bug #10407 (XFree86 ebuild should include i830 1mb stolen mem patch).
+  - Resolve bug #10227 (Xfree requires new SiS driver for Asus P4S533-VM
+    Motherboard).
+  - Add xfree-4.2.x.-bison.fixes.patch for future bison-1.50 support, resolving
+    bug #11595.
+
+  28 Nov 2002; Martin Schlemmer <azarah@gentoo.org> xfree-4.2.1-r1.ebuild :
+  Do not apply 35_all_4.2.0-tdfx-fix-compiler-warnings.patch.bz2, bug #10507.
+
+  20 Nov 2002; Martin Schlemmer <azarah@gentoo.org> files/4.2.1-r1/site.def :
+  Tweak to compile libs (for x86) and glx with -fPIC.
+
+*xfree-4.2.99.3 (13 Nov 2002)
+
+  21 Dec 2002; Seemant Kulleen <seemant@gentoo.org> :
+  updated snapshot again -- sis fixes.  andee and lanalyst in #gentoo were
+  invaluable for this ebuild, which is a lot better than before.  Many many
+  many many many thanks to them :)
+
+  11 Dec 2002; Seemant Kulleen <seemant@gentoo.org> :
+  updated snapshot again -- ibm chipset updates, evidently.
+
+  -7 Dec 2002; Seemant Kulleen <seemant@gentoo.org> :
+  Updated snapshot and newer ft2
+
+  15 Nov 2002; Seemant Kulleen <seemant@gentoo.org>
+  files/4.2.99.3-patches/XFree86-4.2.99.3-no-optimize.patch.bz2 :
+  Patches one file to not optimise on a gcc-3 system.  Submitted by MrGr1m
+  in #gentoo
+
+  13 Nov 2002; Seemant Kulleen <seemant@gentoo.org> xfree-4.2.99.3.ebuild
+  files/digest-xfree-4.2.9.3 :
+  New X snapshot from 20021113.  Not using the FT2 stuff externally, coz it
+  crashes.
+
+  7 Nov 2002; Martin Schlemmer <azarah@gentoo.org> startDM.sh :
+  Source /etc/profile before starting the DM to fix bug #10190.
+
+  5 Nov 2002; Martin Schlemmer <azarah@gentoo.org> xfree-4.2.1-r1.ebuild :
+  Fix backspace in xterm not working.  This closes bug #10186.
+  Added patch 108_all_4.2.1-xterm-enable-backspace.patch.
+  
+  Fix xterm exiting immediately on PPC.  Closes bug #10245.
+  Also see http://www.geocrawler.com/archives/3/3/2001/9/100/6633199/
+  Added patch 109_ppc_4.2.1-xterm-eightBitInput-fix.patch.
+
+  Fix unterminated bracket in xf86.h, closing bug #10271, thanks Gerk!
+  Added patch 110_all_4.2.1-xf86_h-missing-bracket-fix.patch.
+
+  4 Nov 2002; Martin Schlemmer <azarah@gentoo.org> xfree-4.2.1-r1.ebuild :
+
+  Do not apply 107_all_4.2.1-gcc32-internal-compiler-error.patch for
+  gcc-2.95.3, as it cause compile to fail, closing bug #10146.
+
+*xfree-4.2.1-r1 (3 Nov 2002)
+
+  22 Jan 2003; Jason Wever <weeve@gentoo.org> xfree-4.2.1-r1.ebuild
+  Changed ~sparc keyword to -sparc as it introduces keymapping problems
+  not present in xfree-4.2.1-r0.
+
+  3 Nov 2002; Martin Schlemmer <azarah@gentoo.org> :
+
+  New version to address major problems we are having with 4.2.1.
+  Ripped out Xft-1.2 (with fontconfig support), as it causes crashes
+  with gcc3 at least.  Sync patches with Redhat/Mandrake again.  I
+  will try to get behind the problem, but even with an unpatched
+  Radeon driver, I cannot get DRI to work for the Radeon :(
+
+  28 Oct 2002; J Robert Ray <jrray@jrray.org> xfree-4.2.1.ebuild :
+
+  Allow unpriviliged user install, non-root fails to overwrite file
+  with 0444 perms.
+
+  28 Oct 2002; Martin Schlemmer <azarah@gentoo.org> xfree-4.2.1.ebuild,
+                                                    xfs.start :
+  
+  Fix ebuild and xfs.start to only generate fonts.scale files if
+  truetype fonts are present (bug #9714).  Optimize xfs.start a bit
+  for speed.  Make xfree depend on ttmkfdir-2.0 rather.  Remove
+  Tahoma font, as a Windows license is needed (bug #9486).
+
+  Fix typeo in pkg_postinst().
+
+  26 Oct 2002; Martin Schlemmer <azarah@gentoo.org> xfree-4.2.1.ebuild :
+
+  Do not install zlib includes, as it conflicts with those of the real
+  zlib package (bug #9470).
+
+  25 Oct 2002; Martin Schlemmer <azarah@gentoo.org> xfree-4.2.1.ebuild :
+
+  Update Savage and SIS drivers.  Fix my braindead bork with the savage
+  driver getting the binary and not the source.
+
+  21 Oct 2002; Martin Schlemmer <azarah@gentoo.org> xfree-4.2.1.ebuild :
+
+  Update bit that applies Xft quality hack, and also fix patch to apply
+  against 4.2.1.  This closes bug #9383.
+
+  20 Oct 2002; Martin Schlemmer <azarah@gentoo.org> xfree-4.2.1.ebuild :
+
+  Remove /usr/X11R6/lib/X11/fonts/encodings from /etc/X11/fs/config.
+  Get the font stuff in pkg_postinst() sane.  This should fix bug #9357.
+  Should also fix bug #9354 if you specify -e option to ttmkfdir.
+
+  Update /etc/init.d/xfs to scan and index font dirs.
+
+  13 Oct 2002; Martin Schlemmer <azarah@gentoo.org> xfree-4.2.1.ebuild :
+
+  Add ttmkfdir2 to build.  This should close bug #6402.
+  
+  Add X-TrueType patches from Redhat.
+
+  12 Oct 2002; Martin Schlemmer <azarah@gentoo.org> xfree-4.2.1.ebuild :
+
+  Create /tmp/.{ICE,X11}-unix and fix permissions.  Also remove stupid
+  delay if not correct permissions.  This should close bug #8281.
+
+  11 Oct 2002; Martin Schlemmer <azarah@gentoo.org> xfree-4.2.1.ebuild :
+
+  Update Xrender and Xft (to 1.1).  Also now uses fontconfig.
+
+  30 Sep 2002; Martin Schlemmer <azarah@gentoo.org> xfree-4.2.1.ebuild :
+
+  Move all the patches to ibiblio.
+
+  19 Sep 2002; Martin Schlemmer <azarah@gentoo.org> xfree-4.2.1.ebuild :
+
+  Reimplement patch scheme.  Add patch for Sparc PCI domains, should
+  close bug #7790 (for sparc at least).
+
+  14 Sep 2002; Martin Schlemmer <azarah@gentoo.org> xfree-4.2.1.ebuild :
+
+  Do not install libz.a, as it have missing functions .. thanks Dan !
+  (bug #4777).
+
+  10 Sep 2002; Martin Schlemmer <azarah@gentoo.org> xfree-4.2.1.ebuild :
+
+  Gcc3 related fixes.
+
+*xfree-4.2.1 (8 Sep 2002):
+
+  8 Sep 2002; Martin Schlemmer <azarah@gentoo.org> xfree-4.2.1.ebuild :
+
+  New version.  Lots of cleanups.  Freetype-2.1.2 added.
+  
+  Fix security issue with xterms; bug #2618 and #7630.
+
+  Fix compile issues for the tdfx driver.  This should fix bug #3735, thanks
+  to ideas from Ron Simpkin <ron@doobedoobedo.f2s.com>
+
+  Use buildin zlib to fix segfaults, thanks to Brad Laue <brad@brad-x.com>.
+  This closes bug #4777.
+
+  Integrate MS corefonts the right way (tm), thanks to great work from
+  Santiago Tabares <santi___@softhome.net>.  This should close bug #6980,
+  and maybe also bug #6968 and #5722.
+
+  Do not update the Wacom driver if kernel version 2.2 is in use.  This
+  should fix bug #4152.
+
+  Update the Savaga driver to try and fix bug #3531.
+
+  25 Aug 2002; Dan Armak <danarmak@gentoo.org> files/4.2.0-r12/Xsetup_0  :
+
+  Update the kdmrc location logic: look in /usr/kde/*, i.e. in all the
+  directories that actually exist under /usr/kde, instead of hardcoding a
+  list of possible locations.
+
+  12 Aug 2002; Martin Schlemmer <azarah@gentoo.org> :
+  Add XFree86-imake-tmpdir.patch, which should resolve bug #5736.
+
+  11 Aug 2002; Martin Schlemmer <azarah@gentoo.org> :
+  Add XFree86-4.2.0-r128-lockup.patch, which should resolve bug #4518.
+
+  10 Aug 2002; Mark Guertin <gerk@gentoo.org> :
+  Added ARCH check to -mmx/-no-mmx gcc 3.2 fix, not used
+  on ppc (breaks build)
+
+  8 aug 2002; Bart Verwilst <verwilst@gentoo.org> :
+
+  Fixed gcc 3.x based compilation error (with -mmmx)
+
+  29 Jul 2002; Martin Schlemmer <azarah@gentoo.org> :
+
+  Fixes for gcc-3.x and also fixes that should resolve bug #5613.
+
+  Update /etc/X11/xinit/xinitrc ($FILESDIR/4.2.0-r12/xinitrc) to point
+  to the proper place for system wide resources.  Bug #5684.
+
+  17 Jul 2002; Martin Schlemmer <azarah@gentoo.org> :
+
+  Make sure the standard symlinks (/usr/include/X11, etc) will not be removed.
+
+  15 Jul 2002; Owen Stampflee <owen@gentoo.org> :
+
+  Added PPC to KEYWORDS.
+
+  7 Jul 2002; Martin Schlemmer <azarah@gentoo.org> xdm.start :
+
+  Resolve bug #4627.
+
+  6 Jul 2002; Martin Schlemmer <azarah@gentoo.org> :
+
+  Update the gcc-3.1 fix to also work for gcc-3.1.1.
+
+  26 Jun 2002; Martin Schlemmer <azarah@gentoo.org> :
+
+  Add "-fno-merge-constants" to OptimizedCDebugFlags if the gcc in use is
+  not version 2.95.3.  This should resolve bug #4189.
+
+  25 Jun 2002; Martin Schlemmer <azarah@gentoo.org> :
+
+  Add XFree86-4.2.0-i810_i845_20020524.patch and XFree86-4.2.0-Suse-Updates.patch,
+  adding Intel 845, and Neomagic XV support among things.  Also a lot of fixes
+  from Suse.  The Suse patch is a bit big, but I rather do not want to
+  change the ebuild since if the patches are missing, things should still
+  work fine.  This should among things resolve bug #3823.
+
+*xfree-4.2.0-r12 (8 Jun 2002)
+
+  8 Jun 2002; Martin Schlemmer <azarah@gentoo.org> xfree-4.2.0-r12.ebuild :
+
+  Basically r11, but just new version to make sure we dont have some
+  of the weird issues in past because of a masked revision being changed
+  and then unmasked.
+
+*xfree-4.2.0-r11 (28 May 2002)
+
+  7 Jun 2002; Martin Schlemmer <azarah@gentoo.org> xfree-4.2.0-r11.ebuild :
+
+  Add Nvidia GeForce2Go support; bug #2732.  Fix gcc-3.1 compile problem
+  thanks to Verwilst.
+
+  6 Jun 2002; Martin Schlemmer <azarah@gentoo.org> xfree-4.2.0-r11.ebuild :
+
+  Update grep expression to determine if the "xfs" user exist in
+  /etc/init.d/xfs; bug #3314.
+
+  2 Jun 2002; Martin Schlemmer <azarah@gentoo.org> xfree-4.2.0-r11.ebuild :
+
+  Some more symlink cleanups.  Dont nuke the host.def, just filter our
+  hardcoded CFLAGS.
+
+  Fix /etc/X11/xdm/Xsession to first run ~/.xsession, rather then the system
+  default (bug #2731).
+
+  30 May 2002; Martin Schlemmer <azarah@gentoo.org> xfree-4.2.0-r11.ebuild,
+                                                    xfs.start, xfs.conf.d,
+						    xfs.config :
+
+  Fix the xfs port issue in a sane manner ... btw, what happned to the
+  idea that changes should be added to the Changelog ?
+
+  29 May 2002; Martin Schlemmer <azarah@gentoo.org> xfree-4.2.0-r11.ebuild :
+
+  Too much coffee, and too little sleep :P  Moved libGLU.* to /usr/lib where
+  it should be.
+
+  28 May 2002; Martin Schlemmer <azarah@gentoo.org> xfree-4.2.0-r11.ebuild :
+
+  New ebuild that adds lots of fixes and patches.  Should fix the Wacom
+  issues (bug #1632).  Added patch for i810 DRI (bug #1870).  Add libGLU.so.
+  Update Xsession to load resources (bug #2731).  Update freetype2 used;
+  didnt make it use the system freetype2, as this could make things
+  unstable (bug #3082).  Fix problems with PPC and mouse scrolling, thanks
+  to Mark Guertin.
+
+*xfree-4.2.0-r10 (10 Apr 2002)
+
+  20 May 2002; Arcady Genkin <agenkin@thpoon.com>
+	files/4.2.0-r10/xfs.config files/4.2.0-r10/xfs.start :
+
+  Moved the XFS TCP port specification from the startup file into the
+  config file.
+
+  12 May 2002; Martin Schlemmer <azarah@gentoo.org> xfree-4.2.0-r10.ebuild :
+
+  Move opengl-update to its own ebuild for flexibility.  Add some 3dfx fixes.
+
+  16 Apr 2002; Matthew Kennedy <mkennedy@gentoo.org>
+  xfree-4.2.0-r9.ebuild, ChangeLog :
+
+  Resolves bug 1833 for LFH2.2 (section 4.4) compliant
+  symlinks. Thanks goes to pst@ican.at
+
+  15 Apr 2002; Seemant Kulleen <seeamnt@gentoo.org> xfree-4.2.0-r9.ebuild :
+
+  Changed the glide USE flag to 3dfx USE flag instead.
+
+  7 Apr 2002; Martin Schlemmer <azarah@gentoo.org> xfree-4.2.0-r9.ebuild :
+
+  Fix a stray symlink in /.  Also moved libGL.a to /usr/lib/opengl/xfree/lib, as
+  it caused compile problems for tuxracer, etc.  Fixed opengl-update to generate
+  the /usr/lib/libGLcore.so symlinks for nvidia implementation.
+
+*xfree-4.2.0-r9 (7 Apr 2002)
+
+  20 May 2002; Arcady Genkin <agenkin@thpoon.com>
+	files/4.2.0-r9/xfs.config files/4.2.0-r9/xfs.start :
+
+  Moved the XFS TCP port specification from the startup file into the
+  config file.
+
+  7 Apr 2002; Martin Schlemmer <azarah@gentoo.org> xfree-4.2.0-r9.ebuild,
+                                                   files/4.2.0-r9/opengl-update :
+
+  Update for dynamic libGL switching with nvidia drivers.
+
+  4 Apr 2002; Seemant Kulleen <seemant@gentoo.org> files/4.2.0-r8/xdm :
+
+  Update to RedHat's xdm configuration for PAM.
+
+  4 Apr 2002; Seemant Kulleen <seemant@gentoo.org> files/4.2.0-r8/xdm :
+
+  Update to use safer PAM modules.  Update courtesy of Sorcerer.
+
+  24 Mar 2002; Dan Armak <danarmak@gentoo.org> :
+  
+  New Xsetup_0 that runs kdmdesktop when appropriate. This means kdm can now
+  set the background properly.
+
+  21 Mar 2002; Martin Schlemmer <azarah@gentoo.org> :
+
+  Add gcc-3.x compile patch.  Also resolve the mkfontdir issue in
+  pkg_postinst(), closing bug #996.
+
+*xfree-4.2.0-r8 (15 Mar 2002)
+
+  15 Mar 2002; Martin Schlemmer <azarah@gentoo.org> : New release to fix zlib
+  security issue.
+
+  06 Mar 2002; Martin Schlemmer <azarah@gentoo.org> : Updated /etc/init.d/xdm
+  and /etc/X11/startDM.sh to fix startDM.sh being a respawning process when
+  no DM is running.
+
+*xfree-4.2.0-r7 (05 Mar 2002)
+
+  05 Mar 2002; Daniel Robbins <drobbins@gentoo.org> : New release of xfree.
+  Incorporated Xft quality fixes from http://www.cs.mcgill.ca/~dchest/xfthack/;
+  added Azarah's startDM.sh script.
+  
+  28 Feb 2002; M.Schlemmer <azarah@gentoo.org> ${FILESDIR}/chooser.sh :
+
+  Actually source /etc/conf.d/basic and /etc/rc.conf.
+
+*xfree-4.2.0-r6 (24 Feb 2002)
+
+  24 Feb 2002; M.Schlemmer <azarah@gentoo.org> xfree-4.2.0-r6.ebuild, and co :
+
+  Lots of updates, started before the ChangeLog, so not sure of them all, but
+  the major ones is here:  Added Voodoo3/4/5 support, and fixed the locale
+  bug #794.
+
+*xfree-4.2.0-r5 (1 Feb 2002)
+
+  1 Feb 2002; G.Bevin <gbevin@gentoo.org> ChangeLog :
+  
+  Added initial ChangeLog which should be updated whenever the package is
+  updated in any way. This changelog is targetted to users. This means that the
+  comments should well explained and written in clean English. The details about
+  writing correct changelogs are explained in the skel.ChangeLog file which you
+  can find in the root directory of the portage repository.

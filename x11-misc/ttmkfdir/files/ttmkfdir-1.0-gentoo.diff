@@ -1,0 +1,46 @@
+diff -ur ttmkfdir.orig/Makefile ttmkfdir/Makefile
+--- ttmkfdir.orig/Makefile	Thu Sep 10 12:54:26 1998
++++ ttmkfdir/Makefile	Thu Mar  1 15:29:38 2001
+@@ -1,10 +1,11 @@
+-FREETYPE_BASE=../freetype-1.1
+-FREETYPE_INCL=$(FREETYPE_BASE)/lib
+-FREETYPE_LIB=-L$(FREETYPE_BASE)/lib/.libs -lttf
++FREETYPE_BASE=/usr
++FREETYPE_INCL=-I$(FREETYPE_BASE)/include
++FREETYPE_LIB=-L$(FREETYPE_BASE)/lib -lttf
+ 
+ CC=gcc
+-CFLAGS=-Wall -pedantic -I$(FREETYPE_INCL)
+-LDFALGS=$(FREETYPE_LIB) -s
++OPT=-O2
++CFLAGS=$(OPT) -Wall -pedantic $(FREETYPE_INCL)
++LDFLAGS=$(FREETYPE_LIB)
+ 
+ all: ttmkfdir
+ 
+@@ -18,7 +19,11 @@
+ 	ln $< $@
+ 
+ ttmkfdir: ttmkfdir.o
+-	$(CC) -o $@ $< $(LDFALGS)
++	$(CC) $(CFLAGS) -o $@ $< $(LDFLAGS)
++
++install: all
++	mkdir -p $(DESTDIR)/usr/X11R6/bin
++	install -c -m 755 ttmkfdir $(DESTDIR)/usr/X11R6/bin
+ 
+ ttmkfdir.o: ttmkfdir.c panose.h ttos2val.h
+ 
+Only in ttmkfdir: Makefile~
+diff -ur ttmkfdir.orig/ttmkfdir.c ttmkfdir/ttmkfdir.c
+--- ttmkfdir.orig/ttmkfdir.c	Wed Sep  9 08:50:50 1998
++++ ttmkfdir/ttmkfdir.c	Thu Mar  1 15:09:51 2001
+@@ -61,7 +61,7 @@
+ #include <ctype.h>
+ #include <errno.h>
+ 
+-#include <freetype.h>
++#include <freetype/freetype.h>
+ 
+ #include "panose.h"
+ #include "ttos2val.h"
