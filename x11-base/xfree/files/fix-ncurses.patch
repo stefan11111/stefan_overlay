@@ -1,0 +1,44 @@
+--- a/programs/Xserver/hw/xfree86/xf86cfg/loader.h	2024-11-10 01:36:28.451272539 +0200
++++ b/programs/Xserver/hw/xfree86/xf86cfg/loader.h	2024-11-10 01:36:41.271088240 +0200
+@@ -75,7 +75,6 @@
+     unsigned long       num;
+     char *              str;
+     double              realnum;
+-    Bool		bool;
+     OptFrequency	freq;
+ } ValueUnion;
+ 
+--- a/programs/Xserver/hw/xfree86/xf86cfg/Imakefile	2024-11-10 01:40:03.208185173 +0200
++++ b/programs/Xserver/hw/xfree86/xf86cfg/Imakefile	2024-11-10 01:40:12.908045726 +0200
+@@ -92,7 +92,7 @@
+ #endif
+ 
+ #if HasNCurses
+-CURSESLIB = NCursesLibName
++CURSESLIB = NCursesLibName -ltinfo
+ CURSESDEFINES  = -DHAS_NCURSES
+ #endif
+ 
+--- a/programs/Xserver/hw/xfree86/XF86Setup/Imakefile	2024-11-10 01:41:01.634011904 +0200
++++ b/programs/Xserver/hw/xfree86/XF86Setup/Imakefile	2024-11-10 01:41:34.320208671 +0200
+@@ -94,9 +94,9 @@
+  */
+ #if HasNCurses
+ # ifdef NCursesLibDir
+-CURSESLIB = -L$(NCURSESLIBDIR) NCursesLibName
++CURSESLIB = -L$(NCURSESLIBDIR) NCursesLibName -ltinfo
+ # else
+-CURSESLIB = NCursesLibName
++CURSESLIB = NCursesLibName -ltinfo
+ # endif
+ # ifdef NCursesIncDir
+ CURSES_DEFINES = -DCURSES -DNCURSES -I$(NCURSESINCDIR)
+@@ -104,7 +104,7 @@
+ CURSES_DEFINES = -DCURSES -DNCURSES
+ # endif
+ #else
+-CURSESLIB = -lcurses
++CURSESLIB = -lcurses -ltinfo
+ CURSES_DEFINES = -DCURSES
+ #endif
+ 

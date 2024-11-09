@@ -329,6 +329,7 @@ src_unpack() {
 	eapply ${FILESDIR}/fix-ar.patch
 	eapply ${FILESDIR}/fix-kbdrate.patch
 	eapply ${FILESDIR}/fix-missing-libtermcap.patch
+	eapply ${FILESDIR}/fix-ncurses.patch
 	mkdir -p ${D}/usr/include/linux
 	cp ${FILESDIR}/missing-headers/linux/config.h ${D}/usr/include/linux/config.h
 	mkdir -p ${D}/usr/include/asm
