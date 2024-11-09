@@ -4,6 +4,8 @@
 
 EAPI=8
 
+# THIS DOESN'T BUILD AS OF NOW
+
 inherit flag-o-matic toolchain-funcs linux-info
 
 # Make sure Portage does _NOT_ strip symbols.  We will do it later and make sure
@@ -37,6 +39,8 @@ ALLOWED_FLAGS="-fstack-protector -march -mcpu -O -O1 -O2 -O3 -pipe"
 #
 # <azarah@gentoo.org> (13 Oct 2002)
 strip-flags
+
+CFLAGS="${CFLAGS} -fno-strict-aliasing -fno-strict-overlfow -fno-aggressive-loop-optimizations -fno-merge-constants -DLINUX_INPUT"
 
 # Configure for SYNAPTICS support
 if [ "${ARCH}" = "x86" ]
@@ -321,6 +325,9 @@ src_unpack() {
 	eapply ${FILESDIR}/fix-ucs2any.patch
 	eapply ${FILESDIR}/fix-hardcoded-arches.patch
 	eapply ${FILESDIR}/fix-extra-abs-definitions.patch
+	eapply ${FILESDIR}/fix-acecad.patch
+	eapply ${FILESDIR}/fix-ar.patch
+	eapply ${FILESDIR}/fix-kbdrate.patch
 	cd ${S}/programs/Xserver/hw/xfree86/
 
 	# Update Wacom Driver, hopefully resolving bug #1632

@@ -1,0 +1,22 @@
+--- a/programs/Xserver/hw/xfree86/input/acecad/acecad.c	2024-11-09 20:52:49.733302371 +0200
++++ b/programs/Xserver/hw/xfree86/input/acecad/acecad.c	2024-11-09 20:54:33.761806847 +0200
+@@ -30,7 +30,9 @@
+  *	Standard Headers
+  ****************************************************************************/
+ 
++/*
+ #ifdef LINUX_INPUT
++*/
+ #include <asm/types.h>
+ #include <linux/input.h>
+ #ifdef BUS_PCI
+@@ -39,7 +41,9 @@
+ #ifdef BUS_ISA
+ #undef BUS_ISA
+ #endif
++/*
+ #endif
++*/
+ 
+ #include <misc.h>
+ #include <xf86.h>

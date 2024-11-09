@@ -1,0 +1,69 @@
+diff --git a/config/cf/Imake.tmpl b/config/cf/Imake.tmpl
+index 3adf05f..99f7d69 100644
+--- a/config/cf/Imake.tmpl
++++ b/config/cf/Imake.tmpl
+@@ -1003,7 +1003,7 @@ TCLIBDIR = TclLibDir
+ #if HasLargeTmp || SystemV4
+ #define ArCmd ArCmdBase cq
+ #else
+-#define ArCmd ArCmdBase clq
++#define ArCmd ArCmdBase cq
+ #endif
+ #endif
+ #ifndef ArAddCmd
+diff --git a/config/util/crayar.sh b/config/util/crayar.sh
+index 6296de5..8d5d385 100644
+--- a/config/util/crayar.sh
++++ b/config/util/crayar.sh
+@@ -4,6 +4,6 @@ shift
+ if cray2; then
+         bld cr $lib `lorder $* | tsort`
+ else
+-        ar clq $lib $*
++        ar cq $lib $*
+ fi
+ 
+diff --git a/programs/Xserver/hw/xfree86/drivers/savage/Makefile b/programs/Xserver/hw/xfree86/drivers/savage/Makefile
+index e904dc6..b44b120 100644
+--- a/programs/Xserver/hw/xfree86/drivers/savage/Makefile
++++ b/programs/Xserver/hw/xfree86/drivers/savage/Makefile
+@@ -144,7 +144,7 @@ TCLIBDIR =
+ 
+          VARDBDIR = $(VARDIR)/lib
+ 
+-               AR = ar clq
++               AR = ar cq
+   BOOTSTRAPCFLAGS =
+                CC = gcc
+                AS = as
+@@ -220,7 +220,7 @@ CXXEXTRA_INCLUDES =
+             MODLD = ld
+        MODLDFLAGS =
+ MODLDCOMBINEFLAGS = -r
+-            MODAR = ar clq
++            MODAR = ar cq
+         MODRANLIB = ranlib
+ 
+      STD_INCLUDES =
+diff --git a/programs/Xserver/hw/xfree86/drivers/sis/Makefile b/programs/Xserver/hw/xfree86/drivers/sis/Makefile
+index 7b1ab6a..9df2083 100644
+--- a/programs/Xserver/hw/xfree86/drivers/sis/Makefile
++++ b/programs/Xserver/hw/xfree86/drivers/sis/Makefile
+@@ -144,7 +144,7 @@ TCLIBDIR = /usr/lib
+ 
+          VARDBDIR = $(VARDIR)/lib
+ 
+-               AR = ar clq
++               AR = ar cq
+   BOOTSTRAPCFLAGS =
+                CC = gcc
+                AS = as
+@@ -220,7 +220,7 @@ CXXEXTRA_INCLUDES =
+             MODLD = ld
+        MODLDFLAGS =
+ MODLDCOMBINEFLAGS = -r
+-            MODAR = ar clq
++            MODAR = ar cq
+         MODRANLIB = ranlib
+ 
+             DVIPS = dvips
