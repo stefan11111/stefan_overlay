@@ -40,7 +40,7 @@ ALLOWED_FLAGS="-fstack-protector -march -mcpu -O -O1 -O2 -O3 -pipe"
 # <azarah@gentoo.org> (13 Oct 2002)
 strip-flags
 
-CFLAGS="${CFLAGS} -fno-strict-aliasing -fno-strict-overlflow -fno-aggressive-loop-optimizations -fno-merge-constants -DLINUX_INPUT"
+CFLAGS="${CFLAGS} -fno-strict-aliasing -fno-strict-overflow -fno-aggressive-loop-optimizations -fno-merge-constants -DLINUX_INPUT"
 
 # Configure for SYNAPTICS support
 if [ "${ARCH}" = "x86" ]
