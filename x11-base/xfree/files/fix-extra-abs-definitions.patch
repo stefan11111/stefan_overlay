@@ -10,15 +10,3 @@
 -
 +#endif
  #endif /* __glusimplemath_h_ */
---- a/lib/GLU/libnurbs/internals/simplemath.h	2024-11-09 15:49:56.146726052 +0200
-+++ b/lib/GLU/libnurbs/internals/simplemath.h	2024-11-09 15:50:08.473214699 +0200
-@@ -53,7 +53,8 @@
- #ifdef _SCO_DS
- #define abs __gluabs
- #endif
-+#if 0
- inline REAL 
- abs( REAL x ) { return ( x < 0.0 ) ? -x : x; }
--
-+#endif
- #endif /* __glusimplemath_h_ */
