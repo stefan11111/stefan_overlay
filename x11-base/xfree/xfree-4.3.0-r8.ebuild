@@ -145,7 +145,6 @@ DEPEND=">=sys-apps/portage-2.0.50_pre9
 	>=x11-misc/ttmkfdir-3.0.4
 	>=sys-apps/sed-4
 	>=sys-devel/patch-2.5.9
-	sys-libs/libtermcap-compat
 	sys-apps/util-linux
 	dev-lang/perl
 	media-libs/libpng
@@ -330,7 +329,6 @@ src_unpack() {
 	eapply ${FILESDIR}/fix-ar.patch
 	eapply ${FILESDIR}/fix-kbdrate.patch
 	eapply ${FILESDIR}/fix-missing-libtermcap.patch
-	ewarn "Build will fail if ${LIBDIR}/libtermcap.so does not exist"
 	mkdir -p ${D}/usr/include/linux
 	cp ${FILESDIR}/missing-headers/linux/config.h ${D}/usr/include/linux/config.h
 	mkdir -p ${D}/usr/include/asm
