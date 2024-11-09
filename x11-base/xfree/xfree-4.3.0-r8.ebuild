@@ -317,9 +317,10 @@ src_unpack() {
 	epatch ${DISTDIR}/xfree86-dri-resume-v8.patch
 
 	cd ${S}
-    pwd
+	pwd
 	eapply ${FILESDIR}/fix-ucs2any.patch
 	eapply ${FILESDIR}/fix-hardcoded-arches.patch
+	eapply ${FILESDIR}/fix-extra-abs-definitions.patch
 	cd ${S}/programs/Xserver/hw/xfree86/
 
 	# Update Wacom Driver, hopefully resolving bug #1632
