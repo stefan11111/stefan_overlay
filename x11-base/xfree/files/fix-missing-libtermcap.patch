@@ -1,0 +1,11 @@
+--- a/programs/xterm/Makefile.in	2024-11-10 00:16:19.977066311 +0200
++++ b/programs/xterm/Makefile.in	2024-11-10 00:16:42.910069958 +0200
+@@ -48,7 +48,7 @@
+ CPPFLAGS	= -I. -I$(srcdir) -DHAVE_CONFIG_H @CPPFLAGS@
+ CFLAGS		= @CFLAGS@ $(EXTRA_CFLAGS)
+ LDFLAGS		= @LDFLAGS@
+-LIBS		= @LIBS@
++LIBS		= @LIBS@ -ltermcap
+ 
+ prefix		= @prefix@
+ exec_prefix	= @exec_prefix@
