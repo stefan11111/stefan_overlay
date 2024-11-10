@@ -244,9 +244,9 @@ src_unpack() {
 
 	ebegin "Updating Matrox HAL driver"
 	unpack mga-${MGADRV_VER}.tgz
-	touch ${WORKDIR}/mga/HALlib/mgaHALlib.a
-	mv ${WORKDIR}/mga/HALlib/mgaHALlib.a \
-		#{S}/programs/Xserver/hw/xfree86/drivers/mga/HALlib
+	touch ${S}/mga/HALlib/mgaHALlib.a
+	mv ${S}/mga/HALlib/mgaHALlib.a \
+		${S}/programs/Xserver/hw/xfree86/drivers/mga/HALlib
 	eend 0
 
 	if [ "`gcc-version`" = "2.95" ]
@@ -300,6 +300,15 @@ src_unpack() {
 		mv -f ${PATCH_DIR}/200* ${PATCH_DIR}/excluded
 		mv -f ${PATCH_DIR}/9921* ${PATCH_DIR}/excluded
 	else
+#		these patches do not apply
+		ewarn "IPv6 patches do not apply, IPv6 will likely not work"
+		ewarn "All USE=ipv6 does is set a #define"
+		ewarn "2000_all_4.3.0-ipv6-server-v3.patch does not apply, skipping"
+		ewarn "9921_all_4.3.0-xdm-open-chooserfd-CAN-2004-0419-ipv6.patch does not apply, skipping"
+#		eapply -p2 ${PATCH_DIR}/200*
+		mv -f ${PATCH_DIR}/200* ${PATCH_DIR}/excluded
+		mv -f ${PATCH_DIR}/9921* ${PATCH_DIR}/excluded
+
 		mv -f ${PATCH_DIR}/9920* ${PATCH_DIR}/excluded
 		if ! use doc
 		then
