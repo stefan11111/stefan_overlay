@@ -683,7 +683,7 @@ src_install() {
 	einfo "Installing man pages..."
 	make install.man DESTDIR=${D} || die
 	einfo "Compressing man pages..."
-	prepman /usr/X11R6
+#	prepman /usr/X11R6
 
 	if use nls
 	then
