@@ -845,7 +845,7 @@ src_install() {
 
 	# .la files for libtool support
 	insinto /usr/X11R6/lib
-	doins ${FILESDIR}/${PV}/$(get_libdir)/*.la
+	doins ${FILESDIR}/${PV}/lib/*.la
 
 	# Remove libz.a, as it causes problems (bug #4777)
 	rm -f ${D}/usr/X11R6/lib/libz.a
@@ -985,7 +985,7 @@ src_install() {
 
 	# Make the core cursor the default.  People seem not to like whiteglass
 	# for some reason.
-	dosed 's:whiteglass:core:' /usr/share/cursors/xfree/default/index.theme
+	sed -i s/whiteglass/core/ ${D}/usr/share/cursors/xfree/default/index.theme
 
 	einfo "Striping binaries and libraries..."
 	# This bit I got from Redhat ... strip binaries and drivers ..
