@@ -82,10 +82,11 @@ X_PATCHES="
 X_DRIVERS="http://people.mandrakesoft.com/~flepied/projects/wacom/xf86Wacom.c.gz
 	http://www.probo.com/timr/savage-${SAVDRV_VER}.zip
 	http://www.winischhofer.net/sis/sis_drv_src_${SISDRV_VER}.tar.gz
-	http://w1.894.telia.com/~u89404340/touchpad/files/synaptics-${SYNDRV_VER}.tar.bz2"
-	mirror://gentoo/XFree86-4.3.0-drivers-via-${VIADRV_VER}.tar.bz2"
-	ftp://ftp.matrox.com/pub/mga/archive/linux/2001/beta_1_3_0/mga-${MGADRV_VER}.tgz"
-#	3dfx? ( mirror://gentoo/glide3-headers.tar.bz2 )"
+	http://w1.894.telia.com/~u89404340/touchpad/files/synaptics-${SYNDRV_VER}.tar.bz2
+	mirror://gentoo/XFree86-4.3.0-drivers-via-${VIADRV_VER}.tar.bz2
+	http://bloodnoc.org/~roy/olde-distfiles/XFree86-4.3.0-drivers-via-${VIADRV_VER}.tar.bz2
+	ftp://ftp.matrox.com/pub/mga/archive/linux/2001/beta_1_3_0/mga-${MGADRV_VER}.tgz
+	3dfx? ( mirror://gentoo/glide3-headers.tar.bz2 )"
 # Updated Wacom driver:  http://people.mandrakesoft.com/~flepied/projects/wacom/
 # Latest Savaga drivers:  http://www.probo.com/timr/savage40.html
 # Latest SIS drivers:  http://www.winischhofer.net/
@@ -235,22 +236,18 @@ src_unpack() {
 	fi
 	cd ${S}
 
-#	Couldn't find source
-	ewarn "Not adding VIA driver"
-#	ebegin "Adding VIA driver"
-#	cd ${WORKDIR}
-#	unpack XFree86-${PV}-drivers-via-${VIADRV_VER}.tar.bz2
-#	cd ${S}
-#	eend 0
+	ebegin "Adding VIA driver"
+	cd ${WORKDIR}
+	unpack XFree86-${PV}-drivers-via-${VIADRV_VER}.tar.bz2
+	cd ${S}
+	eend 0
 
-#	Couldn't find source
-	ewarn "Not updating Matrox HAL driver"
-#	ebegin "Updating Matrox HAL driver"
-#	unpack mga-${MGADRV_VER}.tgz
-#	touch ${WORKDIR}/mga/HALlib/mgaHALlib.a
-#	mv ${WORKDIR}/mga/HALlib/mgaHALlib.a \
-#		#{S}/programs/Xserver/hw/xfree86/drivers/mga/HALlib
-#	eend 0
+	ebegin "Updating Matrox HAL driver"
+	unpack mga-${MGADRV_VER}.tgz
+	touch ${WORKDIR}/mga/HALlib/mgaHALlib.a
+	mv ${WORKDIR}/mga/HALlib/mgaHALlib.a \
+		#{S}/programs/Xserver/hw/xfree86/drivers/mga/HALlib
+	eend 0
 
 	if [ "`gcc-version`" = "2.95" ]
 	then
