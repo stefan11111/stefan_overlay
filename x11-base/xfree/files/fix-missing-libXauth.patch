@@ -1,0 +1,11 @@
+--- a/programs/Xserver/Imakefile	2024-11-10 13:00:12.197171575 +0200
++++ b/programs/Xserver/Imakefile	2024-11-10 13:00:34.936844875 +0200
+@@ -292,7 +292,7 @@
+        DBMLIBS = DBMLibrary
+ #endif
+         SYSLIBS = $(ZLIB) MathLibrary Krb5Libraries $(DBMLIBS) $(USB) \
+-		  $(PAMLIBS) $(EXTRASYSLIBS)
++		  $(PAMLIBS) $(EXTRASYSLIBS) -lXau
+ #if !HasCbrt
+            CBRT = mi/LibraryTargetName(cbrt)
+ #endif

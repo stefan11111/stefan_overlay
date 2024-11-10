@@ -4,8 +4,6 @@
 
 EAPI=8
 
-# THIS DOESN'T BUILD AS OF NOW
-
 inherit flag-o-matic toolchain-funcs linux-info
 
 # Make sure Portage does _NOT_ strip symbols.  We will do it later and make sure
@@ -40,7 +38,9 @@ ALLOWED_FLAGS="-fstack-protector -march -mcpu -O -O1 -O2 -O3 -pipe"
 # <azarah@gentoo.org> (13 Oct 2002)
 strip-flags
 
-CFLAGS="${CFLAGS} -fno-strict-aliasing -fno-strict-overflow -fno-aggressive-loop-optimizations -fno-merge-constants -DLINUX_INPUT"
+# This is a fragile package
+CFLAGS="${CFLAGS} -std=c89 -fno-strict-aliasing -fno-strict-overflow -fno-aggressive-loop-optimizations -fno-merge-constants -DLINUX_INPUT"
+MAKEOPTS="-j1"
 
 # Configure for SYNAPTICS support
 if [ "${ARCH}" = "x86" ]
@@ -72,9 +72,6 @@ S="${WORKDIR}/xc"
 SYNDIR="${WORKDIR}/synaptics"
 SRC_PATH="mirror://xfree/${BASE_PV}/source"
 HOMEPAGE="http://www.xfree.org"
-
-#Build fails otherwise
-MAKEOPTS="-j1"
 
 # Misc patches we may need to fetch ..
 #http://dev.gentoo.org/~spyderous/xfree/patchsets/${PV}/XFree86-${PV}-patches-${PATCH_VER}.tar.bz2
@@ -206,7 +203,7 @@ src_unpack() {
 	unpack xfsft-encodings.tar.bz2
 
 	# Remove bum encoding
-	rm -f ${WORKDIR}/usr/X11R6/lib/X11/fonts/encodings/urdunaqsh-0.enc
+	rm -f ${WORKDIR}/usr/X11R6/$(get_libdir)/X11/fonts/encodings/urdunaqsh-0.enc
 
 	# Update the Savage Driver
 	# savage driver 1.1.27t is a .zip and contains a savage directory
@@ -330,6 +327,8 @@ src_unpack() {
 	eapply ${FILESDIR}/fix-kbdrate.patch
 	eapply ${FILESDIR}/fix-missing-libtermcap.patch
 	eapply ${FILESDIR}/fix-ncurses.patch
+	eapply ${FILESDIR}/fix-missing-libXauth.patch
+	eapply ${FILESDIR}/fix-old-png-jmpbuf.patch
 	mkdir -p ${D}/usr/include/linux
 	cp ${FILESDIR}/missing-headers/linux/config.h ${D}/usr/include/linux/config.h
 	mkdir -p ${D}/usr/include/asm
@@ -670,16 +669,16 @@ src_install() {
 
 	# We do not want these, so remove them ...
 	rm -rf ${D}/usr/X11R6/include/fontconfig
-	rm -f ${D}/usr/X11R6/lib/libfontconfig.*
+	rm -f ${D}/usr/X11R6/$(get_libdir)/libfontconfig.*
 	rm -f ${D}/usr/X11R6/bin/{fontconfig-config,fc-cache,fc-list}
 	rm -f ${D}/usr/X11R6/man/man3/fontconfig.3x*
 	rm -rf ${D}/etc/fonts/
 
-	# This one needs to be in /usr/lib
-	insinto /usr/lib/pkgconfig
-	doins ${D}/usr/X11R6/lib/pkgconfig/{xcursor,xft}.pc
+	# This one needs to be in /usr/$(get_libdir)
+	insinto /usr/$(get_libdir)/pkgconfig
+	doins ${D}/usr/X11R6/$(get_libdir)/pkgconfig/{xcursor,xft}.pc
 	# Now remove the invalid xft.pc, and co ...
-	rm -rf ${D}/usr/X11R6/lib/pkgconfig
+	rm -rf ${D}/usr/X11R6/$(get_libdir)/pkgconfig
 
 	einfo "Installing man pages..."
 	make install.man DESTDIR=${D} || die
@@ -697,7 +696,7 @@ src_install() {
 	fperms 2755 /usr/X11R6/bin/xterm
 
 	# Fix permissions on locale/common/*.so
-	for x in ${D}/usr/X11R6/lib/X11/locale/lib/common/*.so*
+	for x in ${D}/usr/X11R6/$(get_libdir)/X11/locale/lib/common/*.so*
 	do
 		if [ -f ${x} ]
 		then
@@ -706,8 +705,8 @@ src_install() {
 	done
 
 	# Fix permissions on modules ...
-	for x in $(find ${D}/usr/X11R6/lib/modules -name '*.o') \
-	         $(find ${D}/usr/X11R6/lib/modules -name '*.so')
+	for x in $(find ${D}/usr/X11R6/$(get_libdir)/modules -name '*.o') \
+	         $(find ${D}/usr/X11R6/$(get_libdir)/modules -name '*.so')
 	do
 		if [ -f ${x} ]
 		then
@@ -718,10 +717,10 @@ src_install() {
 	# We zap our CFLAGS in the host.def file, as hardcoded CFLAGS can
 	# mess up other things that use xmkmf
 	ebegin "Fixing lib/X11/config/host.def"
-	cp ${D}/usr/X11R6/lib/X11/config/host.def ${T}
+	cp ${D}/usr/X11R6/$(get_libdir)/X11/config/host.def ${T}
 	awk '!/OptimizedCDebugFlags|OptimizedCplusplusDebugFlags|GccWarningOptions/ {print $0}' \
-		${T}/host.def > ${D}/usr/X11R6/lib/X11/config/host.def
-	# theoretically, /usr/X11R6/lib/X11/config is a possible candidate for
+		${T}/host.def > ${D}/usr/X11R6/$(get_libdir)/X11/config/host.def
+	# theoretically, /usr/X11R6/$(get_libdir)/X11/config is a possible candidate for
 	# config file management. If we find that people really worry about imake
 	# stuff, we may add it.  But for now, we leave the dir unprotected.
 	eend 0
@@ -731,8 +730,8 @@ src_install() {
 	doins ${FILESDIR}/${PV}/XftConfig
 	newins ${FILESDIR}/${PV}/XftConfig XftConfig.new
 	# This is if we are using Fontconfig only ...
-	#newins ${S}/lib/Xft1/XftConfig-OBSOLETE XftConfig
-	dosym ../../../../etc/X11/XftConfig /usr/X11R6/lib/X11/XftConfig
+	#newins ${S}/$(get_libdir)/Xft1/XftConfig-OBSOLETE XftConfig
+	dosym ../../../../etc/X11/XftConfig /usr/X11R6/$(get_libdir)/X11/XftConfig
 
 	# Install example config file
 	newins ${S}/programs/Xserver/hw/xfree86/XF86Config XF86Config.example
@@ -741,19 +740,19 @@ src_install() {
 	if use truetype && use !bindist
 	then
 		ebegin "Installing MS Core Fonts"
-		dodir /usr/X11R6/lib/X11/fonts/truetype
-		cp -af ${WORKDIR}/truetype/*.ttf ${D}/usr/X11R6/lib/X11/fonts/truetype
+		dodir /usr/X11R6/$(get_libdir)/X11/fonts/truetype
+		cp -af ${WORKDIR}/truetype/*.ttf ${D}/usr/X11R6/$(get_libdir)/X11/fonts/truetype
 		eend 0
 	fi
 
 	# EURO support
 	ebegin "Euro Support..."
-	LD_LIBRARY_PATH="${LD_LIBRARY_PATH}:${D}/usr/X11R6/lib" \
+	LD_LIBRARY_PATH="${LD_LIBRARY_PATH}:${D}/usr/X11R6/lib:${D}/usr/X11R6/lib64" \
 	${D}/usr/X11R6/bin/bdftopcf -t ${WORKDIR}/Xlat9-8x14.bdf | \
-		gzip -9 > ${D}/usr/X11R6/lib/X11/fonts/misc/Xlat9-8x14-lat9.pcf.gz
-	LD_LIBRARY_PATH="${LD_LIBRARY_PATH}:${D}/usr/X11R6/lib" \
+		gzip -9 > ${D}/usr/X11R6/$(get_libdir)/X11/fonts/misc/Xlat9-8x14-lat9.pcf.gz
+	LD_LIBRARY_PATH="${LD_LIBRARY_PATH}:${D}/usr/X11R6/lib:${D}/usr/X11R6/lib64" \
 	${D}/usr/X11R6/bin/bdftopcf -t ${WORKDIR}/Xlat9-9x16.bdf | \
-		gzip -9 > ${D}/usr/X11R6/lib/X11/fonts/misc/Xlat9-9x16-lat9.pcf.gz
+		gzip -9 > ${D}/usr/X11R6/$(get_libdir)/X11/fonts/misc/Xlat9-9x16-lat9.pcf.gz
 	eend 0
 
 	# Standard symlinks
@@ -762,28 +761,28 @@ src_install() {
 	dosym ../X11R6/include/X11 /usr/include/X11
 	dosym ../X11R6/include/DPS /usr/include/DPS
 	dosym ../X11R6/include/GL /usr/include/GL
-	dosym ../X11R6/lib/X11 /usr/lib/X11
-	dosym ../../usr/X11R6/lib/X11/xkb /etc/X11/xkb
+	dosym ../X11R6/$(get_libdir)/X11 /usr/$(get_libdir)/X11
+	dosym ../../usr/X11R6/$(get_libdir)/X11/xkb /etc/X11/xkb
 
 	# Some critical directories
-	keepdir /var/lib/xdm
-	dosym ../../../var/lib/xdm /etc/X11/xdm/authdir
+	keepdir /var/$(get_libdir)/xdm
+	dosym ../../../var/$(get_libdir)/xdm /etc/X11/xdm/authdir
 
 	# Remove invalid symlinks
-	rm -f ${D}/usr/lib/libGL.*
+	rm -f ${D}/usr/$(get_libdir)/libGL.*
 	# Create required symlinks
-	dosym libGL.so.1.2 /usr/X11R6/lib/libGL.so
-	dosym libGL.so.1.2 /usr/X11R6/lib/libGL.so.1
-	dosym libGL.so.1.2 /usr/X11R6/lib/libMesaGL.so
-	# We move libGLU to /usr/lib now
-	dosym libGLU.so.1.3 /usr/lib/libMesaGLU.so
+	dosym libGL.so.1.2 /usr/X11R6/$(get_libdir)/libGL.so
+	dosym libGL.so.1.2 /usr/X11R6/$(get_libdir)/libGL.so.1
+	dosym libGL.so.1.2 /usr/X11R6/$(get_libdir)/libMesaGL.so
+	# We move libGLU to /usr/$(get_libdir) now
+	dosym libGLU.so.1.3 /usr/$(get_libdir)/libMesaGLU.so
 
 	# .la files for libtool support
-	insinto /usr/X11R6/lib
-	doins ${FILESDIR}/${PV}/lib/*.la
+	insinto /usr/X11R6/$(get_libdir)
+	doins ${FILESDIR}/${PV}/$(get_libdir)/*.la
 
 	# Remove libz.a, as it causes problems (bug #4777)
-	rm -f ${D}/usr/X11R6/lib/libz.a
+	rm -f ${D}/usr/X11R6/$(get_libdir)/libz.a
 	# And do not forget the includes (bug #9470)
 	rm -f ${D}/usr/X11R6/include/{zconf.h,zlib.h}
 
@@ -793,12 +792,12 @@ src_install() {
 	dosym ../../usr/X11R6/bin/XFree86 /etc/X11/X
 
 	# Fix perms
-	fperms 755 /usr/X11R6/lib/X11/xkb/geometry/sgi
+	fperms 755 /usr/X11R6/$(get_libdir)/X11/xkb/geometry/sgi
 	fperms 755 /usr/X11R6/bin/dga
 
 	# Hack from Mandrake (update ours that just created Compose files for
 	# all locales)
-	for x in $(find ${D}/usr/X11R6/lib/X11/locale/ -mindepth 1 -type d)
+	for x in $(find ${D}/usr/X11R6/$(get_libdir)/X11/locale/ -mindepth 1 -type d)
 	do
 		# make empty Compose files for some locales
 		# CJK must not have that file (otherwise XIM don't works some times)
@@ -820,7 +819,7 @@ src_install() {
 
 	# Another hack from Mandrake -- to fix dead + space for the us
 	# international keyboard
-	for i in ${D}/usr/X11R6/lib/X11/locale/*/Compose
+	for i in ${D}/usr/X11R6/$(get_libdir)/X11/locale/*/Compose
 	do
 		sed -i \
 			-e 's/\(<dead_diaeresis> <space>\).*$/\1 : "\\"" quotedbl/' \
@@ -830,11 +829,11 @@ src_install() {
 
 	# Yet more Mandrake
 	ebegin "Encoding files for xfsft font server..."
-	dodir /usr/X11R6/lib/X11/fonts/encodings
-	cp -a ${WORKDIR}/usr/X11R6/lib/X11/fonts/encodings/* \
-		${D}/usr/X11R6/lib/X11/fonts/encodings
+	dodir /usr/X11R6/$(get_libdir)/X11/fonts/encodings
+	cp -a ${WORKDIR}/usr/X11R6/$(get_libdir)/X11/fonts/encodings/* \
+		${D}/usr/X11R6/$(get_libdir)/X11/fonts/encodings
 
-	for x in ${D}/usr/X11R6/lib/X11/fonts/encodings/{.,large}/*.enc
+	for x in ${D}/usr/X11R6/$(get_libdir)/X11/fonts/encodings/{.,large}/*.enc
 	do
 		[ -f "${x}" ] && gzip -9 -f ${x}
 	done
@@ -847,7 +846,7 @@ src_install() {
 		gunzip *.Z
 		gzip -9 *.pcf
 		cd ${S}
-		cp -a ${WORKDIR}/ukr ${D}/usr/X11R6/lib/X11/fonts
+		cp -a ${WORKDIR}/ukr ${D}/usr/X11R6/$(get_libdir)/X11/fonts
 		eend 0
 	fi
 
@@ -884,36 +883,36 @@ src_install() {
 	insinto /etc/conf.d
 	newins ${FILESDIR}/${PV}/xfs.conf.d xfs
 
-	# we want libGLU.so* in /usr/lib
-	mv ${D}/usr/X11R6/lib/libGLU.* ${D}/usr/lib
+	# we want libGLU.so* in /usr/$(get_libdir)
+	mv ${D}/usr/X11R6/$(get_libdir)/libGLU.* ${D}/usr/$(get_libdir)
 
 	# next section is to setup the dynamic libGL stuff
 	ebegin "Moving libGL and friends for dynamic switching"
-	dodir /usr/lib/opengl/xfree/{lib,extensions,include}
+	dodir /usr/$(get_libdir)/opengl/xfree/{lib,extensions,include}
 	local x=""
-	for x in ${D}/usr/X11R6/lib/libGL.so* \
-		${D}/usr/X11R6/lib/libGL.la \
-		${D}/usr/X11R6/lib/libGL.a \
-		${D}/usr/X11R6/lib/libMesaGL.so
+	for x in ${D}/usr/X11R6/$(get_libdir)/libGL.so* \
+		${D}/usr/X11R6/$(get_libdir)/libGL.la \
+		${D}/usr/X11R6/$(get_libdir)/libGL.a \
+		${D}/usr/X11R6/$(get_libdir)/libMesaGL.so
 	do
 		if [ -f ${x} -o -L ${x} ]
 		then
 			# libGL.a cause problems with tuxracer, etc
-			mv -f ${x} ${D}/usr/lib/opengl/xfree/lib
+			mv -f ${x} ${D}/usr/$(get_libdir)/opengl/xfree/lib
 		fi
 	done
-	for x in ${D}/usr/X11R6/lib/modules/extensions/libglx*
+	for x in ${D}/usr/X11R6/$(get_libdir)/modules/extensions/libglx*
 	do
 		if [ -f ${x} -o -L ${x} ]
 		then
-			mv -f ${x} ${D}/usr/lib/opengl/xfree/extensions
+			mv -f ${x} ${D}/usr/$(get_libdir)/opengl/xfree/extensions
 		fi
 	done
 	for x in ${D}/usr/X11R6/include/GL/{gl.h,glx.h,glxtokens.h}
 	do
 		if [ -f ${x} -o -L ${x} ]
 		then
-			mv -f ${x} ${D}/usr/lib/opengl/xfree/include
+			mv -f ${x} ${D}/usr/$(get_libdir)/opengl/xfree/include
 		fi
 	done
 	eend 0
@@ -932,7 +931,7 @@ src_install() {
 	if [ -f ${x} ]
 		then
 			# Dont do the modules ...
-			if [ "${x/\/usr\/X11R6\/lib\/modules}" = "${x}" ]
+			if [ "${x/\/usr\/X11R6\/$(get_libdir)\/modules}" = "${x}" ]
 			then
 				echo "`echo ${x} | sed -e "s|${D}||"`"
 				strip ${x} || :
@@ -940,8 +939,8 @@ src_install() {
 		fi
 	done
 	# Now do the libraries ...
-	for x in ${D}/usr/{lib,lib/opengl/xfree/lib}/*.so.* \
-		${D}/usr/X11R6/{lib,lib/X11/locale/lib/common}/*.so.*
+	for x in ${D}/usr/{$(get_libdir),$(get_libdir)/opengl/xfree/lin}/*.so.* \
+		${D}/usr/X11R6/{$(get_libdir),$(get_libdir)/X11/locale/lib/common}/*.so.*
 	do
 		if [ -f ${x} ]
 		then
@@ -961,7 +960,7 @@ src_install() {
 	if [ "${SYNAPTICS}" = "yes" ]
 	then
 		# Install Synaptics touchpad driver and docs
-		insinto /usr/X11R6/lib/modules/input
+		insinto /usr/X11R6/$(get_libdir)/modules/input
 		doins ${SYNDIR}/synaptics_drv.o
 		exeinto /usr/X11R6/bin
 		doexe ${SYNDIR}/synclient
@@ -973,10 +972,10 @@ src_install() {
 pkg_preinst() {
 
 	# These changed from a directory/file to a symlink and reverse
-	if [ ! -L ${ROOT}/usr/X11R6/lib/X11/XftConfig ] && \
-	   [ -f ${ROOT}/usr/X11R6/lib/X11/XftConfig ]
+	if [ ! -L ${ROOT}/usr/X11R6/$(get_libdir)/X11/XftConfig ] && \
+	   [ -f ${ROOT}/usr/X11R6/$(get_libdir)/X11/XftConfig ]
 	then
-		rm -rf ${ROOT}/usr/X11R6/lib/X11/XftConfig
+		rm -rf ${ROOT}/usr/X11R6/$(get_libdir)/X11/XftConfig
 	fi
 
 	if [ -L ${ROOT}/etc/X11/app-defaults ]
@@ -984,38 +983,38 @@ pkg_preinst() {
 		rm -f ${ROOT}/etc/X11/app-defaults
 	fi
 
-	if [ ! -L ${ROOT}/usr/X11R6/lib/X11/app-defaults ] && \
-	   [ -d ${ROOT}/usr/X11R6/lib/X11/app-defaults ]
+	if [ ! -L ${ROOT}/usr/X11R6/$(get_libdir)/X11/app-defaults ] && \
+	   [ -d ${ROOT}/usr/X11R6/$(get_libdir)/X11/app-defaults ]
 	then
 		if [ ! -d ${ROOT}/etc/X11/app-defaults ]
 		then
 			mkdir -p ${ROOT}/etc/X11/app-defaults
 		fi
 
-		mv -f ${ROOT}/usr/X11R6/lib/X11/app-defaults ${ROOT}/etc/X11
+		mv -f ${ROOT}/usr/X11R6/$(get_libdir)/X11/app-defaults ${ROOT}/etc/X11
 	fi
 
-	if [ -L ${ROOT}/usr/X11R6/lib/X11/xkb ]
+	if [ -L ${ROOT}/usr/X11R6/$(get_libdir)/X11/xkb ]
 	then
-		rm -f ${ROOT}/usr/X11R6/lib/X11/xkb
+		rm -f ${ROOT}/usr/X11R6/$(get_libdir)/X11/xkb
 	fi
 
 	if [ ! -L ${ROOT}/etc/X11/xkb ] && \
 	   [ -d ${ROOT}/etc/X11/xkb ]
 	then
-		if [ ! -d ${ROOT}/usr/X11R6/lib/X11/xkb ]
+		if [ ! -d ${ROOT}/usr/X11R6/$(get_libdir)/X11/xkb ]
 		then
-			mkdir -p ${ROOT}/usr/X11R6/lib/X11
+			mkdir -p ${ROOT}/usr/X11R6/$(get_libdir)/X11
 		fi
 
-	    mv -f ${ROOT}/etc/X11/xkb ${ROOT}/usr/X11R6/lib/X11
+	    mv -f ${ROOT}/etc/X11/xkb ${ROOT}/usr/X11R6/$(get_libdir)/X11
 	fi
 
 	# clean the dinamic libGL stuff's home to ensure
 	# we dont have stale libs floating around
-	if [ -d ${ROOT}/usr/lib/opengl/xfree ]
+	if [ -d ${ROOT}/usr/$(get_libdir)/opengl/xfree ]
 	then
-		rm -rf ${ROOT}/usr/lib/opengl/xfree/*
+		rm -rf ${ROOT}/usr/$(get_libdir)/opengl/xfree/*
 	fi
 
 	# clean out old fonts.* and encodings.dir files, as we
@@ -1025,15 +1024,15 @@ pkg_preinst() {
 	local G_FONTDIRS="100dpi 75dpi TTF Type1 encodings local misc util"
 	for G_FONTDIR in ${G_FONTDIRS}
 	do
-		find ${ROOT}/usr/X11R6/lib/X11/fonts/${G_FONTDIR} -type f -name 'fonts.*' \
+		find ${ROOT}/usr/X11R6/$(get_libdir)/X11/fonts/${G_FONTDIR} -type f -name 'fonts.*' \
 			-exec rm -f {} \;
-		find ${ROOT}/usr/X11R6/lib/X11/fonts/${G_FONTDIR} -type f -name 'encodings.dir' \
+		find ${ROOT}/usr/X11R6/$(get_libdir)/X11/fonts/${G_FONTDIR} -type f -name 'encodings.dir' \
 			-exec rm -f {} \;
 	done
 
 	# make sure we do not have any stale files lying round
 	# that could break things.
-	rm -f ${ROOT}/usr/X11R6/lib/libGL*
+	rm -f ${ROOT}/usr/X11R6/$(get_libdir)/libGL*
 }
 
 update_XftConfig() {
@@ -1097,18 +1096,18 @@ pkg_postinst() {
 		# ********************************************************************
 
 		ebegin "Generating encodings.dir..."
-		# Create the encodings.dir in /usr/X11R6/lib/X11/fonts/encodings
-		LD_LIBRARY_PATH="${LD_LIBRARY_PATH}:${ROOT}/usr/X11R6/lib" \
+		# Create the encodings.dir in /usr/X11R6/$(get_libdir)/X11/fonts/encodings
+		LD_LIBRARY_PATH="${LD_LIBRARY_PATH}:${ROOT}/usr/X11R6/lib:${ROOT}/usr/X11R6/lib64" \
 		${ROOT}/usr/X11R6/bin/mkfontdir -n \
-			-e ${ROOT}/usr/X11R6/lib/X11/fonts/encodings \
-			-e ${ROOT}/usr/X11R6/lib/X11/fonts/encodings/large \
-			-- ${ROOT}/usr/X11R6/lib/X11/fonts/encodings
+			-e ${ROOT}/usr/X11R6/$(get_libdir)/X11/fonts/encodings \
+			-e ${ROOT}/usr/X11R6/$(get_libdir)/X11/fonts/encodings/large \
+			-- ${ROOT}/usr/X11R6/$(get_libdir)/X11/fonts/encodings
 		eend 0
 
 		if [ -x ${ROOT}/usr/X11R6/bin/ttmkfdir ]
 		then
 			ebegin "Creating fonts.scale files..."
-			for x in $(find ${ROOT}/usr/X11R6/lib/X11/fonts/* -type d -maxdepth 1)
+			for x in $(find ${ROOT}/usr/X11R6/$(get_libdir)/X11/fonts/* -type d -maxdepth 1)
 			do
 				[ -z "$(ls ${x}/)" ] && continue
 				[ "$(ls ${x}/)" = "fonts.cache-1" ] && continue
@@ -1123,17 +1122,17 @@ pkg_postinst() {
 				if [ "${x/encodings}" = "${x}" -a \
 				     -n "$(find ${x} -iname '*.tt[cf]' -print)" ]
 				then
-					LD_LIBRARY_PATH="${LD_LIBRARY_PATH}:${ROOT}/usr/X11R6/lib" \
+					LD_LIBRARY_PATH="${LD_LIBRARY_PATH}:${ROOT}/usr/X11R6/lib:${ROOT}/usr/X11R6/lib64" \
 					${ROOT}/usr/X11R6/bin/ttmkfdir -x 2 \
-						-e ${ROOT}/usr/X11R6/lib/X11/fonts/encodings/encodings.dir \
+						-e ${ROOT}/usr/X11R6/$(get_libdir)/X11/fonts/encodings/encodings.dir \
 						-o ${x}/fonts.scale -d ${x}
 				# Next type1 and opentype (pfa,pfb,otf,otc)
 				elif [ "${x/encodings}" = "${x}" -a \
 					-n "$(find ${x} -iname '*.[po][ft][abcf]' -print)" ]
 				then
-					LD_LIBRARY_PATH="${LD_LIBRARY_PATH}:${ROOT}/usr/X11R6/lib" \
+					LD_LIBRARY_PATH="${LD_LIBRARY_PATH}:${ROOT}/usr/X11R6/lib:${ROOT}/usr/X11R6/lib64" \
 					${ROOT}/usr/X11R6/bin/mkfontscale \
-						-a ${ROOT}/usr/X11R6/lib/X11/fonts/encodings/encodings.dir \
+						-a ${ROOT}/usr/X11R6/$(get_libdir)/X11/fonts/encodings/encodings.dir \
 						-- ${x}
 				fi
 			done
@@ -1141,24 +1140,24 @@ pkg_postinst() {
 		fi
 
 		ebegin "Generating fonts.dir files..."
-		for x in $(find ${ROOT}/usr/X11R6/lib/X11/fonts/* -type d -maxdepth 1)
+		for x in $(find ${ROOT}/usr/X11R6/$(get_libdir)/X11/fonts/* -type d -maxdepth 1)
 		do
 			[ -z "$(ls ${x}/)" ] && continue
 			[ "$(ls ${x}/)" = "fonts.cache-1" ] && continue
 
 			if [ "${x/encodings}" = "${x}" ]
 			then
-				LD_LIBRARY_PATH="${LD_LIBRARY_PATH}:${ROOT}/usr/X11R6/lib" \
+				LD_LIBRARY_PATH="${LD_LIBRARY_PATH}:${ROOT}/usr/X11R6/lib:${ROOT}/usr/X11R6/lib64" \
 				${ROOT}/usr/X11R6/bin/mkfontdir \
-					-e ${ROOT}/usr/X11R6/lib/X11/fonts/encodings \
-					-e ${ROOT}/usr/X11R6/lib/X11/fonts/encodings/large \
+					-e ${ROOT}/usr/X11R6/$(get_libdir)/X11/fonts/encodings \
+					-e ${ROOT}/usr/X11R6/$(get_libdir)/X11/fonts/encodings/large \
 					-- ${x}
 			fi
 		done
 		eend 0
 
 		ebegin "Generating Xft Cache..."
-		for x in $(find ${ROOT}/usr/X11R6/lib/X11/fonts/* -type d -maxdepth 1)
+		for x in $(find ${ROOT}/usr/X11R6/$(get_libdir)/X11/fonts/* -type d -maxdepth 1)
 		do
 			[ -z "$(ls ${x}/)" ] && continue
 			[ "$(ls ${x}/)" = "fonts.cache-1" ] && continue
@@ -1168,14 +1167,14 @@ pkg_postinst() {
 			if [ "${x/encodings}" = "${x}" -a \
 			     -n "$(find ${x} -iname '*.[otps][pft][cfad]' -print)" ]
 			then
-				LD_LIBRARY_PATH="${LD_LIBRARY_PATH}:${ROOT}/usr/X11R6/lib" \
+				LD_LIBRARY_PATH="${LD_LIBRARY_PATH}:${ROOT}/usr/X11R6/lib:${ROOT}/usr/X11R6/lib64" \
 				${ROOT}/usr/X11R6/bin/xftcache ${x} &> /dev/null
 			fi
 		done
 		eend 0
 
 		ebegin "Fixing permissions..."
-		find ${ROOT}/usr/X11R6/lib/X11/fonts/ -type f -name 'font.*' \
+		find ${ROOT}/usr/X11R6/$(get_libdir)/X11/fonts/ -type f -name 'font.*' \
 			-exec chmod 0644 {} \;
 		eend 0
 
@@ -1195,7 +1194,7 @@ pkg_postinst() {
 		echo; ${ROOT}/usr/sbin/opengl-update --use-old xfree
 	fi
 
-	for x in $(find ${ROOT}/usr/X11R6/lib/X11/locale/ -mindepth 1 -type d)
+	for x in $(find ${ROOT}/usr/X11R6/$(get_libdir)/X11/locale/ -mindepth 1 -type d)
 	do
 		# Remove old compose files we might have created incorrectly
 		# CJK must not have that file (otherwise XIM don't works some times)
@@ -1277,6 +1276,6 @@ pkg_postrm() {
 		ln -snf ../X11R6/include/X11 ${ROOT}/usr/include/X11
 		ln -snf ../X11R6/include/DPS ${ROOT}/usr/include/DPS
 		ln -snf ../X11R6/include/GL ${ROOT}/usr/include/GL
-		ln -snf ../X11R6/lib/X11 ${ROOT}/usr/lib/X11
+		ln -snf ../X11R6/$(get_libdir)/X11 ${ROOT}/usr/$(get_libdir)/X11
 	fi
 }

@@ -1,0 +1,11 @@
+--- a/programs/xcursorgen/xcursorgen.c	2024-11-10 13:39:34.023239280 +0200
++++ b/programs/xcursorgen/xcursorgen.c	2024-11-10 13:40:27.195808683 +0200
+@@ -182,7 +182,7 @@
+       return NULL;
+     }
+ 
+-  if (setjmp (png->jmpbuf))
++  if (setjmp (png_jmpbuf(png)))
+     {
+       png_destroy_read_struct (&png, &info, NULL);
+       return NULL;
