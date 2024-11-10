@@ -83,8 +83,8 @@ X_DRIVERS="http://people.mandrakesoft.com/~flepied/projects/wacom/xf86Wacom.c.gz
 	http://www.probo.com/timr/savage-${SAVDRV_VER}.zip
 	http://www.winischhofer.net/sis/sis_drv_src_${SISDRV_VER}.tar.gz
 	http://w1.894.telia.com/~u89404340/touchpad/files/synaptics-${SYNDRV_VER}.tar.bz2"
-#	mirror://gentoo/XFree86-4.3.0-drivers-via-${VIADRV_VER}.tar.bz2"
-#	ftp://ftp.matrox.com/pub/mga/archive/linux/2001/beta_1_3_0/mga-${MGADRV_VER}.tgz"
+	mirror://gentoo/XFree86-4.3.0-drivers-via-${VIADRV_VER}.tar.bz2"
+	ftp://ftp.matrox.com/pub/mga/archive/linux/2001/beta_1_3_0/mga-${MGADRV_VER}.tgz"
 #	3dfx? ( mirror://gentoo/glide3-headers.tar.bz2 )"
 # Updated Wacom driver:  http://people.mandrakesoft.com/~flepied/projects/wacom/
 # Latest Savaga drivers:  http://www.probo.com/timr/savage40.html
@@ -235,12 +235,16 @@ src_unpack() {
 	fi
 	cd ${S}
 
+#	Couldn't find source
+	ewarn "Not adding VIA driver"
 #	ebegin "Adding VIA driver"
 #	cd ${WORKDIR}
 #	unpack XFree86-${PV}-drivers-via-${VIADRV_VER}.tar.bz2
 #	cd ${S}
 #	eend 0
 
+#	Couldn't find source
+	ewarn "Not updating Matrox HAL driver"
 #	ebegin "Updating Matrox HAL driver"
 #	unpack mga-${MGADRV_VER}.tgz
 #	touch ${WORKDIR}/mga/HALlib/mgaHALlib.a
@@ -306,23 +310,80 @@ src_unpack() {
 		fi
 	fi
 
+	#Patches that need various -p values
+	#-p2
+	eapply -p2 ${PATCH_DIR}/0121_all_4.2.99.3-build-libs-with-pic.patch
+	mv -f ${PATCH_DIR}/0121_all_4.2.99.3-build-libs-with-pic.patch ${PATCH_DIR}/excluded
+	eapply -p2 ${PATCH_DIR}/0125_all_4.0-broken-includes.patch
+	mv -f ${PATCH_DIR}/0125_all_4.0-broken-includes.patch ${PATCH_DIR}/excluded
+	eapply -p2 ${PATCH_DIR}/0126_all_4.2.99.3-startx.patch
+	mv -f ${PATCH_DIR}/0126_all_4.2.99.3-startx.patch ${PATCH_DIR}/excluded
+	eapply -p2 ${PATCH_DIR}/0130_all_4.2.1-fix-shared-libXau-link.v2.patch
+	mv -f ${PATCH_DIR}/0130_all_4.2.1-fix-shared-libXau-link.v2.patch ${PATCH_DIR}/excluded
+	#-p0
+	eapply -p0 ${PATCH_DIR}/0185_all_4.3.0-mesa-4.0.4-branch.patch
+	mv -f ${PATCH_DIR}/0185_all_4.3.0-mesa-4.0.4-branch.patch ${PATCH_DIR}/excluded
+	#-p2
+	eapply -p2 ${PATCH_DIR}/0202_all_4.2.1-gl-matrix-man-fixes.patch
+	mv -f ${PATCH_DIR}/0202_all_4.2.1-gl-matrix-man-fixes.patch ${PATCH_DIR}/excluded
+	eapply -p2 ${PATCH_DIR}/0270_s390_4.1.0-cpp.patch
+	mv -f ${PATCH_DIR}/0270_s390_4.1.0-cpp.patch ${PATCH_DIR}/excluded
+	eapply -p2 ${PATCH_DIR}/0300_all_4.1.0-agpgart-load.patch
+	mv -f ${PATCH_DIR}/0300_all_4.1.0-agpgart-load.patch ${PATCH_DIR}/excluded
+	eapply -p2 ${PATCH_DIR}/0350_all_4.2.0-vt7.patch
+	mv -f ${PATCH_DIR}/0350_all_4.2.0-vt7.patch ${PATCH_DIR}/excluded
+	eapply -p2 ${PATCH_DIR}/0400_all_4.2.99-oldkbd.patch
+	mv -f ${PATCH_DIR}/0400_all_4.2.99-oldkbd.patch ${PATCH_DIR}/excluded
+	eapply -p2 ${PATCH_DIR}/0500_all_4.3-mouse-twice.patch
+	mv -f ${PATCH_DIR}/0500_all_4.3-mouse-twice.patch ${PATCH_DIR}/excluded
+	eapply -p2 ${PATCH_DIR}/0600_all_4.1.0-servonly.patch
+	mv -f ${PATCH_DIR}/0600_all_4.1.0-servonly.patch ${PATCH_DIR}/excluded
+	#-p2
+	eapply -p2 ${PATCH_DIR}/1075_all_4.3-xft-fix.patch
+	mv -f ${PATCH_DIR}/1075_all_4.3-xft-fix.patch ${PATCH_DIR}/excluded
+	#-p0
+	eapply -p0 ${PATCH_DIR}/1770_all_4.3.0-savage-scaling.patch
+	mv -f ${PATCH_DIR}/1770_all_4.3.0-savage-scaling.patch ${PATCH_DIR}/excluded
+	#-p6
+	eapply -p6 ${PATCH_DIR}/1771_all_4.3.0-savage-memleak.patch
+	mv -f ${PATCH_DIR}/1771_all_4.3.0-savage-memleak.patch ${PATCH_DIR}/excluded
+	eapply -p6 ${PATCH_DIR}/1772_all_4.3.0-savage-memleak-2.patch
+	mv -f ${PATCH_DIR}/1772_all_4.3.0-savage-memleak-2.patch ${PATCH_DIR}/excluded
+	#-p0
+	eapply -p0 ${PATCH_DIR}/5114_all_4.3.0-radeon-drm-ioremapagp.patch
+	mv -f ${PATCH_DIR}/5114_all_4.3.0-radeon-drm-ioremapagp.patch ${PATCH_DIR}/excluded
+	eapply -p0 ${PATCH_DIR}/5120_all_4.3.0-radeon-ap1-from-daenzer.patch
+	mv -f ${PATCH_DIR}/5120_all_4.3.0-radeon-ap1-from-daenzer.patch ${PATCH_DIR}/excluded
+	#-p2
+	eapply -p2 ${PATCH_DIR}/5300_all_4.3.0-nv-init.patch
+	mv -f ${PATCH_DIR}/5300_all_4.3.0-nv-init.patch ${PATCH_DIR}/excluded
+	eapply -p2 ${PATCH_DIR}/5800_all_4.2.0-tdfx-libglide-name.patch
+	mv -f ${PATCH_DIR}/5800_all_4.2.0-tdfx-libglide-name.patch ${PATCH_DIR}/excluded
+	eapply -p2 ${PATCH_DIR}/5900_all_4.2.99.3-acecad.patch
+	mv -f ${PATCH_DIR}/5900_all_4.2.99.3-acecad.patch ${PATCH_DIR}/excluded
+	eapply -p2 ${PATCH_DIR}/5901_all_4.2.99.3-acecad-debug.patch
+	mv -f ${PATCH_DIR}/5901_all_4.2.99.3-acecad-debug.patch ${PATCH_DIR}/excluded
+
+
 	# Various Patches from all over
-	EPATCH_SUFFIX="patch" epatch ${PATCH_DIR}
+	EPATCH_SUFFIX="patch" eapply ${PATCH_DIR}
 
 	unset EPATCH_EXCLUDE
 
-	epatch ${FILESDIR}/xpm-secfix-thomas.diff
+	#patch fails
+#	eapply ${FILESDIR}/xpm-secfix-thomas.diff
 
+	#-p0
 	# Fix DRI related problems
 	cd ${S}/programs/Xserver/hw/xfree86/
-	epatch ${DISTDIR}/xfree86-dri-resume-v8.patch
+	eapply -p0 ${DISTDIR}/xfree86-dri-resume-v8.patch
 
 	cd ${S}
 	pwd
 	eapply ${FILESDIR}/fix-ucs2any.patch
 	eapply ${FILESDIR}/fix-hardcoded-arches.patch
 	eapply ${FILESDIR}/fix-extra-abs-definitions.patch
-	eapply ${FILESDIR}/fix-acecad.patch
+#	eapply ${FILESDIR}/fix-acecad.patch
 	eapply ${FILESDIR}/fix-ar.patch
 	eapply ${FILESDIR}/fix-kbdrate.patch
 	eapply ${FILESDIR}/fix-missing-libtermcap.patch
@@ -608,8 +669,7 @@ src_compile() {
 	# Compile ucs2any C implementation (patch #9142)
 	ebegin "Compiling ucs2any C implementation"
 		cd ${S}/fonts/util
-	#	$(tc-getCC) -Wall -o ucs2any ucs2any.c
-		cp ucs2any.pl ucs2any
+		$(tc-getCC) -Wall -o ucs2any ucs2any.c
 		[ ! -d ../../exports/bin/ ] && mkdir -p ../../exports/bin/
 		mv ucs2any ../../exports/bin/
 		ls ${S}/exports/bin/
