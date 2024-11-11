@@ -14,6 +14,8 @@ IUSE="3dfx sse mmx 3dnow xml2 truetype nls cjk doc ipv6 debug static pam sdk bin
 
 filter-flags "-funroll-loops"
 
+replace-flags "-O3" "-O2"
+
 ALLOWED_FLAGS="-fstack-protector -march -mcpu -O -O1 -O2 -Os -pipe"
 
 # Recently there has been a lot of stability problem in Gentoo-land.  Many
