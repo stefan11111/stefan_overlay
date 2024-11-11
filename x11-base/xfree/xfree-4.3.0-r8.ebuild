@@ -14,7 +14,7 @@ IUSE="3dfx sse mmx 3dnow xml2 truetype nls cjk doc ipv6 debug static pam sdk bin
 
 filter-flags "-funroll-loops"
 
-ALLOWED_FLAGS="-fstack-protector -march -mcpu -O -O1 -O2 -O3 -pipe"
+ALLOWED_FLAGS="-fstack-protector -march -mcpu -O -O1 -O2 -Os -pipe"
 
 # Recently there has been a lot of stability problem in Gentoo-land.  Many
 # things can be the cause to this, but I believe that it is due to gcc3
@@ -39,7 +39,7 @@ ALLOWED_FLAGS="-fstack-protector -march -mcpu -O -O1 -O2 -O3 -pipe"
 strip-flags
 
 # This is a fragile package
-CFLAGS="${CFLAGS} -std=c89 -fno-strict-aliasing -fno-strict-overflow -fno-aggressive-loop-optimizations -fno-merge-constants -DLINUX_INPUT"
+CFLAGS="${CFLAGS} -fno-lto -std=c89 -fno-strict-aliasing -fno-strict-overflow -fno-aggressive-loop-optimizations -fno-merge-constants -DLINUX_INPUT"
 MAKEOPTS="-j1"
 
 # Configure for SYNAPTICS support
