@@ -18,7 +18,9 @@ DEPEND="|| (    sys-devel/gcc
                 sys-devel/clang )
         libxfont2? ( x11-libs/libXfont2 )
         !libxfont2? ( x11-libs/libXfont )
-        x11-libs/libXtst"
+        x11-libs/libXtst
+        x11-libs/libXdmcp
+        x11-libs/libfontenc"
 RDEPEND="${DEPEND}"
 BDEPEND=""
 
