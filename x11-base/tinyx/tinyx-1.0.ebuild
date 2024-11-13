@@ -12,7 +12,7 @@ inherit git-r3 autotools
 LICENSE="MIT"
 SLOT="0"
 KEYWORDS="~amd64 ~x86"
-IUSE="libxfont2 suid"
+IUSE="libxfont2 suid xfbdev xvesa"
 
 DEPEND="|| (    sys-devel/gcc
                 sys-devel/clang )
@@ -42,11 +42,16 @@ src_prepare() {
 }
 
 src_configure() {
-    econf --with-fontdir=/usr/share/fonts
+    local myeconfargs=( --with-fontdir=/usr/share/fonts )
+    use !xfbdev && myeconfargs+=( --disable-xfbdev )
+    use !xvesa && myeconfargs+=( --disable-xvesa )
+    econf "${myeconfargs[@]}"
 }
 
 src_install() {
     emake install DESTDIR=${D}
-    use suid && chmod 4755 ${D}/usr/bin/Xfbdev
-    use suid && chmod 4755 ${D}/usr/bin/Xvesa
+    use suid && use xfbdev && chmod 4755 ${D}/usr/bin/Xfbdev
+    use suid && use xvesa && chmod 4755 ${D}/usr/bin/Xvesa
+    use xvesa && ewarn "Xvesa doesn't work with a 64-bit kernel on amd64"
+    use !xvesa && use !xfbdev && ewarn "You disabled both X servers. This is a useless configuration"
 }
