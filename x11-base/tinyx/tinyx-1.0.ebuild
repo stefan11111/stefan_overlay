@@ -12,7 +12,7 @@ inherit git-r3 autotools
 LICENSE="MIT"
 SLOT="0"
 KEYWORDS="~amd64 ~x86"
-IUSE="libxfont2 suid xfbdev xvesa"
+IUSE="libxfont2 suid xfbdev xvesa xres screensaver xdmcp xdm-auth-1 dbe xf86bigfont dpms"
 
 DEPEND="|| (    sys-devel/gcc
                 sys-devel/clang )
@@ -45,6 +45,13 @@ src_configure() {
     local myeconfargs=( --with-fontdir=/usr/share/fonts )
     use !xfbdev && myeconfargs+=( --disable-xfbdev )
     use !xvesa && myeconfargs+=( --disable-xvesa )
+    use !xres && myeconfargs+=( --disable-xres )
+    use !screensaver && myeconfargs+=( --disable-screensaver )
+    use !xdmcp && myeconfargs+=( --disable-xdmcp )
+    use !xdm-auth-1 && myeconfargs+=( --disable-xdm-auth-1 )
+    use !dbe && myeconfargs+=( --disable-dbe )
+    use !xf86bigfont && myeconfargs+=( --disable-xf86bigfont )
+    use !dpms && myeconfargs+=( --disable-dpms )
     econf "${myeconfargs[@]}"
 }
 
