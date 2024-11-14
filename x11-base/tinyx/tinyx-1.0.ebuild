@@ -5,8 +5,8 @@ EAPI=8
 
 DESCRIPTION="tinyx/kdrive X11 server"
 HOMEPAGE="https://github.com/stefan11111/tinyx https://github.com/tinycorelinux/tinyx"
-#EGIT_REPO_URI="https://github.com/stefan11111/tinyx.git"
-EGIT_REPO_URI=https://github.com/tinycorelinux/tinyx.git
+EGIT_REPO_URI="https://github.com/stefan11111/tinyx.git"
+#EGIT_REPO_URI=https://github.com/tinycorelinux/tinyx.git
 inherit git-r3 autotools
 
 LICENSE="MIT"
@@ -26,15 +26,15 @@ BDEPEND=""
 
 CFLAGS="-fpermissive ${CFLAGS}"
 
-src_unpack() {
-    local -x EGIT_REPO_URI
-    if use libxfont2; then
-        EGIT_REPO_URI=https://github.com/stefan11111/tinyx.git
-    else
-        EGIT_REPO_URI=https://github.com/tinycorelinux/tinyx.git
-    fi
-    git-r3_src_unpack
-}
+#src_unpack() {
+#    local -x EGIT_REPO_URI
+#    if use libxfont2; then
+#        EGIT_REPO_URI=https://github.com/stefan11111/tinyx.git
+#    else
+#        EGIT_REPO_URI=https://github.com/tinycorelinux/tinyx.git
+#    fi
+#    git-r3_src_unpack
+#}
 
 src_prepare() {
     default
@@ -52,6 +52,7 @@ src_configure() {
     use !dbe && myeconfargs+=( --disable-dbe )
     use !xf86bigfont && myeconfargs+=( --disable-xf86bigfont )
     use !dpms && myeconfargs+=( --disable-dpms )
+    use libxfont2 && myeconfargs+=( --enable-libXfont2 )
     econf "${myeconfargs[@]}"
 }
 
@@ -60,5 +61,7 @@ src_install() {
     use suid && use xfbdev && chmod 4755 ${D}/usr/bin/Xfbdev
     use suid && use xvesa && chmod 4755 ${D}/usr/bin/Xvesa
     use xvesa && ewarn "Xvesa doesn't work with a 64-bit kernel on amd64"
-    use !xvesa && use !xfbdev && ewarn "You disabled both X servers. This is a useless configuration"
+    use !xvesa && use !xfbdev && ewarn "You have disabled both X servers. This is a useless configuration"
+    use !libxfont2 && ewarn "You have built tinyx with libXfont1. The default in ::gentoo is libXfont2, which is also used by Xorg"
+    use !libxfont2 && ewarn "Unless you have configured your system to use libXfont1 instead of libXfont2, tinyx will not work"
 }
