@@ -12,17 +12,19 @@ SRC_URI="https://github.com/stefan11111/gtk2/releases/download/gtk%2B-2.24.35/gt
 LICENSE="LGPL-2+"
 SLOT="2"
 
-IUSE="adwaita-icon-theme X directfb print cups +introspection vim-syntax xinerama test"
+IUSE="werror adwaita-icon-theme X directfb print cups +introspection vim-syntax xinerama test"
 
 KEYWORDS="~x86 ~amd64"
 
 # Disable deprecation warnings
 #CFLAGS="-Wno-deprecated-declarations ${CFLAGS}"
+# No longer needed
 
 # Upstream wants us to do their job:
 # https://bugzilla.gnome.org/show_bug.cgi?id=768663#c1
 # Also no longer in the codebase
 #RESTRICT="test"
+# No longer true, tests are back in the codebase and fixed
 
 REQUIRED_USE="cups? ( print )
 		^^ ( X directfb )"
@@ -120,6 +122,8 @@ multilib_src_configure() {
 	use cups && myeconfargs+=(CUPS_CONFIG="${EPREFIX}/usr/bin/${CHOST}-cups-config")
 
 	use test && myeconfargs+=(--enable-tests)
+
+	use werror && CFLAGS="-Werror ${CFLAGS}"
 
 	ECONF_SOURCE="${S}" econf "${myeconfargs[@]}"
 }

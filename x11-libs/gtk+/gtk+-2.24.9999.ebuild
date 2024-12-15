@@ -16,15 +16,17 @@ SRC_URI=""
 LICENSE="LGPL-2+"
 SLOT="2"
 
-IUSE="adwaita-icon-theme X directfb print cups +introspection vim-syntax xinerama"
+IUSE="werror adwaita-icon-theme X directfb print cups +introspection vim-syntax xinerama"
 
 # Disable deprecation warnings
 #CFLAGS="-Wno-deprecated-declarations ${CFLAGS}"
+# No longer needed
 
 # Upstream wants us to do their job:
 # https://bugzilla.gnome.org/show_bug.cgi?id=768663#c1
 # Also no longer in the codebase
-RESTRICT="test"
+#RESTRICT="test"
+# No longer true, tests are back in the codebase and fixed
 
 REQUIRED_USE="cups? ( print )
 		^^ ( X directfb )"
@@ -120,6 +122,8 @@ multilib_src_configure() {
 	use cups && myeconfargs+=(--enable-cups)
 
 	use cups && myeconfargs+=(CUPS_CONFIG="${EPREFIX}/usr/bin/${CHOST}-cups-config")
+
+	use werror && CFLAGS="-Werror ${CFLAGS}"
 
 	ECONF_SOURCE="${S}" econf "${myeconfargs[@]}"
 }
