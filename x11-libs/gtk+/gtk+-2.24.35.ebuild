@@ -12,7 +12,7 @@ SRC_URI="https://github.com/stefan11111/gtk2/releases/download/gtk%2B-2.24.35/gt
 LICENSE="LGPL-2+"
 SLOT="2"
 
-IUSE="werror adwaita-icon-theme X directfb print cups +introspection vim-syntax xinerama test"
+IUSE="werror adwaita-icon-theme X directfb modules print cups +introspection vim-syntax xinerama test"
 
 KEYWORDS="~x86 ~amd64"
 
@@ -123,7 +123,9 @@ multilib_src_configure() {
 
 	use test && myeconfargs+=(--enable-tests)
 
-	use werror && CFLAGS="-Werror ${CFLAGS}"
+	use !modules && myeconfargs+=(--disable-modules)
+
+	use werror && CFLAGS="-Werror -Wno-error=unused-variable ${CFLAGS}" # -Wno-error=unused-variable needed for autotools tests
 
 	ECONF_SOURCE="${S}" econf "${myeconfargs[@]}"
 }

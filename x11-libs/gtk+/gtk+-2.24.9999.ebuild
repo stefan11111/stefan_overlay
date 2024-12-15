@@ -16,7 +16,7 @@ SRC_URI=""
 LICENSE="LGPL-2+"
 SLOT="2"
 
-IUSE="werror adwaita-icon-theme X directfb print cups +introspection vim-syntax xinerama"
+IUSE="werror adwaita-icon-theme X directfb modules print cups +introspection vim-syntax xinerama"
 
 # Disable deprecation warnings
 #CFLAGS="-Wno-deprecated-declarations ${CFLAGS}"
@@ -123,7 +123,9 @@ multilib_src_configure() {
 
 	use cups && myeconfargs+=(CUPS_CONFIG="${EPREFIX}/usr/bin/${CHOST}-cups-config")
 
-	use werror && CFLAGS="-Werror ${CFLAGS}"
+	use !modules && myeconfargs+=(--disable-modules)
+
+	use werror && CFLAGS="-Werror -Wno-error=unused-variable ${CFLAGS}" # -Wno-error=unused-variable needed for autotools tests
 
 	ECONF_SOURCE="${S}" econf "${myeconfargs[@]}"
 }
