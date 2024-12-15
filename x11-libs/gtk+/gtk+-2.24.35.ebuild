@@ -125,7 +125,7 @@ multilib_src_configure() {
 
 	use !modules && myeconfargs+=(--disable-modules)
 
-	use werror && CFLAGS="-Werror -Wno-error=unused-variable -Werror=unused-but-set-variable ${CFLAGS}" # needed for autotools tests
+	use werror && CFLAGS="-Werror -Wno-error=unused-variable -Wno-error=unused-but-set-variable ${CFLAGS}" # needed for autotools tests
 
 	ECONF_SOURCE="${S}" econf "${myeconfargs[@]}"
 }
