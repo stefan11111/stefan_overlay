@@ -18,8 +18,12 @@ DEPEND="|| (    sys-devel/gcc
 RDEPEND="${DEPEND}"
 BDEPEND=""
 
-src_configure() {
+src_prepare() {
+    default
     eautoreconf
+}
+
+src_configure() {
     use xaa && econf --enable-xaa
     use !xaa && econf
 }
