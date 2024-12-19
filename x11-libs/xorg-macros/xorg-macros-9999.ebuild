@@ -20,9 +20,12 @@ DEPEND="|| (    sys-devel/gcc
 RDEPEND="${DEPEND}"
 BDEPEND=""
 
-src_configure() {
-    ./autogen.sh
+src_prepare() {
+    default
     eautoreconf
+}
+
+src_configure() {
     econf
 }
 
