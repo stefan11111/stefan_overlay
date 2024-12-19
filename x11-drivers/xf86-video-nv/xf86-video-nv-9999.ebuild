@@ -14,7 +14,8 @@ KEYWORDS="~amd64 ~x86"
 IUSE="xaa"
 
 DEPEND="|| (    sys-devel/gcc
-                sys-devel/clang )"
+                sys-devel/clang )
+        x11-libs/xorg-macros"
 RDEPEND="${DEPEND}"
 BDEPEND=""
 
