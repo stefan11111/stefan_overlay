@@ -6,7 +6,7 @@ EAPI=8
 DESCRIPTION="tinyx/kdrive X11 server"
 HOMEPAGE="https://github.com/stefan11111/tinyx https://github.com/tinycorelinux/tinyx"
 EGIT_REPO_URI="https://github.com/stefan11111/tinyx.git"
-EGIT_BRANCH="optional-libXfont2"
+EGIT_BRANCH="proper-libXfont2-port"
 #EGIT_REPO_URI=https://github.com/tinycorelinux/tinyx.git
 inherit git-r3 autotools
 
