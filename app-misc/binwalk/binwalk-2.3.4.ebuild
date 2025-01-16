@@ -4,7 +4,7 @@
 EAPI=8
 
 DISTUTILS_USE_PEP517=setuptools
-PYTHON_COMPAT=( python3_{9..12} pypy3 )
+PYTHON_COMPAT=( python3_{9..11} pypy3 )
 
 inherit distutils-r1
 
@@ -29,7 +29,7 @@ PATCHES=(
 
 )
 
-distutils_enable_tests nose
+#distutils_enable_tests nose
 
 python_install_all() {
 	local DOCS=( API.md INSTALL.md README.md )

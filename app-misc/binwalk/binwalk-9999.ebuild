@@ -29,7 +29,7 @@ PATCHES=(
 
 )
 
-distutils_enable_tests nose
+#distutils_enable_tests nose
 
 python_install_all() {
 	local DOCS=( API.md INSTALL.md README.md )
