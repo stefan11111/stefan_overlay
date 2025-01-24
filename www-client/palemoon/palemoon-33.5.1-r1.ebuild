@@ -273,7 +273,9 @@ src_install() {
 	mkdir -p "${extracted_dir}"
 	cd "${extracted_dir}" || die
 	einfo "Extracting the package..."
-	tar xjpf "${S}/${obj_dir}/dist/${P}.linux-${CTARGET_default%%-*}.tar.bz2" || die
+#	tar xjpf "${S}/${obj_dir}/dist/${P}.linux-${CTARGET_default%%-*}.tar.bz2" || die
+	#Under a different name
+	tar xjpf "${S}/${obj_dir}/dist/palemoon-33.6.0a1.linux-x86_64.tar.bz2" || die
 	einfo "Installing the package..."
 	local dest_libdir="/usr/$(get_libdir)"
 	mkdir -p "${D}/${dest_libdir}"
