@@ -14,13 +14,11 @@ KEYWORDS="~amd64 ~x86"
 
 I_D_USE="input_devices_keyboard input_devices_mouse input_devices_evdev"
 
-EXT_USE_1="+composite +mitshm xres record +xv xvmc dga scrensaver xdmcp xdm-auth-1 +glx +dri +dri2 +dri3 +glamor"
-EXT_USE_2="present xinerama xf86vidmode +xace xselinux tslib +dbe xf86bigfont dpms xfree86-utils libdrm +xshmfence"
-EXT_USE_2="linux_acpi linux_apm"
-# ebuild digest complains otherwise
-EXT_USE_4="+xace tslib xselinux libdrm +xshmfence"
+EXT_USE_1="+composite +mitshm xres record +xv xvmc dga screensaver xdmcp xdm-auth-1 +glx +dri +dri2 +dri3 +glamor"
+EXT_USE_2="present xinerama xf86vidmode +xace xselinux xcsecurity tslib +dbe xf86bigfont dpms xfree86-utils libdrm +xshmfence"
+EXT_USE_3="linux_acpi linux_apm"
 
-IUSE="${I_D_USE} suid ${EXT_USE_1} ${EXT_USE_2} ${EXT_USE_3} ${EXT_USE_4}"
+IUSE="${I_D_USE} suid ${EXT_USE_1} ${EXT_USE_2} ${EXT_USE_3}"
 
 REQUIRED_USE="composite? ( xace )"
 
@@ -65,7 +63,7 @@ src_configure() {
     --with-xkb-output=/usr/var/lib/xkb
     --disable-xorg
     --enable-kdrive
-    --eable-xfbdev
+    --enable-xfbdev
     --disable-clientids
     --disable-config-udev
     --disable-config-udev-kms
@@ -129,7 +127,8 @@ src_compile() {
 }
 
 src_install() {
-    mkdir -p ${D}/usr/bin/Xfbdev
-    cp ${S}/hw/kdrive/fbdev/Xfbdev ${D}/usr/bin/Xfbdev
-    use suid && chmod 4755 ${D}/usr/bin/Xfbdev
+    mkdir -p ${D}/usr/bin
+    # avoid conflict with x11-base/tinyx
+    cp ${S}/hw/kdrive/fbdev/Xfbdev ${D}/usr/bin/Xkdrive
+    use suid && chmod 4755 ${D}/usr/bin/Xkdrive
 }
