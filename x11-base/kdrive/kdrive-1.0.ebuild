@@ -6,7 +6,7 @@ EAPI=8
 DESCRIPTION="kdrive X11 server"
 HOMEPAGE="https://github.com/stefan11111/kdrive"
 EGIT_REPO_URI="https://github.com/stefan11111/kdrive.git"
-inherit git-r3 autotools
+inherit git-r3 autotools linux-info
 
 LICENSE="MIT"
 SLOT="0"
@@ -51,6 +51,13 @@ DEPEND="|| (    sys-devel/gcc
 RDEPEND="${DEPEND}"
 BDEPEND=""
 
+pkg_pretend() {
+    if use input_devices_evdev ; then
+        CONFIG_CHECK="~INPUT_EVDEV"
+    fi
+    check_extra_config
+}
+
 src_prepare() {
     default
     eautoreconf
@@ -80,7 +87,7 @@ src_configure() {
     use input_devices_evdev && myeconfargs+=( --enable-kdrive-evdev )
     use input_devices_evdev && ewarn "kdrive doesn't properly detect evdev devices"
     use input_devices_evdev && ewarn "when starting kdrive, you must do something like:"
-    use input_devices_evdev && ewarn "xinit -- /usr/bin/Xfbdev :1 vt8 -mouse evdev,,device=/dev/input/eventxx -keybd evdev,,device=/dev/input/eventyy"
+    use input_devices_evdev && ewarn "xinit -- /usr/bin/Xkdrive -mouse evdev,,device=/dev/input/eventxx -keybd evdev,,device=/dev/input/eventyy"
     use input_devices_evdev && ewarn "with xx and yy replaced with proper numbers, which can be found in /proc/bus/input/devices"
     use !input_devices_evdev && ewarn "you have disabled the only input driver that works well"
     use tslib && myeconfargs+=( --enable-tslib )
