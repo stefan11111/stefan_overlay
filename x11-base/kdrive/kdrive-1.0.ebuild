@@ -81,14 +81,17 @@ src_configure() {
     use input_devices_keyboard && myeconfargs+=( --enable-kdrive-kbd )
     use input_devices_keyboard && ewarn "The keyboard driver is broken"
     use input_devices_keyboard && ewarn "Use the evdev driver"
+    use !input_devices_keyboard && myeconfargs+=( --disable-kdrive-kbd )
     use input_devices_mouse && myeconfargs+=( --enable-kdrive-mouse )
     use input_devices_mouse && ewarn "The mouse driver has known bugs"
     use input_devices_mouse && ewarn "Use the evdev driver"
+    use !input_devices_mouse && myeconfargs+=( --disable-kdrive-mouse )
     use input_devices_evdev && myeconfargs+=( --enable-kdrive-evdev )
     use input_devices_evdev && ewarn "kdrive doesn't properly detect evdev devices"
     use input_devices_evdev && ewarn "when starting kdrive, you must do something like:"
     use input_devices_evdev && ewarn "xinit -- /usr/bin/Xkdrive -mouse evdev,,device=/dev/input/eventxx -keybd evdev,,device=/dev/input/eventyy"
     use input_devices_evdev && ewarn "with xx and yy replaced with proper numbers, which can be found in /proc/bus/input/devices"
+    use !input_devices_evdev && myeconfargs+=( --disable-kdrive-evdev )
     use !input_devices_evdev && ewarn "you have disabled the only input driver that works well"
     use tslib && myeconfargs+=( --enable-tslib )
 
