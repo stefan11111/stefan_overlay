@@ -20,6 +20,7 @@ RDEPEND="${DEPEND}
 	x11-base/xorg-server"
 
 src_prepare() {
+    eapply ${FILESDIR}/fix-build-2025.patch
     default
     eautoreconf
 }
