@@ -35,6 +35,7 @@ DEPEND="|| (    sys-devel/gcc
         xselinux? ( sys-process/audit
                     sys-libs/libselinux:=
                     sec-policy/selinux-xserver )
+        || ( x11-base/xorg-dri-interface media-libs/mesa[X(+),egl(+),gbm(+)] )
         dri3? ( media-libs/mesa[X(+),egl(+),gbm(+)] )
         dev-libs/libbsd
         glx? ( media-libs/libglvnd[X] )
@@ -79,20 +80,15 @@ src_configure() {
 
     #input
     use input_devices_keyboard && myeconfargs+=( --enable-kdrive-kbd )
-    use input_devices_keyboard && ewarn "The keyboard driver is broken"
-    use input_devices_keyboard && ewarn "Use the evdev driver"
+    use input_devices_keyboard && ewarn "Enabling the keyboard driver disables threaded input, even for evdev"
     use !input_devices_keyboard && myeconfargs+=( --disable-kdrive-kbd )
+
     use input_devices_mouse && myeconfargs+=( --enable-kdrive-mouse )
-    use input_devices_mouse && ewarn "The mouse driver has known bugs"
-    use input_devices_mouse && ewarn "Use the evdev driver"
     use !input_devices_mouse && myeconfargs+=( --disable-kdrive-mouse )
+
     use input_devices_evdev && myeconfargs+=( --enable-kdrive-evdev )
-    use input_devices_evdev && ewarn "kdrive doesn't properly detect evdev devices"
-    use input_devices_evdev && ewarn "when starting kdrive, you must do something like:"
-    use input_devices_evdev && ewarn "xinit -- /usr/bin/Xkdrive -mouse evdev,,device=/dev/input/eventxx -keybd evdev,,device=/dev/input/eventyy"
-    use input_devices_evdev && ewarn "with xx and yy replaced with proper numbers, which can be found in /proc/bus/input/devices"
     use !input_devices_evdev && myeconfargs+=( --disable-kdrive-evdev )
-    use !input_devices_evdev && ewarn "you have disabled the only input driver that works well"
+
     use tslib && myeconfargs+=( --enable-tslib )
 
     #extensions
@@ -141,4 +137,19 @@ src_install() {
     # avoid conflict with x11-base/tinyx
     cp ${S}/hw/kdrive/fbdev/Xfbdev ${D}/usr/bin/Xkdrive
     use suid && chmod 4755 ${D}/usr/bin/Xkdrive
+
+    einfo "The kdrive X server has a few quirks in regards to input drivers"
+    einfo "If you enabled the keyboard and mouse drivers, starting kdrive normally should work fine"
+    einfo "You should be able to just do 'xinit -- /usr/bin/Xkdrive', or however you start X"
+    einfo "The evdev driver doesn't work out of the box."
+    einfo "You have to pass evdev devices as command line arguments."
+    einfo "Like so: 'xinit -- /usr/bin/Xkdrive -mouse evdev,,device=/dev/input/eventxx -keybd,,device=/dev/input/eventyy'"
+    einfo "Where eventxx and eventyy are replaced with the proper evdev devices"
+    einfo "You can also mix evdev, keyboard and mouse drivers however you like"
+    einfo "You might want to emerge x11-apps/start-kdrive, which attempts to detect the proper evdev devices"
+    einfo "The mouse driver also comes with separate ps2 and ms drivers"
+    einfo "you can use those by passing '-mouse ps2' or '-mouse ms' to the Xkdrive command line"
+    einfo "There are also different mouse protocols you can explicitly tell the mouse driver to use"
+    einfo "You can enable the by passing '-mouse mouse,,protocol=<protocol>' to kdrive"
+    einfo "To see the full list of protocols, just pass something random as the protocol and kdrive will tell you the full list"
 }
