@@ -12,7 +12,7 @@ SLOT="0"
 KEYWORDS="~amd64 ~x86"
 IUSE="abi_x86_64 abi_x86_32"
 
-DEPEND=""
+DEPEND=" !media-libs/mesa "
 RDEPEND=""
 BDEPEND=""
 
