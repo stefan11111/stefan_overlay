@@ -15,3 +15,7 @@ RDEPEND="
         !fake? ( sys-fs/libudev-zero[${MULTILIB_USEDEP}] )
         fake? ( sys-fs/fake-libudev[${MULTILIB_USEDEP}] )
 "
+pkg_pretend() {
+    use fake && ewarn "sys-fs/fake-libudev only works with a few programs"
+    use fake && ewarn "You most likely want to emerge virtual/libudev with USE=-fake"
+}
