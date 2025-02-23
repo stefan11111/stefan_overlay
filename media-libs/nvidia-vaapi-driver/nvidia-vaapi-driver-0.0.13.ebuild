@@ -28,6 +28,11 @@ pkg_postinst() {
 	elog "but I find that it causes instability and segfaults."
 	elog "Toggle USE=gstreamer to change this."
 
+	elog "If you are using this for firefox/librewolf/<another firefox fork>"
+	elog "You might need to set this option in about:config to 0"
+	elog "Alongside the other option mentioned in the nvidia-vaapi-driver readme:"
+	elog "media.ffmpeg.vaapi.force-surface-zero-copy"
+
 	# Source: https://github.com/elFarto/nvidia-vaapi-driver/blob/v0.0.12/src/backend-common.c#L13
 	elog "If vaapi drivers fail to load, then make sure that you are"
 	elog "passing the correct parameters to the kernel."
