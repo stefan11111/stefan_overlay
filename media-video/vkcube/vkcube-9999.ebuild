@@ -19,6 +19,7 @@ DEPEND="|| (    sys-devel/gcc
 	media-libs/libpng
 	kms? ( x11-libs/libdrm
 	       media-libs/mesa[gbm(+)]
+	       dev-util/vulkan-intel-header
 	)
 	xcb? ( x11-libs/libxcb )
 	wayland? ( dev-libs/wayland
