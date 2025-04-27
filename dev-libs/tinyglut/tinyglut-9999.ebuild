@@ -6,7 +6,8 @@ EAPI=8
 DESCRIPTION="Small implementation of GLUT (OpenGL Utility Toolkit)"
 HOMEPAGE="https://github.com/caramelli/TinyGLUT"
 EGIT_REPO_URI="https://github.com/caramelli/TinyGLUT.git"
-inherit git-r3 autotools
+
+inherit git-r3 meson
 
 LICENSE="MIT"
 SLOT="0"
@@ -17,64 +18,39 @@ DEPEND="|| (    sys-devel/gcc
                 sys-devel/clang )
         dev-build/autoconf
         dev-build/automake
+        egl? ( dev-libs/libfiu )
         x11? ( x11-libs/libX11 )
         xcb? ( x11-libs/libxcb )
         directfb? ( virtual/directfb )
         wayland? ( dev-libs/wayland
                    dev-libs/wayland-protocols )
 "
+
 RDEPEND="${DEPEND}"
 BDEPEND=""
 
-src_prepare() {
-    default
-    eautoreconf
-}
-
 src_configure() {
-    local myeconfargs=(
+    local emesonargs=(
+        $(meson_use dummy)
+        $(meson_use x11)
+        $(meson_use xcb)
+        $(meson_use directfb)
+        $(meson_use fbdev)
+        $(meson_use wayland)
+        $(meson_use egl)
+        $(meson_use glx)
+        $(meson_use dfbgl)
+        $(meson_use glfbdev)
+        $(meson_use tests)
     )
 
-        use dummy && myeconfargs+=(--enable-dummy)
-        use !dummy && myeconfargs+=(--disable-dummy)
-
-        use x11 && myeconfargs+=(--enable-x11)
-        use !x11 && myeconfargs+=(--disable-x11)
-
-        use xcb && myeconfargs+=(--enable-xcb)
-        use !xcb && myeconfargs+=(--disable-xcb)
-
-        use directfb && myeconfargs+=(--enable-directfb)
-        use !directfb && myeconfargs+=(--disable-directfb)
-
-        use fbdev && myeconfargs+=(--enable-fbdev)
-        use !fbdev && myeconfargs+=(--disable-fbdev)
-
-        use wayland && myeconfargs+=(--enable-wayland)
-        use !wayland && myeconfargs+=(--disable-wayland)
-
-        use egl && myeconfargs+=(--enable-egl)
-        use !egl && myeconfargs+=(--disable-egl)
-
-        use glx && myeconfargs+=(--enable-glx)
-        use !glx && myeconfargs+=(--disable-glx)
-
-        use dfbgl && myeconfargs+=(--enable-dfbgl)
-        use !dfbgl && myeconfargs+=(--disable-dfbgl)
-
-        use glfbdev && myeconfargs+=(--enable-glfbdev)
-        use !glfbdev && myeconfargs+=(--disable-glfbdev)
-
-        use tests && myeconfargs+=(--enable-tests)
-        use !tests && myeconfargs+=(--disable-tests)
-
-        ECONF_SOURCE="${S}" econf "${myeconfargs[@]}"
+    meson_src_configure
 }
 
 src_compile() {
-    emake DESTDIR=${D}
+    meson_src_compile
 }
 
 src_install() {
-    emake install DESTDIR=${D}
+    meson_src_install
 }

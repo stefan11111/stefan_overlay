@@ -24,10 +24,9 @@ src_compile() {
 }
 
 src_install() {
-    # These should be in the Makefile
-    mkdir -p /usr/bin
-    mkdir -p /usr/share/man/man3
 
-    emake install PREFIX=/usr DESTDIR=${D}
-    use python && emake python3_install PREFIX=/usr DESTDIR=${D}
+    emake install PREFIX=${D}/usr DESTDIR=${D}
+    use python && emake python3_install PREFIX=${D}/usr DESTDIR=${D}
+
+    mv ${D}/usr/lib ${D}/usr/lib64
 }
