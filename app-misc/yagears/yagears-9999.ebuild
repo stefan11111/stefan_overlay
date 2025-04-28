@@ -75,6 +75,8 @@ src_configure() {
         use sdl2 && emesonargs+=( -Dwith-sdl=2 )
     fi
 
+    CXXFLAGS="-DGDK_GL_USE_ES=GDK_GL_USE_GL ${CXXFLAGS}"
+
     meson_src_configure
 }
 

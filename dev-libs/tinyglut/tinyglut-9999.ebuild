@@ -12,7 +12,8 @@ inherit git-r3 meson
 LICENSE="MIT"
 SLOT="0"
 KEYWORDS="~amd64 ~x86"
-IUSE="dummy x11 xcb directfb fbdev wayland egl glx dfbgl glfbdev tests"
+IUSE="dummy x11 xcb directfb fbdev wayland egl glx dfbgl glfbdev +tests"
+# USE=tests must be enabled, otherwise not everything will be installed
 
 DEPEND="|| (    sys-devel/gcc
                 sys-devel/clang )
