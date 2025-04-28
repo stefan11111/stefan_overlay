@@ -19,7 +19,7 @@ DEPEND="|| (    sys-devel/gcc
 	dev-libs/lite
 	virtual/directfb
 	mupdf? ( app-text/mupdf )
-        poppler? ( app-text/poppler )"
+        poppler? ( app-text/poppler[glib(+),cairo(+)] )"
 
 RDEPEND="${DEPEND}"
 BDEPEND=""
