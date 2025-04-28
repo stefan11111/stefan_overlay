@@ -18,7 +18,7 @@ DEPEND="|| (    sys-devel/gcc
                 sys-devel/clang )
         dev-build/autoconf
         dev-build/automake
-        egl? ( dev-libs/libfiu )
+        tests? ( dev-libs/libfiu )
         x11? ( x11-libs/libX11 )
         xcb? ( x11-libs/libxcb )
         directfb? ( virtual/directfb )
