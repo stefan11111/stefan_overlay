@@ -16,6 +16,7 @@ IUSE="mupdf poppler"
 DEPEND="|| (    sys-devel/gcc
                 sys-devel/clang )
 	dev-build/meson
+	dev-libs/lite
 	virtual/directfb
 	mupdf? ( app-text/mupdf )
         poppler? ( app-text/poppler )"
