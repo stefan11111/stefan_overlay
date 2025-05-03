@@ -20,7 +20,7 @@ DEPEND="|| (    sys-devel/gcc
 RDEPEND="${DEPEND}"
 BDEPEND=""
 
-multilib_src_compile() {
+src_compile() {
     local emakeargs=()
 
     use video_cards_vmware && emakeargs+=(vmware=1)
@@ -34,7 +34,7 @@ multilib_src_compile() {
     emake "${emakeargs}"
 }
 
-multilib_src_install() {
+src_install() {
     if use abi_x86_64; then
         emake install PREFIX=/usr DESTDIR=${D}
     fi
