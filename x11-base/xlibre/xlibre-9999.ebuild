@@ -100,9 +100,6 @@ PATCHES=(
 	"${FILESDIR}"/${PN}-1.12-unloadsubmodule.patch
 	# needed for new eselect-opengl, bug #541232
 	"${FILESDIR}"/${PN}-1.18-support-multiple-Files-sections.patch
-	"${FILESDIR}"/${PN}-fix-nvidia-abi-001.patch
-	"${FILESDIR}"/${PN}-fix-nvidia-abi-002.patch
-	"${FILESDIR}"/${PN}-fix-nvidia-abi-003.patch
 )
 
 src_configure() {
