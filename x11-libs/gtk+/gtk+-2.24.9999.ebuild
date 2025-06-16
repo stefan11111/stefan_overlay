@@ -11,7 +11,7 @@ HOMEPAGE="https://www.gtk.org/"
 #SRC_URI=${SRC_URI}
 EGIT_REPO_URI="https://github.com/stefan11111/gtk2.git"
 SRC_URI=""
-#EGIT_BRANCH="devel"
+EGIT_BRANCH="devel"
 
 LICENSE="LGPL-2+"
 SLOT="2"
