@@ -102,6 +102,7 @@ PATCHES=(
 	"${FILESDIR}"/${PN}-1.18-support-multiple-Files-sections.patch
 	"${FILESDIR}"/${PN}-fix-nvidia-abi-001.patch
 	"${FILESDIR}"/${PN}-fix-nvidia-abi-002.patch
+	"${FILESDIR}"/${PN}-fix-nvidia-abi-003.patch
 )
 
 src_configure() {
@@ -188,6 +189,10 @@ src_install() {
 	ln -rsf "${ED}"/usr/$(get_libdir)/xorg/modules/xlibre-25.0/drivers "${ED}"/usr/$(get_libdir)/xorg/modules/drivers
 	ln -rsf "${ED}"/usr/$(get_libdir)/xorg/modules/xlibre-25.0/input "${ED}"/usr/$(get_libdir)/xorg/modules/input
 	ln -rsf "${ED}"/usr/$(get_libdir)/xorg/modules/xlibre-25.0/extensions "${ED}"/usr/$(get_libdir)/xorg/modules/extensions
+
+	ewarn "If this is the first time you installed xlibre, you have to emerge @x11-module-rebuild"
+	ewarn "Something in your @world likely depends on xorg-server"
+	ewarn "Add x11-base/xorg-server-9999 to /etc/portage/profile/package.provided to fix this"
 }
 
 pkg_postrm() {
