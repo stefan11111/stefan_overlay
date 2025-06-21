@@ -15,7 +15,7 @@ EGIT_REPO_URI="https://github.com/KenjiBrown/xf86-video-fbturbo.git"
 EGIT_BRANCH="aarch64-gentoo"
 
 DEPEND="x11-base/xorg-proto
-        x11-libs/xorg-macros"
+        x11-misc/util-macros"
 RDEPEND="${DEPEND}
 	x11-base/xorg-server"
 

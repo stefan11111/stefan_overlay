@@ -15,7 +15,7 @@ IUSE="xaa"
 
 DEPEND="|| (    sys-devel/gcc
                 sys-devel/clang )
-        x11-libs/xorg-macros"
+        x11-misc/util-macros"
 RDEPEND="${DEPEND}"
 BDEPEND=""
 

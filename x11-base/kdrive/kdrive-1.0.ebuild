@@ -28,7 +28,7 @@ DEPEND="|| (    sys-devel/gcc
         x11-libs/libXtst
         x11-libs/libXdmcp
         x11-libs/libfontenc
-	x11-libs/xorg-macros
+	x11-misc/util-macros
         tslib? ( x11-libs/tslib )
         x11-base/xorg-proto
         x11-libs/xtrans
