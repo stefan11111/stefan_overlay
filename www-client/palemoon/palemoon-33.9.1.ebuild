@@ -75,7 +75,7 @@ RDEPEND="
 	gtk3? ( >=x11-libs/gtk+-3.4.0:3 )
 
 	media-libs/alsa-lib
-	pulseaudio? ( media-sound/pulseaudio )
+	pulseaudio? ( media-libs/libpulse )
 
 	media-video/ffmpeg[x264]
 
