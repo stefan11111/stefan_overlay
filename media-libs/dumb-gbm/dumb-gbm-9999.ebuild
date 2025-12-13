@@ -15,7 +15,7 @@ IUSE="abi_x86_32 abi_x86_64 strict"
 
 DEPEND="|| (    sys-devel/gcc
                 sys-devel/clang )
-                x11-libs/libdrm
+                x11-libs/libdrm[${MULTILIB_USEDEP}]
                 virtual/pkgconfig"
 RDEPEND="${DEPEND}"
 BDEPEND=""
