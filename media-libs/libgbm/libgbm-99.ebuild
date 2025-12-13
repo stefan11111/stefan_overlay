@@ -16,7 +16,7 @@ IUSE=""
 DEPEND="|| (    sys-devel/gcc
                 sys-devel/clang )
 	dev-build/meson
-	x11-libs/libdrm"
+	x11-libs/libdrm[${MULTILIB_USEDEP}]"
 RDEPEND="${DEPEND}"
 BDEPEND=""
 
