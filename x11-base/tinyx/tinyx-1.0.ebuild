@@ -13,7 +13,7 @@ inherit git-r3 autotools
 LICENSE="MIT"
 SLOT="0"
 KEYWORDS="~amd64 ~x86"
-IUSE="libxfont2 suid xfbdev xvesa xres screensaver xdmcp xdm-auth-1 dbe xf86bigfont dpms"
+IUSE="libxfont2 suid xfbdev xvesa xres screensaver xdmcp xdm-auth-1 dbe xf86bigfont dpms kdrive-rename"
 
 DEPEND="|| (    sys-devel/gcc
                 sys-devel/clang )
@@ -61,6 +61,7 @@ src_install() {
     emake install DESTDIR=${D}
     use suid && use xfbdev && chmod 4755 ${D}/usr/bin/Xfbdev
     use suid && use xvesa && chmod 4755 ${D}/usr/bin/Xvesa
+    use kdrive-rename && use xfbdev && mv  ${D}/usr/bin/Xfbdev ${D}/usr/bin/Xkdrive
     use xvesa && ewarn "Xvesa doesn't work with a 64-bit kernel on amd64"
     use !xvesa && use !xfbdev && ewarn "You have disabled both X servers. This is a useless configuration"
     use !libxfont2 && ewarn "You have built tinyx with libXfont1. The default in ::gentoo is libXfont2, which is also used by Xorg"
