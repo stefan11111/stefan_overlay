@@ -25,7 +25,7 @@ DEPEND="|| (    sys-devel/gcc
 RDEPEND="${DEPEND}"
 BDEPEND=""
 
-CFLAGS="-fpermissive ${CFLAGS}"
+CFLAGS="-fpermissive -std=gnu99 ${CFLAGS}"
 
 #src_unpack() {
 #    local -x EGIT_REPO_URI
