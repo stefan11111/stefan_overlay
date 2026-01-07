@@ -11,7 +11,7 @@ inherit git-r3 multilib-minimal
 LICENSE="MIT"
 SLOT="0"
 KEYWORDS="~amd64 ~x86"
-IUSE="abi_x86_32 abi_x86_64 strict"
+IUSE="abi_x86_32 abi_x86_64"
 
 DEPEND="|| (    sys-devel/gcc
                 sys-devel/clang )
@@ -22,18 +22,10 @@ BDEPEND=""
 
 src_install() {
     if use abi_x86_64; then
-        if use strict; then
-            emake install PREFIX=/usr DESTDIR=${D} STRICT=1
-        else
-            emake install PREFIX=/usr DESTDIR=${D}
-        fi
+        emake install PREFIX=/usr DESTDIR=${D}
     fi
     if use abi_x86_32; then
         emake clean
-        if use strict; then
-            emake install PREFIX=/usr DESTDIR=${D} LIBDIR=/lib CFLAGS="${CFLAGS} -m32" STRICT=1
-        else
-            emake install PREFIX=/usr DESTDIR=${D} LIBDIR=/lib CFLAGS="${CFLAGS} -m32"
-        fi
+        emake install PREFIX=/usr DESTDIR=${D} LIBDIR=/lib CFLAGS="${CFLAGS} -m32"
     fi
 }
