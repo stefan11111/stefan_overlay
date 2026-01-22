@@ -105,7 +105,7 @@ src_configure() {
 	# Basic configuration:
 	mozconfig_init
 
-	mozconfig_disable updater accessibility gconf webrtc gold
+	mozconfig_disable updater accessibility webrtc gold
 
 	if use npapi; then
 		mozconfig_enable npapi
