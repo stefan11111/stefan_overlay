@@ -6,14 +6,14 @@ EAPI=8
 DESCRIPTION="tinyx/kdrive X11 server"
 HOMEPAGE="https://github.com/stefan11111/tinyx https://github.com/tinycorelinux/tinyx"
 EGIT_REPO_URI="https://github.com/stefan11111/tinyx.git"
-EGIT_BRANCH="proper-libXfont2-port"
+EGIT_BRANCH="Xmodesetting-libXfont2"
 #EGIT_REPO_URI=https://github.com/tinycorelinux/tinyx.git
 inherit git-r3 autotools
 
 LICENSE="MIT"
 SLOT="0"
 KEYWORDS="~amd64 ~x86"
-IUSE="libxfont2 suid xfbdev xvesa xres screensaver xdmcp xdm-auth-1 dbe xf86bigfont dpms kdrive-rename"
+IUSE="libxfont2 suid xfbdev xmodesetting xvesa xres screensaver xdmcp xdm-auth-1 dbe xf86bigfont dpms"
 
 DEPEND="|| (    sys-devel/gcc
                 sys-devel/clang )
@@ -21,7 +21,10 @@ DEPEND="|| (    sys-devel/gcc
         !libxfont2? ( x11-libs/libXfont )
         x11-libs/libXtst
         x11-libs/libXdmcp
-        x11-libs/libfontenc"
+        x11-libs/libfontenc
+        xmodesetting? ( || ( media-libs/libgbm
+                             media-libs/mesa[X(+),egl(+),gbm(+)] )
+                        x11-libs/libdrm )"
 RDEPEND="${DEPEND}"
 BDEPEND=""
 
@@ -45,6 +48,7 @@ src_prepare() {
 src_configure() {
     local myeconfargs=( --with-fontdir=/usr/share/fonts )
     use !xfbdev && myeconfargs+=( --disable-xfbdev )
+    use !xmodesetting && myeconfargs+=( --disable-xmodesetting )
     use !xvesa && myeconfargs+=( --disable-xvesa )
     use !xres && myeconfargs+=( --disable-xres )
     use !screensaver && myeconfargs+=( --disable-screensaver )
@@ -60,10 +64,10 @@ src_configure() {
 src_install() {
     emake install DESTDIR=${D}
     use suid && use xfbdev && chmod 4755 ${D}/usr/bin/Xfbdev
+    use suid && use xmodesetting && chmod 4755 ${D}/usr/bin/Xmodesetting
     use suid && use xvesa && chmod 4755 ${D}/usr/bin/Xvesa
-    use kdrive-rename && use xfbdev && mv  ${D}/usr/bin/Xfbdev ${D}/usr/bin/Xkdrive
     use xvesa && ewarn "Xvesa doesn't work with a 64-bit kernel on amd64"
-    use !xvesa && use !xfbdev && ewarn "You have disabled both X servers. This is a useless configuration"
+    use !xvesa && use !xmodesetting && use !xfbdev && ewarn "You have disabled all X servers. This is a useless configuration"
     use !libxfont2 && ewarn "You have built tinyx with libXfont1. The default in ::gentoo is libXfont2, which is also used by Xorg"
     use !libxfont2 && ewarn "Unless you have configured your system to use libXfont1 instead of libXfont2, tinyx will not work"
 }
