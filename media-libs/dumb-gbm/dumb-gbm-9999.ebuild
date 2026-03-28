@@ -11,21 +11,31 @@ inherit git-r3 multilib-minimal
 LICENSE="MIT"
 SLOT="0"
 KEYWORDS="~amd64 ~x86"
-IUSE="abi_x86_32 abi_x86_64"
+IUSE="abi_x86_32 abi_x86_64 epoxy"
 
 DEPEND="|| (    sys-devel/gcc
                 sys-devel/clang )
                 x11-libs/libdrm[${MULTILIB_USEDEP}]
-                virtual/pkgconfig"
+                virtual/pkgconfig
+                epoxy? ( media-libs/libepoxy[${MULTILIB_USEDEP}] )
+"
 RDEPEND="${DEPEND}"
 BDEPEND=""
 
 src_install() {
     if use abi_x86_64; then
-        emake install PREFIX=/usr DESTDIR=${D}
+        if use epoxy; then
+            emake install PREFIX=/usr DESTDIR=${D} USE_LIBEPOXY=1
+        else
+            emake install PREFIX=/usr DESTDIR=${D}
+        fi
     fi
     if use abi_x86_32; then
         emake clean
-        emake install PREFIX=/usr DESTDIR=${D} LIBDIR=/lib CFLAGS="${CFLAGS} -m32"
+        if use epoxy; then
+            emake install PREFIX=/usr DESTDIR=${D} LIBDIR=/lib CFLAGS="${CFLAGS} -m32" USE_LIBEPOXY=1
+        else
+            emake install PREFIX=/usr DESTDIR=${D} LIBDIR=/lib CFLAGS="${CFLAGS} -m32"
+        fi
     fi
 }
