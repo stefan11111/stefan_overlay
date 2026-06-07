@@ -11,17 +11,6 @@ palemoon-5_pkg_pretend() {
 	# Ensure that we have enough disk space to compile:
 	CHECKREQS_DISK_BUILD=${REQUIRED_BUILDSPACE}
 	check-reqs_pkg_setup
-
-	# Ensure that we are on a supported compiler profile:
-	einfo "Checking compiler profile..."
-	if [[ $PALEMOON_ENABLE_UNSUPPORTED_COMPILERS == 1 ]]; then
-		unsupported_compiler_warning $(tc-get-compiler-type)
-	else
-		if ! [[ tc-is-gcc && "$GCC_SUPPORTED_VERSIONS" =~ (^| )"$(gcc-version)"($| ) ]]; then
-			unsupported_compiler_error $(tc-get-compiler-type)
-			die
-		fi
-	fi
 }
 
 palemoon-5_pkg_preinst() {
@@ -55,43 +44,6 @@ official-branding_warning() {
 	elog "a legal problem with Moonchild Productions."
 	elog "You can disable the official branding by emerging ${PN} _without_"
 	elog "the official-branding USE flag."
-}
-
-unsupported_compiler_warning() {
-	ewarn "Building Pale Moon with a compiler other than a supported gcc version"
-	ewarn "may result in an unstable build."
-	ewarn "Be aware that building Pale Moon with an unsupported compiler"
-	ewarn "means that the official support channels may refuse to offer any"
-	ewarn "kind of help in case the build fails or the browser behaves incorrectly."
-	ewarn "Supported GCC versions: ${GCC_SUPPORTED_VERSIONS// /, }"
-	if [[ "$1" == "gcc" ]]; then
-		ewarn "Selected GCC version: $(gcc-version)"
-	else
-		ewarn "Unsupported compiler selected: $1"
-	fi
-	ewarn "To disable this warning unset the PALEMOON_ENABLE_UNSUPPORTED_COMPILERS"
-	ewarn "environment variable."
-}
-
-unsupported_compiler_error() {
-	eerror "Building Pale Moon with a compiler other than a supported gcc version"
-	eerror "may result in an unstable build."
-	eerror "You can use gcc-config to change your compiler profile, just remember"
-	eerror "to change it back afterwards."
-	eerror "You need to have the appropriate versions of gcc installed for them"
-	eerror "to be shown in gcc-config."
-	eerror "Alternatively, you can set the PALEMOON_ENABLE_UNSUPPORTED_COMPILERS"
-	eerror "environment variable to 1 either by exporting it from the current shell"
-	eerror "or by adding it to your make.conf file."
-	eerror "Be aware though that building Pale Moon with an unsupported compiler"
-	eerror "means that the official support channels may refuse to offer any"
-	eerror "kind of help in case the build fails or the browser behaves incorrectly."
-	eerror "Supported GCC versions: ${GCC_SUPPORTED_VERSIONS// /, }"
-	if [[ "$1" == "gcc" ]]; then
-		eerror "Selected GCC version: $(gcc-version)"
-	else
-		eerror "Unsupported compiler selected: $1"
-	fi
 }
 
 
