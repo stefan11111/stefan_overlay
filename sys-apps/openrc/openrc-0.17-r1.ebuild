@@ -53,6 +53,8 @@ RDEPEND="${COMMON_DEPEND}
 
 PDEPEND="netifrc? ( net-misc/netifrc )"
 
+PATCHES=( "${FILESDIR}"/openrc-0.17-missing-extern.patch )
+
 src_prepare() {
 	sed -i 's:0444:0644:' mk/sys.mk || die
 
