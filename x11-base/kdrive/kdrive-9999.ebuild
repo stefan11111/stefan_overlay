@@ -12,7 +12,8 @@ SLOT="0/${PV}"
 KEYWORDS="~alpha ~amd64 ~arm ~arm64 ~hppa ~loong ~m68k ~mips ~ppc ~ppc64 ~riscv ~s390 ~sparc ~x86"
 
 IUSE_SERVERS="xephyr xnest xorg xvfb"
-IUSE="${IUSE_SERVERS} debug +elogind minimal selinux suid systemd test +udev unwind xcsecurity"
+IUSE_EXTENSIONS="xcsecurity +xinerama +glx +glx-dri"
+IUSE="${IUSE_SERVERS} ${IUSE_EXTENSIONS} debug +elogind +gbm minimal selinux suid systemd test +udev unwind"
 RESTRICT="!test? ( test )"
 
 CDEPEND="
@@ -109,16 +110,21 @@ src_configure() {
 		$(meson_use !minimal dri2)
 		$(meson_use !minimal dri3)
 		$(meson_use !minimal glamor)
-		$(meson_use !minimal glx)
+		$(meson_use gbm)
+		$(meson_use glx)
+		$(meson_use glx-dri glx_dri)
 		$(meson_use udev)
 		$(meson_use udev udev_kms)
 		$(meson_use unwind libunwind)
 		$(meson_use xcsecurity)
 		$(meson_use selinux xselinux)
 		$(meson_use xephyr)
+		$(meson_use xinerama)
 		$(meson_use xnest)
 		$(meson_use xorg)
 		$(meson_use xvfb)
+		$(meson_use test tests)
+		$(meson_use test xf86-input-inputtest)
 		-Ddocs=false
 		-Ddrm=true
 		-Ddtrace=false
