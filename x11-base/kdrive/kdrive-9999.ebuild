@@ -166,15 +166,4 @@ src_install() {
 			"${ED}"/usr/$(get_libdir)/pkgconfig/xorg-server.pc \
 			"${ED}"/usr/share/man/man1/Xserver.1x || die
 	fi
-
-	# install the @x11-module-rebuild set for Portage
-	insinto /usr/share/portage/config/sets
-	newins "${FILESDIR}"/xorg-sets.conf xorg.conf
-}
-
-pkg_postrm() {
-	# Get rid of module dir to ensure opengl-update works properly
-	if [[ -z ${REPLACED_BY_VERSION} && -e ${EROOT}/usr/$(get_libdir)/xorg/modules ]]; then
-		rm -rf "${EROOT}"/usr/$(get_libdir)/xorg/modules
-	fi
 }
