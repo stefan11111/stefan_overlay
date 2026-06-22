@@ -155,7 +155,7 @@ src_install() {
 
 	# The meson build system does not support install-setuid
 	if ! use systemd && ! use elogind; then
-		if use suid; then
+		if use suid && use xorg; then
 			chmod u+s "${ED}"/usr/bin/Xorg
 		fi
 	fi
