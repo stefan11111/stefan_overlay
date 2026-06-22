@@ -8,9 +8,8 @@ EGIT_REPO_URI="https://github.com/stefan11111/kdrive.git"
 
 DESCRIPTION="X.Org X servers"
 SLOT="0/${PV}"
-if [[ ${PV} != 9999* ]]; then
-	KEYWORDS="~alpha ~amd64 ~arm ~arm64 ~hppa ~loong ~m68k ~mips ~ppc ~ppc64 ~riscv ~s390 ~sparc ~x86"
-fi
+
+KEYWORDS="~alpha ~amd64 ~arm ~arm64 ~hppa ~loong ~m68k ~mips ~ppc ~ppc64 ~riscv ~s390 ~sparc ~x86"
 
 IUSE_SERVERS="xephyr xnest xorg xvfb"
 IUSE="${IUSE_SERVERS} debug +elogind minimal selinux suid systemd test +udev unwind xcsecurity"
