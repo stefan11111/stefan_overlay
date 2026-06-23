@@ -11,7 +11,7 @@ SLOT="0/${PV}"
 
 KEYWORDS="~alpha ~amd64 ~arm ~arm64 ~hppa ~loong ~m68k ~mips ~ppc ~ppc64 ~riscv ~s390 ~sparc ~x86"
 
-IUSE_SERVERS="xephyr xnest xorg xvfb"
+IUSE_SERVERS="xephyr xfbdev xvfb"
 IUSE_EXTENSIONS="xcsecurity +xinerama +glx +glx-dri"
 IUSE="${IUSE_SERVERS} ${IUSE_EXTENSIONS} debug +elogind +gbm minimal selinux suid systemd test +udev unwind"
 RESTRICT="!test? ( test )"
@@ -33,13 +33,6 @@ CDEPEND="
 	>=x11-libs/pixman-0.27.2
 	>=x11-misc/xbitmaps-1.0.1
 	>=x11-misc/xkeyboard-config-2.4.1-r3
-	xorg? (
-		>=x11-libs/libxcvt-0.1.0
-	)
-	xnest? (
-		>=x11-libs/libXext-1.0.99.4
-		>=x11-libs/libX11-1.1.5
-	)
 	xephyr? (
 		x11-libs/libxcb
 		x11-libs/xcb-util
@@ -78,13 +71,12 @@ DEPEND="${CDEPEND}
 RDEPEND="${CDEPEND}
 	!systemd? ( gui-libs/display-manager-init )
 	selinux? ( sec-policy/selinux-xserver )
-	xorg? ( >=x11-apps/xinit-1.3.3-r1 )
+	>=x11-apps/xinit-1.3.3-r1
 "
 BDEPEND="
 	app-alternatives/lex
 "
-PDEPEND="
-	xorg? ( >=x11-base/xorg-drivers-$(ver_cut 1-2) )"
+PDEPEND=""
 
 REQUIRED_USE="!minimal? (
 		|| ( ${IUSE_SERVERS} )
@@ -119,9 +111,8 @@ src_configure() {
 		$(meson_use xcsecurity)
 		$(meson_use selinux xselinux)
 		$(meson_use xephyr)
+		$(meson_use xfbdev)
 		$(meson_use xinerama)
-		$(meson_use xnest)
-		$(meson_use xorg)
 		$(meson_use xvfb)
 		$(meson_use test tests)
 		$(meson_use test xf86-input-inputtest)
@@ -134,6 +125,8 @@ src_configure() {
 		-Dlinux_apm=false
 		-Dsha1=libcrypto
 		-Dxkb_output_dir="${EPREFIX}/var/lib/xkb"
+		-Dxnest=false
+		-Dxorg=false
 	)
 
 	if [[ ${PV} == 9999 ]] ; then
@@ -159,17 +152,8 @@ src_configure() {
 src_install() {
 	xorg-meson_src_install
 
-	# The meson build system does not support install-setuid
-	if ! use systemd && ! use elogind; then
-		if use suid && use xorg; then
-			chmod u+s "${ED}"/usr/bin/Xorg
-		fi
-	fi
-
-	if ! use xorg; then
-		rm -f "${ED}"/usr/share/man/man1/Xserver.1x \
-			"${ED}"/usr/$(get_libdir)/xserver/SecurityPolicy \
-			"${ED}"/usr/$(get_libdir)/pkgconfig/xorg-server.pc \
-			"${ED}"/usr/share/man/man1/Xserver.1x || die
-	fi
+	rm -f "${ED}"/usr/share/man/man1/Xserver.1x \
+		"${ED}"/usr/$(get_libdir)/xserver/SecurityPolicy \
+		"${ED}"/usr/$(get_libdir)/pkgconfig/xorg-server.pc \
+		"${ED}"/usr/share/man/man1/Xserver.1x || die
 }
