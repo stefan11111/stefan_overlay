@@ -152,6 +152,11 @@ src_configure() {
 src_install() {
 	xorg-meson_src_install
 
+	# Xfbdev should always be installed suid
+	if use xfbdev; then
+		chmod 4755 "${ED}"/usr/bin/Xfbdev
+	fi
+
 	rm -f "${ED}"/usr/share/man/man1/Xserver.1x \
 		"${ED}"/usr/$(get_libdir)/xserver/SecurityPolicy \
 		"${ED}"/usr/$(get_libdir)/pkgconfig/xorg-server.pc \
