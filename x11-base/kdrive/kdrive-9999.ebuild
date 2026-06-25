@@ -12,9 +12,8 @@ SLOT="0/${PV}"
 KEYWORDS="~alpha ~amd64 ~arm ~arm64 ~hppa ~loong ~m68k ~mips ~ppc ~ppc64 ~riscv ~s390 ~sparc ~x86"
 
 IUSE_SERVERS="xephyr xfbdev xvfb"
-IUSE_EXTENSIONS="+xdmcp +xdm-auth-1 +dpms xf86bigfont +screensaver +xres +xace xcsecurity +xinerama +xv +xvmc +dga +mitshm +agp +dri1 +dri2 +dri3"
-IUSE_OTHER="debug +drm +elogind +gbm +glx +glx-dri +ipv6 linux_apm linux_acpi minimal selinux suid systemd test +udev unwind"
-IUSE="${IUSE_SERVERS} ${IUSE_EXTENSIONS} ${IUSE_OTHER}"
+IUSE_EXTENSIONS="xcsecurity +xinerama +glx +glx-dri"
+IUSE="${IUSE_SERVERS} ${IUSE_EXTENSIONS} debug +elogind +gbm minimal selinux suid systemd test +udev unwind"
 RESTRICT="!test? ( test )"
 
 CDEPEND="
@@ -99,43 +98,31 @@ src_configure() {
 		--localstatedir "${EPREFIX}/var"
 		--sysconfdir "${EPREFIX}/etc/X11"
 		-Db_ndebug=$(usex debug false true)
-		$(meson_use agp)
-		$(meson_use dga)
-		$(meson_use dri1)
-		$(meson_use dri2)
-		$(meson_use dri3)
-		$(meson_use drm)
-		$(meson_use dpms)
+		$(meson_use !minimal dri1)
+		$(meson_use !minimal dri2)
+		$(meson_use !minimal dri3)
 		$(meson_use !minimal glamor)
 		$(meson_use gbm)
 		$(meson_use glx)
 		$(meson_use glx-dri glx_dri)
-		$(meson_use ipv6)
-                $(meson_use linux_acpi)
-		$(meson_use linux_apm)
-		$(meson_use mitshm)
-		$(meson_use screensaver)
 		$(meson_use udev)
 		$(meson_use udev udev_kms)
 		$(meson_use unwind libunwind)
 		$(meson_use xcsecurity)
 		$(meson_use selinux xselinux)
-		$(meson_use xace)
-		$(meson_use xdmcp)
-		$(meson_use xdm-auth-1)
 		$(meson_use xephyr)
-		$(meson_use xf86bigfont)
 		$(meson_use xfbdev)
 		$(meson_use xinerama)
-		$(meson_use xres)
-		$(meson_use xv)
-		$(meson_use xvmc)
 		$(meson_use xvfb)
 		$(meson_use test tests)
 		$(meson_use test xf86-input-inputtest)
 		-Ddocs=false
+		-Ddrm=true
 		-Ddtrace=false
+		-Dipv6=true
 		-Dhal=false
+		-Dlinux_acpi=false
+		-Dlinux_apm=false
 		-Dsha1=libcrypto
 		-Dxkb_output_dir="${EPREFIX}/var/lib/xkb"
 		-Dxnest=false
