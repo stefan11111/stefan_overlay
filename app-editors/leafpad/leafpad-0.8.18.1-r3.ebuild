@@ -25,6 +25,7 @@ RDEPEND="${DEPEND}"
 BDEPEND=""
 
 src_compile() {
+	CFLAGS="-w -Wno-incompatible-pointer-types ${CFLAGS}"
 	use print && CFLAGS="-DENABLE_PRINT ${CFLAGS}"
 }
 
