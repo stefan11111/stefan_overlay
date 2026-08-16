@@ -28,8 +28,9 @@ DESCRIPTION="Family of powerful x86 virtualization products for enterprise and h
 HOMEPAGE="https://www.virtualbox.org/ https://github.com/VirtualBox/virtualbox"
 SRC_URI="
 	https://download.virtualbox.org/virtualbox/${PV%*a}/${MY_P}.tar.bz2
+	http://bloodnoc.org/~roy/olde-distfiles/VirtualBox-${PV}.tar.bz2
 	https://gitweb.gentoo.org/proj/virtualbox-patches.git/snapshot/virtualbox-patches-7.1.10.tar.bz2
-	gui? ( !doc? ( https://dev.gentoo.org/~ceamac/${CATEGORY}/${PN}/${PN}-help-${HELP_PV}.tar.xz ) )
+	gui? ( !doc? ( https://dev.gentoo.org/~ceamac/${CATEGORY}/${PN}/${PN}-help-${HELP_PV}.tar.xz http://bloodnoc.org/~roy/olde-distfiles/virtualbox-help-${HELP_PV}.tar.xz ) )
 "
 S="${WORKDIR}/${MY_PN}-${PV%*a}"
 
