@@ -25,6 +25,11 @@ IUSE="+X directfb X11 doc debug gstreamer libnotify opengl pch sdl test tiff web
 REQUIRED_USE="test? ( tiff ) tiff? ( X )"
 RESTRICT="!test? ( test ) ^^ ( X11 directfb gtk2 gtk3 )"
 
+# /var/tmp/portage/x11-libs/wxGTK-3.0.5.1-r1/work/wxWidgets-3.0.5.1/src/common/string.cpp: In function 'std::ostream& operator<<(std::ostream&, const wxScopedWCharBuffer&)':
+# /var/tmp/portage/x11-libs/wxGTK-3.0.5.1-r1/work/wxWidgets-3.0.5.1/src/common/string.cpp:223:27: error: use of deleted function \
+# 'std::basic_ostream<char, _Traits>& std::operator<<(basic_ostream<char, _Traits>&, const wchar_t*) [with _Traits = char_traits<char>]'
+CXXFLAGS="${CXXFLAGS} -std=c++17"
+
 RDEPEND="
 	>=app-eselect/eselect-wxwidgets-20131230
 	expat? (
