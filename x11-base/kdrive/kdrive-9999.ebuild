@@ -11,7 +11,7 @@ SLOT="0/${PV}"
 
 KEYWORDS="~alpha ~amd64 ~arm ~arm64 ~hppa ~loong ~m68k ~mips ~ppc ~ppc64 ~riscv ~s390 ~sparc ~x86"
 
-IUSE_SERVERS="xephyr xfbdev xvfb"
+IUSE_SERVERS="xephyr xfbdev xorg xvfb"
 IUSE_EXTENSIONS="xcsecurity +xinerama +glx +glx-dri"
 IUSE="${IUSE_SERVERS} ${IUSE_EXTENSIONS} debug +elogind +gbm minimal selinux suid systemd test +udev unwind"
 RESTRICT="!test? ( test )"
@@ -113,6 +113,7 @@ src_configure() {
 		$(meson_use xephyr)
 		$(meson_use xfbdev)
 		$(meson_use xinerama)
+		$(meson_use xorg)
 		$(meson_use xvfb)
 		$(meson_use test tests)
 		$(meson_use test xf86-input-inputtest)
@@ -126,7 +127,6 @@ src_configure() {
 		-Dsha1=libcrypto
 		-Dxkb_output_dir="${EPREFIX}/var/lib/xkb"
 		-Dxnest=false
-		-Dxorg=false
 	)
 
 	if [[ ${PV} == 9999 ]] ; then
@@ -157,8 +157,10 @@ src_install() {
 		chmod 4755 "${ED}"/usr/bin/Xfbdev
 	fi
 
-	rm -f "${ED}"/usr/share/man/man1/Xserver.1x \
-		"${ED}"/usr/$(get_libdir)/xserver/SecurityPolicy \
-		"${ED}"/usr/$(get_libdir)/pkgconfig/xorg-server.pc \
-		"${ED}"/usr/share/man/man1/Xserver.1x || die
+    if ! use xorg; then
+		rm -f "${ED}"/usr/share/man/man1/Xserver.1x \
+			"${ED}"/usr/$(get_libdir)/xserver/SecurityPolicy \
+			"${ED}"/usr/$(get_libdir)/pkgconfig/xorg-server.pc \
+			"${ED}"/usr/share/man/man1/Xserver.1x || die
+	fi
 }
