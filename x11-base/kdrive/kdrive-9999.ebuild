@@ -157,6 +157,10 @@ src_install() {
 		chmod 4755 "${ED}"/usr/bin/Xfbdev
 	fi
 
+	if use xorg && use suid; then
+		chmod 4755 "${ED}"/usr/bin/Xorg
+	fi
+
     if ! use xorg; then
 		rm -f "${ED}"/usr/share/man/man1/Xserver.1x \
 			"${ED}"/usr/$(get_libdir)/xserver/SecurityPolicy \
