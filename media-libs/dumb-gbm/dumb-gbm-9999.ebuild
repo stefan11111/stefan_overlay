@@ -4,8 +4,8 @@
 EAPI=8
 
 DESCRIPTION="libgbm backend for allocating dumb buffers"
-HOMEPAGE="https://github.com/stefan11111/dumb_gbm"
-EGIT_REPO_URI="https://github.com/stefan11111/dumb_gbm.git"
+HOMEPAGE="https://gitlab.freedesktop.org/stefan11111/dumb_gbm"
+EGIT_REPO_URI="https://gitlab.freedesktop.org/stefan11111/dumb_gbm.git"
 inherit git-r3 multilib-minimal
 
 LICENSE="MIT"
