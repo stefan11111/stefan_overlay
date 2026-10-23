@@ -3,7 +3,7 @@
 
 EAPI=8
 
-EGIT_REPO_URI="https://gitlab.freedesktop.org/stefan11111/xf86-input-mouse"
+EGIT_REPO_URI="https://gitlab.freedesktop.org/stefan11111/xf86-input-keyboard"
 inherit xorg-3
 
 
