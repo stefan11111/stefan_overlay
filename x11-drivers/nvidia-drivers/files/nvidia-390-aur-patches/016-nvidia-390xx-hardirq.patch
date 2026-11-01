@@ -1,0 +1,54 @@
+--- NVIDIA-Linux-x86-390.157/kernel/nvidia/os-interface.c.orig	2026-03-05 16:46:55.880164039 +0200
++++ NVIDIA-Linux-x86-390.157/kernel/nvidia/os-interface.c	2026-03-05 16:51:49.991882240 +0200
+@@ -510,7 +510,7 @@
+     nv_gettimeofday(&tm1);
+ #endif
+ 
+-    if (in_irq() && (MicroSeconds > NV_MAX_ISR_DELAY_US))
++    if (nv_in_hardirq() && (MicroSeconds > NV_MAX_ISR_DELAY_US))
+         return NV_ERR_GENERIC;
+     
+     mdelay_safe_msec = MicroSeconds / 1000;
+@@ -555,7 +555,7 @@
+     tm_start = tm_aux;
+ #endif
+ 
+-    if (in_irq() && (MilliSeconds > NV_MAX_ISR_DELAY_MS))
++    if (nv_in_hardirq() && (MilliSeconds > NV_MAX_ISR_DELAY_MS))
+         return NV_ERR_GENERIC;
+ 
+     if (!NV_MAY_SLEEP()) 
+--- NVIDIA-Linux-x86-390.157/kernel/nvidia/nvlink_linux.c.orig	2022-10-12 12:31:03.000000000 +0300
++++ NVIDIA-Linux-x86-390.157/kernel/nvidia/nvlink_linux.c	2026-03-05 16:51:49.991165521 +0200
+@@ -570,7 +570,7 @@
+ 
+     nv_gettimeofday(&tm_aux);
+ 
+-    if (in_irq() && (ms > NV_MAX_ISR_DELAY_MS))
++    if (nv_in_hardirq() && (ms > NV_MAX_ISR_DELAY_MS))
+     {
+         return;
+     }
+--- NVIDIA-Linux-x86-390.157/kernel/common/inc/nv-time.h.orig	2022-10-12 12:31:02.000000000 +0300
++++ NVIDIA-Linux-x86-390.157/kernel/common/inc/nv-time.h	2026-03-05 16:51:49.990953661 +0200
+@@ -36,6 +36,20 @@
+ typedef struct __kernel_old_timeval nv_timeval;
+ #endif
+ 
++/*
++ * in_hardirq() was added in v5.11-rc1 (2020-12-15) to replace in_irq().
++ * Fall back to in_irq() for older kernels that don't have in_hardirq().
++ */
++#include <linux/hardirq.h>
++static inline NvBool nv_in_hardirq(void)
++{
++#if defined(in_hardirq)
++    return in_hardirq();
++#else
++    return in_irq();
++#endif
++}
++
+ static inline void nv_gettimeofday(nv_timeval *tv)
+ {
+ #ifdef NV_DO_GETTIMEOFDAY_PRESENT
