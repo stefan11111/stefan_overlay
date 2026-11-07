@@ -25,7 +25,9 @@ DEPEND="
 "
 RDEPEND="${DEPEND}"
 
-PATCHES=( "${FILESDIR}/${PN}-5.15.7-libressl.patch" )
+PATCHES=( "${FILESDIR}/${PN}-5.15.7-libressl.patch"
+	  "${FILESDIR}/${PN}-5.15.8-openssl-4.patch"
+	)
 
 QT5_TARGET_SUBDIRS=(
 	src/network
