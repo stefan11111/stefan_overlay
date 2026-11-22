@@ -4,8 +4,8 @@
 EAPI=8
 
 DESCRIPTION="libgbm is the Generic Buffer Management library, a frontend to GBM."
-HOMEPAGE="https://github.com/glfs-book/libgbm"
-EGIT_REPO_URI="https://github.com/glfs-book/libgbm.git"
+HOMEPAGE="https://gitlab.freedesktop.org/mesa/libgbm"
+EGIT_REPO_URI="https://gitlab.freedesktop.org/mesa/libgbm.git"
 inherit git-r3 meson multilib-minimal
 
 LICENSE="MIT"
